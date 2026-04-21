@@ -559,10 +559,37 @@ const S={
     {id:'bro',nm:'Brochures',ico:'📰',sc:['Tri-fold','Bi-fold','Z-fold'],pricing:'fixed'},
     {id:'pos',nm:'Posters',ico:'🎨',sc:['Glossy','Matte','Canvas'],pricing:'fixed'},
     {id:'tsh',nm:'T-Shirt Print',ico:'👕',sc:['Screen Print','Digital','Embroidery'],pricing:'fixed'},
+    {id:'frm',nm:'Frames',ico:'🪟',sc:[],pricing:'frame'},
   ],
   sizes:{flex:[{id:'f1',l:'1×2 ft',w:1,h:2,cu:'ft'},{id:'f2',l:'2×3 ft',w:2,h:3,cu:'ft'},{id:'f3',l:'3×4 ft',w:3,h:4,cu:'ft'},{id:'f4',l:'4×6 ft',w:4,h:6,cu:'ft'},{id:'f5',l:'6×8 ft',w:6,h:8,cu:'ft'},{id:'f6',l:'10×10 ft',w:10,h:10,cu:'ft'}],cards:[{id:'c1',l:'Standard 3.5x2in',p:200},{id:'c2',l:'Slim',p:180},{id:'c3',l:'Square',p:250}],dig:[{id:'d1',l:'A4',p:20},{id:'d2',l:'A3',p:35},{id:'d3',l:'A2',p:65},{id:'d4',l:'A1',p:120}],ban:[{id:'b1',l:'2×4 ft',w:2,h:4,cu:'ft'},{id:'b2',l:'3×6 ft',w:3,h:6,cu:'ft'},{id:'b3',l:'4×8 ft',w:4,h:8,cu:'ft'},{id:'b4',l:'5×10 ft',w:5,h:10,cu:'ft'}],stk:[{id:'s1',l:'2x2 in',p:15},{id:'s2',l:'3x3 in',p:20},{id:'s3',l:'4x6 in',p:30},{id:'s4',l:'A4 Sheet',p:60}],bro:[{id:'br1',l:'Tri-fold A4',p:25},{id:'br2',l:'Bi-fold A4',p:20},{id:'br3',l:'Tri-fold A3',p:45}],pos:[{id:'p1',l:'A3',p:50},{id:'p2',l:'A2',p:90},{id:'p3',l:'A1',p:160},{id:'p4',l:'18x24in',p:110}],tsh:[{id:'t1',l:'Front Only',p:150},{id:'t2',l:'Back Only',p:150},{id:'t3',l:'Front and Back',p:250}]},
   mats:[{id:'m1',nm:'Normal Flex',rate:45,price:0,cats:['flex','ban']},{id:'m2',nm:'Star Flex',rate:65,price:0,cats:['flex','ban']},{id:'m3',nm:'Backlit Flex',rate:100,price:0,cats:['flex','ban']},{id:'m4',nm:'Vinyl',rate:55,price:25,cats:['flex','stk','ban']},{id:'m5',nm:'Glossy Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m6',nm:'Matte Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m7',nm:'Art Paper 130gsm',rate:0,price:0,cats:['dig','pos','bro','cards']},{id:'m8',nm:'Art Paper 300gsm',rate:0,price:0,cats:['cards','pos','bro']},{id:'m9',nm:'Canvas',rate:120,price:100,cats:['flex','ban','pos']},{id:'m10',nm:'Transparent Vinyl',rate:0,price:40,cats:['stk']},{id:'m11',nm:'Cotton',rate:0,price:0,cats:['tsh']},{id:'m12',nm:'Polyester',rate:0,price:30,cats:['tsh']}],
   dFee:200,
+  // Frame settings: sizes and types with price matrix
+  frameSizes:[
+    {id:'fs1',l:'4x6 in'},{id:'fs2',l:'5x7 in'},{id:'fs3',l:'6x8 in'},
+    {id:'fs4',l:'8x10 in'},{id:'fs5',l:'10x12 in'},{id:'fs6',l:'12x16 in'},
+    {id:'fs7',l:'16x20 in'},{id:'fs8',l:'20x24 in'},{id:'fs9',l:'A4'},{id:'fs10',l:'A3'},
+  ],
+  frameTypes:[
+    {id:'ft1',nm:'Wooden (Simple)',ico:'🪵'},
+    {id:'ft2',nm:'Wooden (Designer)',ico:'🌿'},
+    {id:'ft3',nm:'Aluminium',ico:'⬜'},
+    {id:'ft4',nm:'Acrylic / Glass',ico:'💎'},
+    {id:'ft5',nm:'Photo Frame',ico:'🖼️'},
+  ],
+  // framePrices: { 'sizeId_typeId': price }
+  framePrices:{
+    'fs1_ft1':80,'fs1_ft2':120,'fs1_ft3':100,'fs1_ft4':150,'fs1_ft5':90,
+    'fs2_ft1':100,'fs2_ft2':150,'fs2_ft3':130,'fs2_ft4':190,'fs2_ft5':110,
+    'fs3_ft1':130,'fs3_ft2':190,'fs3_ft3':160,'fs3_ft4':230,'fs3_ft5':140,
+    'fs4_ft1':180,'fs4_ft2':260,'fs4_ft3':220,'fs4_ft4':320,'fs4_ft5':200,
+    'fs5_ft1':230,'fs5_ft2':330,'fs5_ft3':280,'fs5_ft4':400,'fs5_ft5':250,
+    'fs6_ft1':300,'fs6_ft2':430,'fs6_ft3':360,'fs6_ft4':520,'fs6_ft5':330,
+    'fs7_ft1':420,'fs7_ft2':600,'fs7_ft3':500,'fs7_ft4':720,'fs7_ft5':460,
+    'fs8_ft1':550,'fs8_ft2':780,'fs8_ft3':650,'fs8_ft4':950,'fs8_ft5':600,
+    'fs9_ft1':160,'fs9_ft2':230,'fs9_ft3':200,'fs9_ft4':290,'fs9_ft5':180,
+    'fs10_ft1':220,'fs10_ft2':320,'fs10_ft3':270,'fs10_ft4':390,'fs10_ft5':250,
+  },
 };
 
 function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null};}
@@ -603,6 +630,9 @@ async function syncSettingsSave(){
     {key:'dFee',   value:String(S.dFee)},
     {key:'holdReasons',value:JSON.stringify(S.holdReasons)},
     {key:'imgs',   value:JSON.stringify(S.imgs)},
+    {key:'frameSizes',  value:JSON.stringify(S.frameSizes)},
+    {key:'frameTypes',  value:JSON.stringify(S.frameTypes)},
+    {key:'framePrices', value:JSON.stringify(S.framePrices)},
   ];
   try{await SB.from('settings').upsert(rows,{onConflict:'key'});}catch(e){console.warn('Settings save failed',e);}
 }
@@ -621,6 +651,9 @@ async function syncSettingsLoad(){
         else if(key==='dFee'&&!isNaN(v))S.dFee=Number(v);
         else if(key==='holdReasons'&&Array.isArray(v))S.holdReasons=v;
         else if(key==='imgs'&&typeof v==='object')S.imgs=v;
+        else if(key==='frameSizes'&&Array.isArray(v)&&v.length)S.frameSizes=v;
+        else if(key==='frameTypes'&&Array.isArray(v)&&v.length)S.frameTypes=v;
+        else if(key==='framePrices'&&typeof v==='object')S.framePrices=v;
       }catch(e){}
     });
   }catch(e){console.warn('Settings load failed',e);}
@@ -744,6 +777,16 @@ function getSqftArea(f){
 function calc(f){
   const cat=S.cats.find(c=>c.id===f.cat),mat=S.mats.find(m=>m.id===f.mat);
   const isSqft=cat&&cat.pricing==='sqft';
+  const isFrame=cat&&cat.pricing==='frame';
+  if(isFrame){
+    const sz=S.frameSizes.find(s=>s.id===f.sz);
+    const ft=S.frameTypes.find(t=>t.id===f.mat);
+    const key=(f.sz&&f.mat)?f.sz+'_'+f.mat:'';
+    const bp=key?(S.framePrices[key]||0):0;
+    const snm=(sz?sz.l:'')+(ft?' – '+ft.nm:'');
+    const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0,preg=sub+df+delf,gst=Math.round(preg*.18),total=preg+gst;
+    return{cat,mat:ft,snm,up,sub,df,delf,preg,gst,total,area:0,isSqft:false,isFrame:true};
+  }
   let bp=0,snm='',area=0;
   if(isSqft){
     const rate=mat?(mat.rate||0):0;
@@ -869,7 +912,50 @@ function selCatAdv(id){
 
 function wS3(){
   const f=S.form,cat=S.cats.find(c=>c.id===f.cat),prev=f.ctype==='co'?3:2;
+  if(cat&&cat.pricing==='frame')return wS3frame(f,cat,prev);
   return(cat&&cat.pricing==='sqft')?wS3sqft(f,cat,prev):wS3fixed(f,cat,prev);
+}
+function wS3frame(f,cat,prev){
+  const selSz=S.frameSizes.find(s=>s.id===f.sz);
+  const selFt=S.frameTypes.find(t=>t.id===f.mat);
+  const price=(f.sz&&f.mat)?(S.framePrices[f.sz+'_'+f.mat]||0):null;
+  const sizePills=S.frameSizes.map(sz=>{
+    const p=(f.mat&&S.framePrices[sz.id+'_'+f.mat])?S.framePrices[sz.id+'_'+f.mat]:null;
+    return `<div class="pill${f.sz===sz.id?' on':''}" onclick="SM.play('click');S.form.sz='${sz.id}';render(false);">${sz.l}${p!==null?`<span style="display:block;font-size:10px;opacity:.75;">&#8377;${p}</span>`:''}</div>`;
+  }).join('');
+  const typeCards=S.frameTypes.map(ft=>{
+    const p=(f.sz&&S.framePrices[f.sz+'_'+ft.id])?S.framePrices[f.sz+'_'+ft.id]:null;
+    return `<div class="sport${f.mat===ft.id?' hi':''}" style="max-width:100%;border-radius:var(--rsm);padding:11px 14px;cursor:pointer;" onclick="SM.play('click');S.form.mat='${ft.id}';render(false);">
+      <div style="font-size:22px;">${ft.ico}</div>
+      <div style="flex:1;"><div style="font-weight:700;font-size:13px;${f.mat===ft.id?'color:#fff':''}">${ft.nm}</div>
+      ${p!==null?`<div style="font-size:11px;${f.mat===ft.id?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">&#8377;${p}${selSz?' for '+selSz.l:''}</div>`:'<div style="font-size:11px;color:var(--t2);">Select size first</div>'}
+      </div>
+      <span style="font-size:18px;${f.mat===ft.id?'color:rgba(255,255,255,.9)':'color:var(--t3)'};">${f.mat===ft.id?'✓':'›'}</span>
+    </div>`;
+  }).join('');
+  return `<div style="font-size:18px;font-weight:800;margin-bottom:4px;">Frame Size &amp; Type</div>
+  <div style="font-size:11px;color:var(--t2);margin-bottom:14px;">Each size and frame type has its own price set by admin</div>
+  <div class="fg"><label class="fl">Frame Size</label>
+    <div class="pills">${sizePills}</div>
+  </div>
+  <div class="fg"><label class="fl">Frame Type ${f.sz?'':'<span style="color:var(--t2);font-size:10px;">(select size first)</span>'}</label>
+    <div style="display:flex;flex-direction:column;gap:7px;">${typeCards}</div>
+  </div>
+  ${price!==null&&selSz&&selFt?`<div style="background:var(--gb);border:1px solid color-mix(in srgb,var(--g) 40%,transparent);border-radius:var(--rsm);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+    <div><div style="font-size:11px;font-weight:700;color:var(--gt);">FRAME PRICE</div>
+    <div style="font-size:10px;color:var(--gt);opacity:.8;">${selSz.l} &bull; ${selFt.nm}${f.qty>1?' &times; '+f.qty+' qty':''}</div></div>
+    <div style="font-size:20px;font-weight:800;color:var(--gt);">&#8377;${(price*f.qty).toLocaleString('en-IN')}</div>
+  </div>`:''}
+  <div class="fg"><label class="fl">Notes (optional)</label><textarea class="fi" id="fnote" rows="2" placeholder="Any specific requirements, colour, finish..." oninput="S.form.note=this.value;">${esc(f.note||'')}</textarea></div>
+  <button class="btn pri" onclick="SM.play('click');wn3frame();" style="margin-top:4px;">Continue &rarr;</button>
+  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
+}
+function wn3frame(){
+  if(!S.form.sz){SM.play('error');alert('Please select a frame size');return;}
+  if(!S.form.mat){SM.play('error');alert('Please select a frame type');return;}
+  const key=S.form.sz+'_'+S.form.mat;
+  if(!(S.framePrices[key]>0)){SM.play('error');alert('No price set for this combination. Contact admin.');return;}
+  S.form.step=S.form.ctype==='co'?5:4;SM.play('click');render(true);
 }
 function wS3sqft(f,cat,prev){
   const szPresets=S.sizes[f.cat]||[];
@@ -1068,7 +1154,18 @@ function wn2(){
 
 function wn3(){
   const cat=S.cats.find(c=>c.id===S.form.cat);
+  if(cat&&cat.pricing==='frame'){wn3frame();return;}
   const isSqft=cat&&cat.pricing==='sqft';
+  const isFrame=cat&&cat.pricing==='frame';
+  if(isFrame){
+    const sz=S.frameSizes.find(s=>s.id===f.sz);
+    const ft=S.frameTypes.find(t=>t.id===f.mat);
+    const key=(f.sz&&f.mat)?f.sz+'_'+f.mat:'';
+    const bp=key?(S.framePrices[key]||0):0;
+    const snm=(sz?sz.l:'')+(ft?' – '+ft.nm:'');
+    const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0,preg=sub+df+delf,gst=Math.round(preg*.18),total=preg+gst;
+    return{cat,mat:ft,snm,up,sub,df,delf,preg,gst,total,area:0,isSqft:false,isFrame:true};
+  }
   if(isSqft){
     const mats=S.mats.filter(m=>m.cats.includes(S.form.cat));
     if(mats.length&&!S.form.mat){SM.play('error');alert('Please select a material');return;}
@@ -1716,11 +1813,12 @@ function showQR(){
 function vSett(){
   if(S.sub==='cats')return sCats();if(S.sub==='szs')return sSzs();if(S.sub==='mats')return sMats();
   if(S.sub==='clr')return sClr();if(S.sub==='imgs')return sImgs();if(S.sub==='hold')return sHoldReasons();
+  if(S.sub==='frm')return sFrame();
   return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Settings</div>
   <div class="sync-banner"><div style="font-size:10px;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">Admin Code</div><div class="sync-code">${ADMIN_CODE}</div></div>
   <div class="flush" style="margin-bottom:10px;">
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Catalog</div>
-    ${sr('🏷️','Categories','',"S.sub='cats';render(false);")}${sr('📐','Sizes & Prices','',"S.sub='szs';render(false);")}${sr('🧱','Materials',S.mats.length+' items',"S.sub='mats';render(false);")}${sr('🖼️','Catalog Images','',"S.sub='imgs';render(false);")}
+    ${sr('🪟','Frames','Sizes & Pricing',"S.sub='frm';render(false);")}${sr('🏷️','Categories','',"S.sub='cats';render(false);")}${sr('📐','Sizes & Prices','',"S.sub='szs';render(false);")}${sr('🧱','Materials',S.mats.length+' items',"S.sub='mats';render(false);")}${sr('🖼️','Catalog Images','',"S.sub='imgs';render(false);")}
   </div>
   <div class="flush" style="margin-bottom:10px;">
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Controls</div>
@@ -1734,6 +1832,110 @@ function vSett(){
     ${sr('☁️','Sync',SB?'<span style="color:var(--gt);font-size:11px;">● Live</span>':'<span style="color:var(--rt);">● Offline</span>',"sbLoad().then(()=>{SM.play('status');render(false);});")}
   </div>
   <div class="card" style="background:var(--rb);border-color:var(--r);"><div style="font-weight:700;color:var(--rt);margin-bottom:9px;">⚠️ Danger Zone</div><button class="btn dan sm" onclick="SM.play('click');clearAll();">Clear All Orders</button></div>`;
+}
+
+function sFrame(){
+  // Build price matrix: rows=sizes, cols=types
+  const matrixRows=S.frameSizes.map(sz=>{
+    const cells=S.frameTypes.map(ft=>{
+      const key=sz.id+'_'+ft.id;
+      const val=S.framePrices[key]||0;
+      return `<td style="padding:4px 3px;"><input class="fi" type="number" value="${val}" min="0"
+        style="width:62px;padding:5px 4px;text-align:right;font-size:12px;border-radius:6px;"
+        onchange="setFramePrice('${sz.id}','${ft.id}',this.value);"
+        title="${sz.l} – ${ft.nm}"></td>`;
+    }).join('');
+    return `<tr><td style="padding:6px 8px;font-weight:700;font-size:12px;white-space:nowrap;color:var(--t);border-right:1px solid var(--b);background:var(--s2);">${sz.l}</td>${cells}</tr>`;
+  }).join('');
+
+  const typeHeaders=S.frameTypes.map(ft=>`<th style="padding:6px 4px;font-size:10px;font-weight:700;color:var(--t2);text-align:center;max-width:70px;">${ft.ico}<br>${ft.nm}</th>`).join('');
+
+  // Size management
+  const sizeList=S.frameSizes.map((sz,i)=>`
+    <div class="si">
+      <div style="font-weight:700;">${sz.l}</div>
+      <button class="mat-del" onclick="SM.play('click');rmFrameSize('${sz.id}');" title="Remove size">✕</button>
+    </div>`).join('');
+
+  // Frame type management
+  const typeList=S.frameTypes.map((ft,i)=>`
+    <div class="si">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:18px;">${ft.ico}</span>
+        <span style="font-weight:700;">${ft.nm}</span>
+      </div>
+      <button class="mat-del" onclick="SM.play('click');rmFrameType('${ft.id}');" title="Remove type">✕</button>
+    </div>`).join('');
+
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
+    <button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button>
+    <div style="font-size:18px;font-weight:800;">🪟 Frames</div>
+  </div>
+
+  <div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 13px;margin-bottom:12px;font-size:12px;color:var(--t2);">
+    Set individual prices for each <b>Size × Frame Type</b> combination below. Enter 0 to mark as unavailable.
+  </div>
+
+  <!-- PRICE MATRIX -->
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Price Matrix (₹)</div>
+  <div style="overflow-x:auto;margin-bottom:14px;border:1px solid var(--b);border-radius:var(--rad);">
+    <table style="border-collapse:collapse;min-width:100%;background:var(--s);">
+      <thead>
+        <tr>
+          <th style="padding:8px;font-size:11px;font-weight:700;color:var(--t2);text-align:left;border-right:1px solid var(--b);border-bottom:1px solid var(--b);background:var(--s2);">Size \ Type</th>
+          ${typeHeaders}
+        </tr>
+      </thead>
+      <tbody>${matrixRows}</tbody>
+    </table>
+  </div>
+  <button class="btn suc sm" onclick="SM.play('status');syncSettingsSave();showToast('✅ Prices saved!');" style="width:auto;margin-bottom:16px;">💾 Save All Prices</button>
+
+  <!-- FRAME SIZES -->
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Frame Sizes</div>
+  <div class="flush" style="margin-bottom:10px;">${sizeList||'<div style="padding:13px;text-align:center;color:var(--t2);">No sizes</div>'}</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="font-weight:800;margin-bottom:10px;">Add Frame Size</div>
+    <div class="fg"><label class="fl">Label (e.g. 8x10 in)</label><input class="fi" id="nfs-l" type="text" placeholder="8x10 in"></div>
+    <button class="btn pri" onclick="SM.play('click');addFrameSize();">+ Add Size</button>
+  </div>
+
+  <!-- FRAME TYPES -->
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Frame Types</div>
+  <div class="flush" style="margin-bottom:10px;">${typeList||'<div style="padding:13px;text-align:center;color:var(--t2);">No types</div>'}</div>
+  <div class="card">
+    <div style="font-weight:800;margin-bottom:10px;">Add Frame Type</div>
+    <div style="display:flex;gap:8px;">
+      <div class="fg" style="flex:1;"><label class="fl">Name</label><input class="fi" id="nft-n" type="text" placeholder="Wooden (Simple)"></div>
+      <div class="fg" style="width:70px;"><label class="fl">Icon</label><input class="fi" id="nft-i" type="text" placeholder="🪵" maxlength="2" style="font-size:20px;text-align:center;"></div>
+    </div>
+    <button class="btn pri" onclick="SM.play('click');addFrameType();">+ Add Type</button>
+  </div>`;
+}
+
+function setFramePrice(szId,ftId,val){
+  const key=szId+'_'+ftId,v=parseFloat(val)||0;
+  if(v>0)S.framePrices[key]=v;else delete S.framePrices[key];
+}
+function addFrameSize(){
+  const l=gv('nfs-l').trim();if(!l){SM.play('error');alert('Enter a label');return;}
+  S.frameSizes.push({id:'fs'+Date.now(),l});SM.play('tick');render(false);syncSettingsSave();
+}
+function rmFrameSize(id){
+  S.frameSizes=S.frameSizes.filter(s=>s.id!==id);
+  // remove prices for this size
+  Object.keys(S.framePrices).filter(k=>k.startsWith(id+'_')).forEach(k=>delete S.framePrices[k]);
+  SM.play('click');render(false);syncSettingsSave();
+}
+function addFrameType(){
+  const nm=gv('nft-n').trim(),ico=gv('nft-i').trim()||'🖼️';
+  if(!nm){SM.play('error');alert('Enter a type name');return;}
+  S.frameTypes.push({id:'ft'+Date.now(),nm,ico});SM.play('tick');render(false);syncSettingsSave();
+}
+function rmFrameType(id){
+  S.frameTypes=S.frameTypes.filter(t=>t.id!==id);
+  Object.keys(S.framePrices).filter(k=>k.endsWith('_'+id)).forEach(k=>delete S.framePrices[k]);
+  SM.play('click');render(false);syncSettingsSave();
 }
 
 function sr(i,t,s,oc){return`<div class="si" onclick="${oc}"><div><div style="font-weight:700;font-size:13px;">${i} ${t}</div>${s?`<div style="font-size:11px;color:var(--t2);">${s}</div>`:''}</div><span style="color:var(--t3);font-size:18px;">›</span></div>`;}
