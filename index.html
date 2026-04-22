@@ -7,6 +7,7 @@
 <title>Vikrant Offset Printers</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px;}
 :root{
   --a:#ef4444;
   --t:#f0eaff;--t2:#a090c0;--t3:#6a5a8a;
@@ -63,7 +64,7 @@ body.light #bgc{opacity:.45;}
 .sport.hi .stit,.sport.hi .ssub{color:#fff;}
 .sico{font-size:26px;}.stit{font-size:15px;font-weight:700;color:var(--t);}.ssub{font-size:11px;opacity:.65;margin-top:1px;color:var(--t);}
 .splash-bottom{position:absolute;bottom:20px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;}
-#admin-corner{padding:5px 12px;border-radius:20px;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:10px;font-weight:700;color:var(--t2);transition:all .2s;}
+#admin-corner{padding:5px 12px;border-radius:20px;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:10px;font-weight:700;color:var(--t2);transition:all .2s;font-family:inherit;}
 #admin-corner:hover{border-color:var(--a);color:var(--a);}
 .sh{padding:5px 12px;border-radius:20px;background:var(--g);font-size:10px;font-weight:700;color:#fff;text-decoration:none;transition:background .2s;}
 .sh:hover{background:#15803d;}
@@ -105,7 +106,7 @@ body.light .hdr{background:rgba(240,232,255,.92);}
 .ibtn:hover{background:var(--a);border-color:var(--a);}
 .ibtn:active{transform:scale(.85);}
 .pbadge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;background:var(--a);color:#fff;}
-.pill-sync{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;background:var(--s2);border:1px solid var(--b);font-size:10px;font-weight:700;color:var(--t2);}
+.pill-sync{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;background:var(--s2);border:1px solid var(--b);font-size:10px;font-weight:700;color:var(--t2);font-family:inherit;}
 .sdot{width:6px;height:6px;border-radius:50%;}
 .live{background:var(--g);animation:pulse 2s infinite;}
 .offline{background:var(--r);}
@@ -414,13 +415,13 @@ body.light .mod{background:rgba(248,242,255,.98);}
 </div>
 
 <div id="splash">
-  <button id="muteBtn" onclick="SM.toggle();" title="Toggle sounds">🔊</button>
+  <button id="muteBtn" onclick="SM.toggle();" title="Toggle sounds" aria-label="Toggle sounds">🔊</button>
   <div style="text-align:center;">
     <div class="slogo">Vikrant <span>Offset</span></div>
     <div style="font-size:11px;color:var(--t2);margin-top:2px;">Printers · Belagavi</div>
-    <div id="s-sync" class="pill-sync" style="margin:8px auto 0;display:inline-flex;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect">
+    <button id="s-sync" class="pill-sync" style="margin:8px auto 0;display:inline-flex;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect" aria-label="Reconnect to server">
       <div class="sdot conn" id="sdot"></div><span id="stxt">Connecting…</span>
-    </div>
+    </button>
   </div>
   <div class="sport hi" onclick="SM.play('click');goCust();">
     <div class="sico">🛒</div>
@@ -428,8 +429,8 @@ body.light .mod{background:rgba(248,242,255,.98);}
   </div>
   <div class="splash-bottom">
     <a class="sh" href="tel:+919035346417">📞 Helpline</a>
-    <button id="info-btn" onclick="openInfo();">ⓘ</button>
-    <div id="admin-corner" onclick="SM.play('click');goALog();">🔐 Admin</div>
+    <button id="info-btn" onclick="openInfo();" aria-label="Business information">ⓘ</button>
+    <button id="admin-corner" onclick="SM.play('click');goALog();" aria-label="Admin access">🔐 Admin</button>
   </div>
 </div>
 
@@ -464,12 +465,12 @@ body.light .mod{background:rgba(248,242,255,.98);}
   <header class="hdr">
     <div><div class="hlogo">Vikrant <span>Offset</span></div><div style="font-size:9px;color:var(--t3);">Printers · Belagavi</div></div>
     <div class="hright">
-      <div class="pill-sync" id="hs" style="display:none;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect"><div class="sdot conn" id="hsdot"></div><span id="hstxt" style="font-size:10px;">Sync</span></div>
+      <button class="pill-sync" id="hs" style="display:none;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect" aria-label="Sync status"><div class="sdot conn" id="hsdot"></div><span id="hstxt" style="font-size:10px;">Sync</span></button>
       <span class="pbadge" id="pbadge">Admin</span>
-      <button class="ibtn" id="dkbtn" onclick="darkToggle();">☀️</button>
-      <button class="ibtn" id="hMuteBtn" onclick="SM.toggle();">🔊</button>
-      <button class="ibtn" onclick="bkSplash();">⇄</button>
-      <a class="ibtn" href="tel:+919035346417">📞</a>
+      <button class="ibtn" id="dkbtn" onclick="darkToggle();" aria-label="Toggle dark mode">☀️</button>
+      <button class="ibtn" id="hMuteBtn" onclick="SM.toggle();" aria-label="Toggle sounds">🔊</button>
+      <button class="ibtn" onclick="bkSplash();" aria-label="Return to splash screen">⇄</button>
+      <a class="ibtn" href="tel:+919035346417" aria-label="Call helpline">📞</a>
     </div>
   </header>
   <main class="main" id="mc"></main>
@@ -498,7 +499,7 @@ const SM=(()=>{
   };
   const play=id=>{if(!muted&&sounds[id])sounds[id]();};
   const toggle=()=>{muted=!muted;try{localStorage.setItem('pf_muted',muted?'1':'0');}catch(e){}updateUI();if(!muted)play('tick');};
-  const updateUI=()=>{const icon=muted?'🔇':'🔊';['muteBtn','hMuteBtn'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=icon;e.style.opacity=muted?'.5':'1';}});};
+  const updateUI=()=>{const icon=muted?'🔇':'🔊',label=muted?'Unmute sounds':'Mute sounds';['muteBtn','hMuteBtn'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=icon;e.style.opacity=muted?'.5':'1';e.setAttribute('aria-label',label);}});};
   const init=()=>{try{getCtx();}catch(e){}updateUI();};
   return{play,toggle,init,isMuted:()=>muted};
 })();
@@ -684,7 +685,7 @@ function o2r(o){
 // DARK / BOOT
 // ════════════════════════════════════════════════
 function darkToggle(){S.dark=!S.dark;applyDark();}
-function applyDark(){document.body.classList.toggle('light',!S.dark);const b=document.getElementById('dkbtn');if(b)b.textContent=S.dark?'☀️':'🌙';}
+function applyDark(){document.body.classList.toggle('light',!S.dark);const b=document.getElementById('dkbtn');if(b){b.textContent=S.dark?'☀️':'🌙';b.setAttribute('aria-label',S.dark?'Switch to light mode':'Switch to dark mode');}}
 applyDark();
 (function boot(){
   initBg();SM.init();
