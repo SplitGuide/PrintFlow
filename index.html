@@ -659,7 +659,7 @@ async function syncSettingsLoad(){
 }
 
 async function dbAdd(o){if(!SB){const id='L'+Date.now();S.orders.unshift({id,...o});renderNav();return id;}try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(error)throw error;return data[0]?.id;}catch(e){alert('❌ Save failed: '+e.message);return null;}}
-async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
+async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',up:'unit_price',df:'design_fee',delf:'delivery_fee',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
 async function dbDel(id){
   const o=S.orders.find(x=>x.id===id);
   S.orders=S.orders.filter(x=>x.id!==id);
@@ -673,11 +673,11 @@ async function dbDel(id){
   }
 }
 const safeJ=(v,fb)=>{try{if(typeof v==='string'&&(v.startsWith('[')||v.startsWith('{')))return JSON.parse(v);return v||fb;}catch(e){return fb;}};
-function r2o(r){return{id:r.id,invNo:r.inv_no||'',at:r.at,cust:{nm:r.cust_name||'',ph:r.cust_phone||'',em:r.cust_email||''},ctype:r.customer_type||'ind',coname:r.company_name||'',gstin:r.gstin||'',otype:r.order_type||'order',cat:r.cat_name||'',sz:r.size_name||'',mat:r.mat_name||'',sc:r.subcategory||'',qty:r.qty||1,uprice:+r.unit_price||0,dfee:+r.design_fee||0,delfee:+r.delivery_fee||0,preg:+r.pre_gst||0,gst:+r.gst_amt||0,sub:+r.subtotal||0,total:+r.total||0,note:r.notes||'',del:r.delivery||false,daddr:r.address||'',status:r.status||'pending',pm:r.pay_method||'',isNew:r.is_new||false,appr:r.approval_status||'pending',upiSS:r.upi_screenshot||'',files:safeJ(r.attached_files,[]),fname:r.attached_file_name||'',fileData:r.attached_file_data||'',fileType:r.attached_file_type||'',jobStatus:r.job_status||'new',holdReasons:safeJ(r.hold_reasons,[]),payRequested:r.pay_requested||false,statusHistory:safeJ(r.status_history,[]),fromQuoId:r.from_quotation_id||null};}
+function r2o(r){return{id:r.id,invNo:r.inv_no||'',at:r.at,cust:{nm:r.cust_name||'',ph:r.cust_phone||'',em:r.cust_email||''},ctype:r.customer_type||'ind',coname:r.company_name||'',gstin:r.gstin||'',otype:r.order_type||'order',cat:r.cat_name||'',sz:r.size_name||'',mat:r.mat_name||'',sc:r.subcategory||'',qty:r.qty||1,up:+r.unit_price||0,df:+r.design_fee||0,delf:+r.delivery_fee||0,preg:+r.pre_gst||0,gst:+r.gst_amt||0,sub:+r.subtotal||0,total:+r.total||0,note:r.notes||'',del:r.delivery||false,daddr:r.address||'',status:r.status||'pending',pm:r.pay_method||'',isNew:r.is_new||false,appr:r.approval_status||'pending',upiSS:r.upi_screenshot||'',files:safeJ(r.attached_files,[]),fname:r.attached_file_name||'',fileData:r.attached_file_data||'',fileType:r.attached_file_type||'',jobStatus:r.job_status||'new',holdReasons:safeJ(r.hold_reasons,[]),payRequested:r.pay_requested||false,statusHistory:safeJ(r.status_history,[]),fromQuoId:r.from_quotation_id||null};}
 function o2r(o){
   // Use first file for legacy columns, full list in attached_files
   const firstFile=o.files&&o.files.length?o.files[0]:null;
-  return{inv_no:o.invNo,at:o.at,cust_name:o.cust?.nm||'',cust_phone:o.cust?.ph||'',cust_email:o.cust?.em||'',customer_type:o.ctype||'ind',company_name:o.coname||'',gstin:o.gstin||'',order_type:o.otype||'order',cat_name:o.cat||'',size_name:o.sz||'',mat_name:o.mat||'',subcategory:o.sc||'',qty:o.qty||1,unit_price:o.uprice||0,design_fee:o.dfee||0,delivery_fee:o.delfee||0,pre_gst:o.preg||0,gst_amt:o.gst||0,subtotal:o.sub||0,total:o.total||0,notes:o.note||'',delivery:o.del||false,address:o.daddr||'',status:o.status||'pending',pay_method:o.pm||'',is_new:o.isNew||false,approval_status:o.appr||'pending',upi_screenshot:o.upiSS||'',attached_files:JSON.stringify(o.files||[]),attached_file_name:firstFile?.name||'',attached_file_data:firstFile?.url||firstFile?.data||'',attached_file_type:firstFile?.type||'',job_status:o.jobStatus||'new',hold_reasons:JSON.stringify(o.holdReasons||[]),pay_requested:o.payRequested||false,status_history:JSON.stringify(o.statusHistory||[]),from_quotation_id:o.fromQuoId||null};
+  return{inv_no:o.invNo,at:o.at,cust_name:o.cust?.nm||'',cust_phone:o.cust?.ph||'',cust_email:o.cust?.em||'',customer_type:o.ctype||'ind',company_name:o.coname||'',gstin:o.gstin||'',order_type:o.otype||'order',cat_name:o.cat||'',size_name:o.sz||'',mat_name:o.mat||'',subcategory:o.sc||'',qty:o.qty||1,unit_price:o.up||0,design_fee:o.df||0,delivery_fee:o.delf||0,pre_gst:o.preg||0,gst_amt:o.gst||0,subtotal:o.sub||0,total:o.total||0,notes:o.note||'',delivery:o.del||false,address:o.daddr||'',status:o.status||'pending',pm:o.pm||'',is_new:o.isNew||false,approval_status:o.appr||'pending',upi_screenshot:o.upiSS||'',attached_files:JSON.stringify(o.files||[]),attached_file_name:firstFile?.name||'',attached_file_data:firstFile?.url||firstFile?.data||'',attached_file_type:firstFile?.type||'',job_status:o.jobStatus||'new',hold_reasons:JSON.stringify(o.holdReasons||[]),pay_requested:o.payRequested||false,status_history:JSON.stringify(o.statusHistory||[]),from_quotation_id:o.fromQuoId||null};
 }
 
 // ════════════════════════════════════════════════
@@ -786,10 +786,17 @@ function getSqftArea(f){
   return sz?toSqft(sz.w||0,sz.h||0,sz.cu||'ft'):0;
 }
 function calc(f){
-  const cat=S.cats.find(c=>c.id===f.cat),mat=S.mats.find(m=>m.id===f.mat);
-  const isSqft=cat&&cat.pricing==='sqft';
+  const cat=S.cats.find(c=>c.id===f.cat);
+  let mat=S.mats.find(m=>m.id===f.mat);
+  const isSqft=cat&&cat.pricing==='sqft',isFrame=cat&&cat.pricing==='frame';
   let bp=0,snm='',area=0;
-  if(isSqft){
+  if(isFrame){
+    const sz=S.frameSizes.find(s=>s.id===f.sz),ft=S.frameTypes.find(t=>t.id===f.mat);
+    const key=(f.sz&&f.mat)?f.sz+'_'+f.mat:'';
+    bp=key?(S.framePrices[key]||0):0;
+    snm=(sz?sz.l:'')+(ft?' – '+ft.nm:'');
+    mat=ft;
+  } else if(isSqft){
     const rate=mat?(mat.rate||0):0;
     area=getSqftArea(f);
     bp=Math.round(area*rate*100)/100;
@@ -802,15 +809,15 @@ function calc(f){
       if(sz){bp=(mat&&mat.price>0)?mat.price:sz.p;snm=sz.l;}
     }
   }
-  // Optional frame add-on
-  const frameKey=(f.addFrame&&f.frameSz&&f.frameFt)?f.frameSz+'_'+f.frameFt:'';
+  const canAddFrame=!isFrame;
+  const frameKey=(canAddFrame&&f.addFrame&&f.frameSz&&f.frameFt)?f.frameSz+'_'+f.frameFt:'';
   const framePrice=frameKey?(S.framePrices[frameKey]||0):0;
-  const frameSzObj=f.addFrame?S.frameSizes.find(s=>s.id===f.frameSz):null;
-  const frameFtObj=f.addFrame?S.frameTypes.find(t=>t.id===f.frameFt):null;
+  const frameSzObj=(canAddFrame&&f.addFrame)?S.frameSizes.find(s=>s.id===f.frameSz):null;
+  const frameFtObj=(canAddFrame&&f.addFrame)?S.frameTypes.find(t=>t.id===f.frameFt):null;
   const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0;
-  const frameTotal=f.addFrame?framePrice*f.qty:0;
+  const frameTotal=(canAddFrame&&f.addFrame)?framePrice*f.qty:0;
   const preg=sub+df+delf+frameTotal,gst=Math.round(preg*.18),total=preg+gst;
-  return{cat,mat,snm,up,sub,df,delf,preg,gst,total,area,isSqft,framePrice,frameTotal,frameSzObj,frameFtObj};
+  return{cat,mat,snm,up,sub,df,delf,preg,gst,total,area,isSqft,isFrame,framePrice,frameTotal,frameSzObj,frameFtObj};
 }
 
 // ════════════════════════════════════════════════
@@ -1191,30 +1198,24 @@ function wn2(){
 }
 
 function wn3(){
-  const cat=S.cats.find(c=>c.id===S.form.cat);
+  const f=S.form,cat=S.cats.find(c=>c.id===f.cat);
   const isSqft=cat&&cat.pricing==='sqft';
   const isFrame=cat&&cat.pricing==='frame';
   if(isFrame){
-    const sz=S.frameSizes.find(s=>s.id===f.sz);
-    const ft=S.frameTypes.find(t=>t.id===f.mat);
-    const key=(f.sz&&f.mat)?f.sz+'_'+f.mat:'';
-    const bp=key?(S.framePrices[key]||0):0;
-    const snm=(sz?sz.l:'')+(ft?' – '+ft.nm:'');
-    const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0,preg=sub+df+delf,gst=Math.round(preg*.18),total=preg+gst;
-    return{cat,mat:ft,snm,up,sub,df,delf,preg,gst,total,area:0,isSqft:false,isFrame:true};
-  }
-  if(isSqft){
-    const mats=S.mats.filter(m=>m.cats.includes(S.form.cat));
-    if(mats.length&&!S.form.mat){SM.play('error');alert('Please select a material');return;}
-    const cw=parseFloat(S.form.cw||gv('cw')||0),ch=parseFloat(S.form.ch||gv('ch')||0);
+    if(!f.sz){SM.play('error');alert('Select frame size');return;}
+    if(!f.mat){SM.play('error');alert('Select frame type');return;}
+  } else if(isSqft){
+    const mats=S.mats.filter(m=>m.cats.includes(f.cat));
+    if(mats.length&&!f.mat){SM.play('error');alert('Please select a material');return;}
+    const cw=parseFloat(f.cw||gv('cw')||0),ch=parseFloat(f.ch||gv('ch')||0);
     if(!cw||!ch){SM.play('error');alert('Please enter width and height');return;}
-    S.form.cw=String(cw);S.form.ch=String(ch);S.form.cu=S.form.cu||gv('cu')||'ft';
-    S.form.custom=true;
+    f.cw=String(cw);f.ch=String(ch);f.cu=f.cu||gv('cu')||'ft';
+    f.custom=true;
   }else{
-    if(!S.form.custom&&!S.form.sz){SM.play('error');alert('Select a size');return;}
-    if(S.form.custom){const cw=S.form.cw||gv('cw'),ch=S.form.ch||gv('ch');if(!cw||!ch){SM.play('error');alert('Enter dimensions');return;}S.form.cw=cw;S.form.ch=ch;S.form.cu=S.form.cu||gv('cu')||'ft';S.form.cp=S.form.cp||gv('cp')||'0';}
+    if(!f.custom&&!f.sz){SM.play('error');alert('Select a size');return;}
+    if(f.custom){const cw=f.cw||gv('cw'),ch=f.ch||gv('ch');if(!cw||!ch){SM.play('error');alert('Enter dimensions');return;}f.cw=cw;f.ch=ch;f.cu=f.cu||gv('cu')||'ft';f.cp=f.cp||gv('cp')||'0';}
   }
-  S.form.step=S.form.ctype==='co'?5:4;SM.play('click');render(true);
+  f.step=f.ctype==='co'?5:4;SM.play('click');render(true);
 }
 
 function wn4(){
@@ -1271,7 +1272,7 @@ async function submitOrder(){
     const initHistory=[{st:'new',note:`${isQuo?'Quotation':'Order'} submitted`,at:new Date().toISOString()}];
     const o={invNo,at:new Date().toISOString(),cust:{...f.cust},ctype:f.ctype,coname:f.coname||'',gstin:f.gstin||'',
       otype:f.otype||'order',cat:cat?.nm||'',sc:f.sc||'',sz:snm,mat:mat?.nm||'',
-      qty:f.qty,uprice:up,dfee:df,delfee:delf,preg,gst,sub,total,
+      qty:f.qty,up:up,df:df,delf:delf,preg,gst,sub,total,
       note:f.note,del:f.del,daddr:f.daddr||'',
       status:'pending',pm:'',isNew:true,appr:'pending',upiSS:'',
       files:f.files||[],fname:f.files[0]?.name||'',fileData:f.files[0]?.data||'',fileType:f.files[0]?.type||'',
@@ -1346,9 +1347,9 @@ function convertQuo(id){
   f.files=o.files||[];f.qty=o.qty||1;f.fromQuoId=id;
   const catObj=S.cats.find(c=>c.nm===o.cat);
   if(catObj){f.cat=catObj.id;f.sc=o.sc||'';}
-  if(catObj&&o.sz){const szObj=(S.sizes[catObj.id]||[]).find(s=>s.l===o.sz);if(szObj)f.sz=szObj.id;else{f.custom=true;f.cp=String(o.uprice||0);}}
+  if(catObj&&o.sz){const szObj=(S.sizes[catObj.id]||[]).find(s=>s.l===o.sz);if(szObj)f.sz=szObj.id;else{f.custom=true;f.cp=String(o.up||0);}}
   if(o.mat){const matObj=S.mats.find(m=>m.nm===o.mat);if(matObj)f.mat=matObj.id;}
-  f.step=5;S.form=f;S.view='browse';render(true);
+  f.step=o.ctype==='co'?6:5;S.form=f;S.view='browse';render(true);
   showMod(`<div style="text-align:center;padding:10px 0 20px;">
     <div style="font-size:40px;margin-bottom:12px;">🔄</div>
     <div style="font-size:16px;font-weight:800;margin-bottom:6px;">Converting Quotation</div>
@@ -1861,7 +1862,7 @@ function vSett(){
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Controls</div>
     ${sr('⏸️','Hold Reasons','',"S.sub='hold';render(false);")}
     <div class="si" style="cursor:default;"><div><div style="font-weight:700;">🔊 Sound Effects</div></div><div class="toggle${SM.isMuted()?'':' on'}" onclick="SM.toggle();render(false);"></div></div>
-    <div class="si" style="cursor:default;"><div><div style="font-weight:700;">🎨 Design Fee</div></div><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--t2);">₹</span><input class="fi" type="number" value="${S.dFee}" style="width:80px;text-align:right;padding:7px 9px;" onchange="S.dFee=parseInt(this.value)||0;"></div></div>
+    <div class="si" style="cursor:default;"><div><div style="font-weight:700;">🎨 Design Fee</div></div><div style="display:flex;align-items:center;gap:4px;"><span style="color:var(--t2);">₹</span><input class="fi" type="number" value="${S.dFee}" style="width:80px;text-align:right;padding:7px 9px;" onchange="S.dFee=parseInt(this.value)||0;syncSettingsSave();"></div></div>
   </div>
   <div class="flush" style="margin-bottom:10px;">
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Appearance</div>
@@ -1978,7 +1979,7 @@ function rmFrameType(id){
 function sr(i,t,s,oc){return`<div class="si" onclick="${oc}"><div><div style="font-weight:700;font-size:13px;">${i} ${t}</div>${s?`<div style="font-size:11px;color:var(--t2);">${s}</div>`:''}</div><span style="color:var(--t3);font-size:18px;">›</span></div>`;}
 function bkS(){S.sub=null;render(false);}
 
-function sHoldReasons(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Hold Reasons</div></div><div class="flush" style="margin-bottom:10px;">${S.holdReasons.map((r,i)=>`<div class="mat-row"><div class="mat-info"><div class="mat-name">${esc(r)}</div></div><button class="mat-del" onclick="SM.play('click');S.holdReasons.splice(${i},1);render(false);">✕</button></div>`).join('')}</div><div class="card"><div style="font-weight:800;margin-bottom:10px;">Add Reason</div><div style="display:flex;gap:8px;"><input class="fi" id="newReason" type="text" placeholder="e.g. Wrong colour profile" style="flex:1;"><button class="btn pri sm" onclick="SM.play('click');addHoldReason();">+ Add</button></div></div>`;}
+function sHoldReasons(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Hold Reasons</div></div><div class="flush" style="margin-bottom:10px;">${S.holdReasons.map((r,i)=>`<div class="mat-row"><div class="mat-info"><div class="mat-name">${esc(r)}</div></div><button class="mat-del" onclick="SM.play('click');S.holdReasons.splice(${i},1);render(false);syncSettingsSave();">✕</button></div>`).join('')}</div><div class="card"><div style="font-weight:800;margin-bottom:10px;">Add Reason</div><div style="display:flex;gap:8px;"><input class="fi" id="newReason" type="text" placeholder="e.g. Wrong colour profile" style="flex:1;"><button class="btn pri sm" onclick="SM.play('click');addHoldReason();">+ Add</button></div></div>`;}
 function addHoldReason(){const v=gv('newReason').trim();if(!v)return;S.holdReasons.push(v);SM.play('click');render(false);syncSettingsSave();}
 
 function sClr(){const nm={red:'Red',orange:'Orange',blue:'Blue',green:'Green',purple:'Purple',teal:'Teal'};return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Color &amp; Theme</div></div><div class="card" style="margin-bottom:10px;"><div style="font-weight:800;margin-bottom:12px;">Accent + Background</div><div class="swatches">${Object.entries(THEMES).map(([k,v])=>`<div style="text-align:center;cursor:pointer;" onclick="SM.play('click');setTheme('${k}');render(false);"><div class="sw${S.scheme===k?' on':''}" style="background:${v.a};"></div><div style="font-size:10px;margin-top:3px;color:var(--t2);">${nm[k]}</div></div>`).join('')}</div></div><div class="card"><div style="font-weight:800;margin-bottom:8px;">Display Mode</div><div class="togs"><div class="tog${S.dark?' on':''}" onclick="S.dark=true;applyDark();SM.play('click');render(false);">🌙 Dark</div><div class="tog${!S.dark?' on':''}" onclick="S.dark=false;applyDark();SM.play('click');render(false);">☀️ Light</div></div></div>`;}
@@ -2101,7 +2102,7 @@ function sMats(){
   </div>`;
 }
 
-function sImgs(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Catalog Images</div></div>${S.cats.map(c=>`<div class="card" style="margin-bottom:9px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span style="font-size:20px;">${c.ico}</span><span style="font-weight:700;">${c.nm}</span></div>${S.imgs[c.id]?`<img src="${S.imgs[c.id]}" style="width:100%;height:95px;object-fit:cover;border-radius:9px;margin-bottom:8px;">`:''}  <div style="display:flex;gap:7px;"><button class="btn gho sm" style="flex:1;" onclick="SM.play('click');document.getElementById('ci-${c.id}').click();">📷 ${S.imgs[c.id]?'Change':'Add'}</button>${S.imgs[c.id]?`<button class="btn dan sm" onclick="SM.play('click');delete S.imgs['${c.id}'];render(false);">Remove</button>`:''}</div><input type="file" id="ci-${c.id}" accept="image/*" style="display:none;" onchange="pickCatImg(this,'${c.id}');"></div>`).join('')}`;}
+function sImgs(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Catalog Images</div></div>${S.cats.map(c=>`<div class="card" style="margin-bottom:9px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span style="font-size:20px;">${c.ico}</span><span style="font-weight:700;">${c.nm}</span></div>${S.imgs[c.id]?`<img src="${S.imgs[c.id]}" style="width:100%;height:95px;object-fit:cover;border-radius:9px;margin-bottom:8px;">`:''}  <div style="display:flex;gap:7px;"><button class="btn gho sm" style="flex:1;" onclick="SM.play('click');document.getElementById('ci-${c.id}').click();">📷 ${S.imgs[c.id]?'Change':'Add'}</button>${S.imgs[c.id]?`<button class="btn dan sm" onclick="SM.play('click');delete S.imgs['${c.id}'];render(false);syncSettingsSave();">Remove</button>`:''}</div><input type="file" id="ci-${c.id}" accept="image/*" style="display:none;" onchange="pickCatImg(this,'${c.id}');"></div>`).join('')}`;}
 
 // ════════════════════════════════════════════════
 // SETTINGS CRUD
@@ -2135,7 +2136,7 @@ function addSz(){
   }
   SM.play('tick');render(false);syncSettingsSave();
 }
-function updSz(cat,id,v){const sz=(S.sizes[cat]||[]).find(s=>s.id===id);if(sz)sz.p=parseFloat(v)||0;}
+function updSz(cat,id,v){const sz=(S.sizes[cat]||[]).find(s=>s.id===id);if(sz){sz.p=parseFloat(v)||0;render(false);syncSettingsSave();}}
 function rmSz(cat,id){S.sizes[cat]=(S.sizes[cat]||[]).filter(s=>s.id!==id);render(false);syncSettingsSave();}
 function addMat(){
   const nm=gv('nm-n').trim(),rate=parseFloat(gv('nm-r'))||0,price=parseFloat(gv('nm-c'))||0;
@@ -2144,8 +2145,8 @@ function addMat(){
   S.mats.push({id:'mat'+Date.now(),nm,rate,price,cats});
   SM.play('status');render(false);syncSettingsSave();
 }
-function updMatRate(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.rate=parseFloat(v)||0;syncSettingsSave();}}
-function updMatPrice(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.price=parseFloat(v)||0;syncSettingsSave();}}
+function updMatRate(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.rate=parseFloat(v)||0;render(false);syncSettingsSave();}}
+function updMatPrice(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.price=parseFloat(v)||0;render(false);syncSettingsSave();}}
 function rmMat(id){S.mats=S.mats.filter(m=>m.id!==id);render(false);syncSettingsSave();}
 
 // ════════════════════════════════════════════════
