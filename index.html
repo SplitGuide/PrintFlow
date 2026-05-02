@@ -622,7 +622,7 @@ const S={
   },
 };
 
-function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null};}
+function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null,customDFee:null};}
 
 // ════════════════════════════════════════════════
 // SUPABASE
@@ -905,7 +905,8 @@ function calc(f){
   // Optional duplicate/NCR add-on
   const dupObj=f.addDup&&f.dupSet?S.dupSets.find(d=>d.id===f.dupSet):null;
   const dupPrice=dupObj?(dupObj.price*f.qty):0;
-  const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0;
+  const dFeeAmt=f.customDFee!==null&&f.customDFee!==undefined?Number(f.customDFee):S.dFee;
+  const up=bp,sub=up*f.qty,df=f.design==='us'?dFeeAmt:0,delf=f.del?150:0;
   const frameTotal=f.addFrame?framePrice*f.qty:0;
   const foamTotal=f.addFoam?foamPrice*f.qty:0;
   const preg=sub+df+delf+frameTotal+foamTotal+dupPrice,gst=Math.round(preg*.18),total=preg+gst;
@@ -1339,11 +1340,26 @@ function wS4(){
         <div><div style="font-weight:700;font-size:14px;${f.design==='cust'?'color:#fff':''}">I'll provide my file</div><div style="font-size:11px;${f.design==='cust'?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">Upload required</div></div>
         ${f.design==='cust'?'<div style="margin-left:auto;font-size:18px;color:rgba(255,255,255,.8);">✓</div>':'<div style="margin-left:auto;font-size:18px;color:var(--t3);">›</div>'}
       </div>
-      <div class="sport${f.design==='us'?' hi':''}" style="max-width:100%;border-radius:var(--rad);" onclick="S.form.design='us';S.form.fileErr=false;render(false);">
+      <div class="sport${f.design==='us'?' hi':''}" style="max-width:100%;border-radius:var(--rad);" onclick="S.form.design='us';if(S.form.customDFee===null)S.form.customDFee=S.dFee;S.form.fileErr=false;render(false);">
         <div style="font-size:22px;">🎨</div>
-        <div><div style="font-weight:700;font-size:14px;${f.design==='us'?'color:#fff':''}">Design for me</div><div style="font-size:11px;${f.design==='us'?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">+₹${S.dFee}</div></div>
+        <div><div style="font-weight:700;font-size:14px;${f.design==='us'?'color:#fff':''}">Design for me</div>
+          <div style="font-size:11px;${f.design==='us'?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">+₹${f.design==='us'&&f.customDFee!==null?f.customDFee:S.dFee}</div>
+        </div>
         ${f.design==='us'?'<div style="margin-left:auto;font-size:18px;color:rgba(255,255,255,.8);">✓</div>':'<div style="margin-left:auto;font-size:18px;color:var(--t3);">›</div>'}
       </div>
+      ${f.design==='us'?`<div style="background:color-mix(in srgb,var(--a) 8%,transparent);border:1px solid color-mix(in srgb,var(--a) 25%,transparent);border-radius:var(--rsm);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--t);">Design Charge</div>
+          <div style="font-size:10px;color:var(--t2);">Edit for this order</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:13px;color:var(--t2);">&#8377;</span>
+          <input class="fi" type="number" min="0" value="${f.customDFee!==null?f.customDFee:S.dFee}"
+            style="width:90px;text-align:right;font-size:16px;font-weight:800;padding:6px 10px;border-color:color-mix(in srgb,var(--a) 40%,transparent);"
+            oninput="S.form.customDFee=this.value===''?null:parseFloat(this.value)||0;render(false);">
+          <button style="font-size:11px;color:var(--t2);background:none;border:none;cursor:pointer;padding:4px;" onclick="S.form.customDFee=S.dFee;render(false);" title="Reset to default">↺</button>
+        </div>
+      </div>`:''}
     </div>
   </div>
   ${f.design==='cust'?`<div class="fg"><label class="fl">Attach File(s) <span style="color:var(--r);">*</span></label>
@@ -1450,6 +1466,21 @@ function wn4(){
   S.form.note=S.form.note||gv('note');
   if(S.form.del){const a=S.form.daddr||gv('daddr');if(!a){SM.play('error');alert('Enter delivery address');return;}S.form.daddr=a;}
   S.form.step=S.form.ctype==='co'?6:5;SM.play('click');render(true);
+}
+
+function updateOrderDfee(id, newFee){
+  const o=S.orders.find(x=>x.id===id);if(!o)return;
+  const fee=parseFloat(newFee)||0;
+  // Recalculate totals
+  const prevDfee=o.dfee||0;
+  const diff=fee-prevDfee;
+  o.dfee=fee;
+  o.preg=Math.max(0,(o.preg||0)+diff);
+  o.gst=Math.round(o.preg*0.18);
+  o.total=o.preg+o.gst;
+  dbUpd(id,{dfee:fee,preg:o.preg,gst:o.gst,total:o.total});
+  SM.play('tick');render(false);
+  showToast('✅ Design fee updated → ₹'+fee.toLocaleString('en-IN'));
 }
 
 function adjQ(d){
@@ -1673,6 +1704,19 @@ function vInv(){
   const waContact=encodeURIComponent(`Hi! Regarding *${o.invNo}* – ${o.cat}`);
 
   const adminSection=isA?`
+  <div class="card" style="margin-bottom:10px;">
+    <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">🎨 Design Charge</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div style="font-size:12px;color:var(--t2);">Adjust design fee for this order${o.dfee!==S.dFee?'<div style="font-size:10px;color:var(--a);font-weight:700;margin-top:2px;">Custom charge applied</div>':''}</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="color:var(--t2);">&#8377;</span>
+        <input class="fi" type="number" min="0" value="${o.dfee||0}"
+          style="width:90px;text-align:right;font-size:16px;font-weight:800;padding:6px 10px;"
+          onchange="updateOrderDfee('${o.id}',this.value);">
+        <button style="font-size:11px;color:var(--t2);background:none;border:none;cursor:pointer;padding:4px;" onclick="updateOrderDfee('${o.id}',${S.dFee});this.previousElementSibling.previousElementSibling.value=${S.dFee};" title="Reset to default ₹${S.dFee}">↺</button>
+      </div>
+    </div>
+  </div>
   <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">📋 Update Status</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
