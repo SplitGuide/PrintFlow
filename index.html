@@ -679,8 +679,31 @@ async function syncSettingsLoad(){
     data.forEach(({key,value})=>{
       try{
         const v=JSON.parse(value);
-        if(key==='cats'&&Array.isArray(v)&&v.length)S.cats=v;
-        else if(key==='sizes'&&typeof v==='object'&&!Array.isArray(v))S.sizes=v;
+        if(key==='cats'&&Array.isArray(v)&&v.length){
+          // Merge DB cats with default state — preserve hardcoded flags
+          S.cats=v.map(dbCat=>{
+            const def=S.cats.find(d=>d.id===dbCat.id)||{};
+            return Object.assign(
+              {frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+              def,           // keep hardcoded flags (allowSides, pricing)
+              dbCat,         // override with saved values (nm, ico, sc, frameOn, etc.)
+              {pricing:dbCat.pricing||def.pricing||'fixed',
+               allowSides:def.allowSides||dbCat.allowSides||false}
+            );
+          });
+        }
+        else if(key==='sizes'&&typeof v==='object'&&!Array.isArray(v)){
+          // Merge DB sizes — preserve pSingle/pDouble from defaults if missing
+          const merged={...S.sizes};
+          Object.entries(v).forEach(([catId,dbSzs])=>{
+            const defSzs=S.sizes[catId]||[];
+            merged[catId]=(Array.isArray(dbSzs)?dbSzs:[]).map(dbSz=>{
+              const def=defSzs.find(d=>d.id===dbSz.id)||{};
+              return Object.assign({},def,dbSz);
+            });
+          });
+          S.sizes=merged;
+        }
         else if(key==='mats'&&Array.isArray(v))S.mats=v;
         else if(key==='dFee'&&!isNaN(v))S.dFee=Number(v);
         else if(key==='holdReasons'&&Array.isArray(v))S.holdReasons=v;
