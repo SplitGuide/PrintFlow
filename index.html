@@ -392,6 +392,10 @@ body.light .mod{background:rgba(248,242,255,.98);}
 .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:var(--s2);border-radius:var(--rad);border:1px solid var(--b);}
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:rgba(14,5,32,.95);border:1px solid var(--b2);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--t);z-index:9000;pointer-events:none;animation:toastIn .35s var(--sp) forwards;white-space:nowrap;backdrop-filter:blur(12px);}
 .confetti-piece{position:fixed;width:8px;height:8px;pointer-events:none;z-index:9990;animation:confettiFall linear forwards;border-radius:2px;}
+/* Add-ons section smooth expand */
+.addon-body{animation:fadeIn .22s var(--sp);}
+/* Settings card grid hover */
+.sett-card:hover{border-color:var(--a)!important;transform:translateY(-2px);}
 
 @media print{
   #bgc,#welcome,#splash,#alog,.hdr,.bnav,.nop,#mods,#infoSheet{display:none!important;}
@@ -551,18 +555,23 @@ const S={
   dark:true,scheme:'red',imgs:{},searchQ:'',holdReasons:[...DEFAULT_HOLD_REASONS],
   quoSearch:'',quoResults:null,
   cats:[
-    {id:'flex',nm:'Flex Printing',ico:'🖼️',sc:['Indoor Flex','Outdoor Flex','Glossy Flex'],pricing:'sqft'},
-    {id:'cards',nm:'Business Cards',ico:'💳',sc:['Single Side','Double Side','Matte Lam','Gloss Lam'],pricing:'fixed'},
-    {id:'dig',nm:'Digital Print',ico:'🖨️',sc:['Color Print','B&W','Photo Print'],pricing:'fixed'},
-    {id:'ban',nm:'Banners',ico:'📢',sc:['Vinyl','Star Flex','Backlit'],pricing:'sqft'},
-    {id:'stk',nm:'Stickers',ico:'🏷️',sc:['Round','Square','Custom','Transparent'],pricing:'fixed'},
-    {id:'bro',nm:'Brochures',ico:'📰',sc:['Tri-fold','Bi-fold','Z-fold'],pricing:'fixed'},
-    {id:'pos',nm:'Posters',ico:'🎨',sc:['Glossy','Matte','Canvas'],pricing:'fixed'},
-    {id:'tsh',nm:'T-Shirt Print',ico:'👕',sc:['Screen Print','Digital','Embroidery'],pricing:'fixed'},
+    {id:'flex',nm:'Flex Printing',ico:'🖼️',sc:['Indoor Flex','Outdoor Flex','Glossy Flex'],pricing:'sqft',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+    {id:'cards',nm:'Business Cards',ico:'💳',sc:['Single Side','Double Side','Matte Lam','Gloss Lam'],pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+    {id:'dig',nm:'Digital Print',ico:'🖨️',sc:['Color Print','B&W','Photo Print'],pricing:'fixed',frameOn:true,frameSubcats:[],foamOn:true,foamSubcats:[],dupOn:true,dupSubcats:[],allowSides:true},
+    {id:'ban',nm:'Banners',ico:'📢',sc:['Vinyl','Star Flex','Backlit'],pricing:'sqft',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+    {id:'stk',nm:'Stickers',ico:'🏷️',sc:['Round','Square','Custom','Transparent'],pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+    {id:'bro',nm:'Brochures',ico:'📰',sc:['Tri-fold','Bi-fold','Z-fold'],pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:true,dupSubcats:[]},
+    {id:'pos',nm:'Posters',ico:'🎨',sc:['Glossy','Matte','Canvas'],pricing:'fixed',frameOn:true,frameSubcats:[],foamOn:true,foamSubcats:[],dupOn:false,dupSubcats:[]},
+    {id:'tsh',nm:'T-Shirt Print',ico:'👕',sc:['Screen Print','Digital','Embroidery'],pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
   ],
-  sizes:{flex:[{id:'f1',l:'1×2 ft',w:1,h:2,cu:'ft'},{id:'f2',l:'2×3 ft',w:2,h:3,cu:'ft'},{id:'f3',l:'3×4 ft',w:3,h:4,cu:'ft'},{id:'f4',l:'4×6 ft',w:4,h:6,cu:'ft'},{id:'f5',l:'6×8 ft',w:6,h:8,cu:'ft'},{id:'f6',l:'10×10 ft',w:10,h:10,cu:'ft'}],cards:[{id:'c1',l:'Standard 3.5x2in',p:200},{id:'c2',l:'Slim',p:180},{id:'c3',l:'Square',p:250}],dig:[{id:'d1',l:'A4',p:20},{id:'d2',l:'A3',p:35},{id:'d3',l:'A2',p:65},{id:'d4',l:'A1',p:120}],ban:[{id:'b1',l:'2×4 ft',w:2,h:4,cu:'ft'},{id:'b2',l:'3×6 ft',w:3,h:6,cu:'ft'},{id:'b3',l:'4×8 ft',w:4,h:8,cu:'ft'},{id:'b4',l:'5×10 ft',w:5,h:10,cu:'ft'}],stk:[{id:'s1',l:'2x2 in',p:15},{id:'s2',l:'3x3 in',p:20},{id:'s3',l:'4x6 in',p:30},{id:'s4',l:'A4 Sheet',p:60}],bro:[{id:'br1',l:'Tri-fold A4',p:25},{id:'br2',l:'Bi-fold A4',p:20},{id:'br3',l:'Tri-fold A3',p:45}],pos:[{id:'p1',l:'A3',p:50},{id:'p2',l:'A2',p:90},{id:'p3',l:'A1',p:160},{id:'p4',l:'18x24in',p:110}],tsh:[{id:'t1',l:'Front Only',p:150},{id:'t2',l:'Back Only',p:150},{id:'t3',l:'Front and Back',p:250}]},
+  sizes:{flex:[{id:'f1',l:'1×2 ft',w:1,h:2,cu:'ft'},{id:'f2',l:'2×3 ft',w:2,h:3,cu:'ft'},{id:'f3',l:'3×4 ft',w:3,h:4,cu:'ft'},{id:'f4',l:'4×6 ft',w:4,h:6,cu:'ft'},{id:'f5',l:'6×8 ft',w:6,h:8,cu:'ft'},{id:'f6',l:'10×10 ft',w:10,h:10,cu:'ft'}],cards:[{id:'c1',l:'Standard 3.5x2in',p:200},{id:'c2',l:'Slim',p:180},{id:'c3',l:'Square',p:250}],dig:[{id:'d1',l:'A4',p:20,pSingle:20,pDouble:35},{id:'d2',l:'A3',p:35,pSingle:35,pDouble:60},{id:'d3',l:'A2',p:65,pSingle:65,pDouble:110},{id:'d4',l:'A1',p:120,pSingle:120,pDouble:200}],ban:[{id:'b1',l:'2×4 ft',w:2,h:4,cu:'ft'},{id:'b2',l:'3×6 ft',w:3,h:6,cu:'ft'},{id:'b3',l:'4×8 ft',w:4,h:8,cu:'ft'},{id:'b4',l:'5×10 ft',w:5,h:10,cu:'ft'}],stk:[{id:'s1',l:'2x2 in',p:15},{id:'s2',l:'3x3 in',p:20},{id:'s3',l:'4x6 in',p:30},{id:'s4',l:'A4 Sheet',p:60}],bro:[{id:'br1',l:'Tri-fold A4',p:25},{id:'br2',l:'Bi-fold A4',p:20},{id:'br3',l:'Tri-fold A3',p:45}],pos:[{id:'p1',l:'A3',p:50},{id:'p2',l:'A2',p:90},{id:'p3',l:'A1',p:160},{id:'p4',l:'18x24in',p:110}],tsh:[{id:'t1',l:'Front Only',p:150},{id:'t2',l:'Back Only',p:150},{id:'t3',l:'Front and Back',p:250}]},
   mats:[{id:'m1',nm:'Normal Flex',rate:45,price:0,cats:['flex','ban']},{id:'m2',nm:'Star Flex',rate:65,price:0,cats:['flex','ban']},{id:'m3',nm:'Backlit Flex',rate:100,price:0,cats:['flex','ban']},{id:'m4',nm:'Vinyl',rate:55,price:25,cats:['flex','stk','ban']},{id:'m5',nm:'Glossy Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m6',nm:'Matte Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m7',nm:'Art Paper 130gsm',rate:0,price:0,cats:['dig','pos','bro','cards']},{id:'m8',nm:'Art Paper 300gsm',rate:0,price:0,cats:['cards','pos','bro']},{id:'m9',nm:'Canvas',rate:120,price:100,cats:['flex','ban','pos']},{id:'m10',nm:'Transparent Vinyl',rate:0,price:40,cats:['stk']},{id:'m11',nm:'Cotton',rate:0,price:0,cats:['tsh']},{id:'m12',nm:'Polyester',rate:0,price:30,cats:['tsh']}],
   dFee:200,
+  // Duplicate / NCR copy sets
+  dupSets:[
+    {id:'dup2',label:'Duplicate (2-ply)',copies:2,price:3},
+    {id:'dup3',label:'Triplicate (3-ply)',copies:3,price:5},
+  ],
   // Frame settings: sizes and types with price matrix
   frameSizes:[
     {id:'fs1',l:'4x6 in'},{id:'fs2',l:'5x7 in'},{id:'fs3',l:'6x8 in'},
@@ -589,9 +598,31 @@ const S={
     'fs9_ft1':160,'fs9_ft2':230,'fs9_ft3':200,'fs9_ft4':290,'fs9_ft5':180,
     'fs10_ft1':220,'fs10_ft2':320,'fs10_ft3':270,'fs10_ft4':390,'fs10_ft5':250,
   },
+  // Foam Sheet add-on: size × thickness matrix
+  foamSizes:[
+    {id:'fms1',l:'A4'},{id:'fms2',l:'A3'},{id:'fms3',l:'A2'},
+    {id:'fms4',l:'12×18 in'},{id:'fms5',l:'18×24 in'},{id:'fms6',l:'24×36 in'},
+    {id:'fms7',l:'Custom'},
+  ],
+  foamTypes:[
+    {id:'fmt1',nm:'3mm Foam',ico:'⬜'},
+    {id:'fmt2',nm:'5mm Foam',ico:'⬛'},
+    {id:'fmt3',nm:'8mm Foam',ico:'🟫'},
+    {id:'fmt4',nm:'10mm Foam',ico:'📦'},
+  ],
+  // foamPrices: { 'sizeId_typeId': price }
+  foamPrices:{
+    'fms1_fmt1':40,'fms1_fmt2':55,'fms1_fmt3':75,'fms1_fmt4':90,
+    'fms2_fmt1':70,'fms2_fmt2':95,'fms2_fmt3':130,'fms2_fmt4':160,
+    'fms3_fmt1':120,'fms3_fmt2':165,'fms3_fmt3':220,'fms3_fmt4':270,
+    'fms4_fmt1':90,'fms4_fmt2':120,'fms4_fmt3':165,'fms4_fmt4':200,
+    'fms5_fmt1':160,'fms5_fmt2':210,'fms5_fmt3':290,'fms5_fmt4':350,
+    'fms6_fmt1':280,'fms6_fmt2':370,'fms6_fmt3':500,'fms6_fmt4':600,
+    'fms7_fmt1':0,'fms7_fmt2':0,'fms7_fmt3':0,'fms7_fmt4':0,
+  },
 };
 
-function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null};}
+function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null};}
 
 // ════════════════════════════════════════════════
 // SUPABASE
@@ -632,6 +663,10 @@ async function syncSettingsSave(){
     {key:'frameSizes',  value:JSON.stringify(S.frameSizes)},
     {key:'frameTypes',  value:JSON.stringify(S.frameTypes)},
     {key:'framePrices', value:JSON.stringify(S.framePrices)},
+    {key:'dupSets',     value:JSON.stringify(S.dupSets)},
+    {key:'foamSizes',    value:JSON.stringify(S.foamSizes)},
+    {key:'foamTypes',    value:JSON.stringify(S.foamTypes)},
+    {key:'foamPrices',   value:JSON.stringify(S.foamPrices)},
   ];
   try{await SB.from('settings').upsert(rows,{onConflict:'key'});}catch(e){console.warn('Settings save failed',e);}
 }
@@ -653,6 +688,10 @@ async function syncSettingsLoad(){
         else if(key==='frameSizes'&&Array.isArray(v)&&v.length)S.frameSizes=v;
         else if(key==='frameTypes'&&Array.isArray(v)&&v.length)S.frameTypes=v;
         else if(key==='framePrices'&&typeof v==='object')S.framePrices=v;
+        else if(key==='dupSets'&&Array.isArray(v))S.dupSets=v;
+        else if(key==='foamSizes'&&Array.isArray(v)&&v.length)S.foamSizes=v;
+        else if(key==='foamTypes'&&Array.isArray(v)&&v.length)S.foamTypes=v;
+        else if(key==='foamPrices'&&typeof v==='object')S.foamPrices=v;
       }catch(e){}
     });
   }catch(e){console.warn('Settings load failed',e);}
@@ -786,11 +825,18 @@ function getSqftArea(f){
   return sz?toSqft(sz.w||0,sz.h||0,sz.cu||'ft'):0;
 }
 function calc(f){
-  const cat=S.cats.find(c=>c.id===f.cat),mat=S.mats.find(m=>m.id===f.mat);
+  const cat=S.cats.find(c=>c.id===f.cat);
+  // Resolve material: check subcategory-specific rate first
+  const mat=S.mats.find(m=>m.id===f.mat);
   const isSqft=cat&&cat.pricing==='sqft';
   let bp=0,snm='',area=0;
   if(isSqft){
-    const rate=mat?(mat.rate||0):0;
+    // For sqft: check subcat-specific rate on material
+    let rate=0;
+    if(mat){
+      const subKey=f.cat+'___'+f.sc;
+      rate=(f.sc&&mat.subRates&&mat.subRates[subKey]!=null)?mat.subRates[subKey].rate:(mat.rate||0);
+    }
     area=getSqftArea(f);
     bp=Math.round(area*rate*100)/100;
     if(f.custom){snm='Custom ('+f.cw+'x'+f.ch+' '+f.cu+')';}
@@ -799,7 +845,28 @@ function calc(f){
     if(f.custom){bp=parseFloat(f.cp)||0;snm='Custom ('+f.cw+'x'+f.ch+' '+f.cu+')';}
     else{
       const sz=(S.sizes[f.cat]||[]).find(s=>s.id===f.sz);
-      if(sz){bp=(mat&&mat.price>0)?mat.price:sz.p;snm=sz.l;}
+      if(sz){
+        // Check subcat-specific price on material
+        let matP=0;
+        if(mat){
+          const subKey=f.cat+'___'+f.sc;
+          matP=(f.sc&&mat.subRates&&mat.subRates[subKey]!=null)?mat.subRates[subKey].price:(mat.price||0);
+        }
+        // Check sides (single/double)
+        if(cat&&cat.allowSides&&f.sides&&!f.custom){
+          // Check subcategory-specific side price first
+          const subKey=f.cat+'___'+f.sc;
+          const subR=f.sc&&mat&&mat.subRates&&mat.subRates[subKey];
+          if(f.sides==='double'){
+            bp=subR&&subR.pDouble!=null?subR.pDouble:(sz.pDouble||Math.round((sz.pSingle||sz.p)*1.7));
+          }else{
+            bp=subR&&subR.pSingle!=null?subR.pSingle:(sz.pSingle||sz.p);
+          }
+        }else{
+          bp=matP>0?matP:sz.p;
+        }
+        snm=sz.l;
+      }
     }
   }
   // Optional frame add-on
@@ -807,10 +874,19 @@ function calc(f){
   const framePrice=frameKey?(S.framePrices[frameKey]||0):0;
   const frameSzObj=f.addFrame?S.frameSizes.find(s=>s.id===f.frameSz):null;
   const frameFtObj=f.addFrame?S.frameTypes.find(t=>t.id===f.frameFt):null;
+  // Optional foam sheet add-on
+  const foamKey=(f.addFoam&&f.foamSz&&f.foamFt)?f.foamSz+'_'+f.foamFt:'';
+  const foamPrice=foamKey?(S.foamPrices[foamKey]||0):0;
+  const foamSzObj=f.addFoam?S.foamSizes.find(s=>s.id===f.foamSz):null;
+  const foamFtObj=f.addFoam?S.foamTypes.find(t=>t.id===f.foamFt):null;
+  // Optional duplicate/NCR add-on
+  const dupObj=f.addDup&&f.dupSet?S.dupSets.find(d=>d.id===f.dupSet):null;
+  const dupPrice=dupObj?(dupObj.price*f.qty):0;
   const up=bp,sub=up*f.qty,df=f.design==='us'?S.dFee:0,delf=f.del?150:0;
   const frameTotal=f.addFrame?framePrice*f.qty:0;
-  const preg=sub+df+delf+frameTotal,gst=Math.round(preg*.18),total=preg+gst;
-  return{cat,mat,snm,up,sub,df,delf,preg,gst,total,area,isSqft,framePrice,frameTotal,frameSzObj,frameFtObj};
+  const foamTotal=f.addFoam?foamPrice*f.qty:0;
+  const preg=sub+df+delf+frameTotal+foamTotal+dupPrice,gst=Math.round(preg*.18),total=preg+gst;
+  return{cat,mat,snm,up,sub,df,delf,preg,gst,total,area,isSqft,framePrice,frameTotal,frameSzObj,frameFtObj,foamPrice,foamTotal,foamSzObj,foamFtObj,dupObj,dupPrice};
 }
 
 // ════════════════════════════════════════════════
@@ -930,7 +1006,10 @@ function wS3(){
 // FRAME ADD-ON — shown in size/material step
 // ════════════════════════════════════════════════
 function frameAddonHTML(f){
-  if(!S.frameSizes.length||!S.frameTypes.length)return '';
+  const cat=S.cats.find(c=>c.id===f.cat);
+  if(!cat||!S.frameSizes.length||!S.frameTypes.length)return '';
+  const frameEnabled=cat.frameOn||(f.sc&&(cat.frameSubcats||[]).includes(f.sc));
+  if(!frameEnabled)return '';
   const selFt=S.frameTypes.find(t=>t.id===f.frameFt);
   const selSz=S.frameSizes.find(s=>s.id===f.frameSz);
   const frameP=(f.frameSz&&f.frameFt)?(S.framePrices[f.frameSz+'_'+f.frameFt]||0):0;
@@ -961,6 +1040,94 @@ function frameAddonHTML(f){
       <div style="font-size:11px;color:var(--gt);font-weight:700;">Frame: ${selSz.l} &bull; ${selFt.ico} ${selFt.nm}</div>
       <div style="font-size:15px;font-weight:800;color:var(--gt);">+&#8377;${(frameP*f.qty).toLocaleString('en-IN')}</div>
     </div>`:f.frameSz&&f.frameFt?'<div style="font-size:11px;color:var(--r);margin-top:4px;">&#9888; No price set for this combination</div>':''}
+    `:''}
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
+// DUPLICATE / NCR ADD-ON — per category & subcategory
+// ════════════════════════════════════════════════
+function dupAddonHTML(f){
+  const cat=S.cats.find(c=>c.id===f.cat);
+  if(!cat||!S.dupSets.length)return '';
+  // Check if dup is enabled for this cat & optional subcat
+  const dupEnabled=cat.dupOn||(f.sc&&cat.dupSubcats&&cat.dupSubcats.includes(f.sc));
+  if(!dupEnabled)return '';
+  const selSet=S.dupSets.find(d=>d.id===f.dupSet);
+  const dupTotal=selSet?(selSet.price*f.qty):0;
+  const setPills=f.addDup?S.dupSets.map(d=>`
+    <div class="pill${f.dupSet===d.id?' on':''}" onclick="S.form.dupSet='${d.id}';render(false);">
+      ${d.label}
+      <span style="display:block;font-size:10px;opacity:.8;">+&#8377;${d.price}/set</span>
+    </div>`).join(''):'';
+  return `<div id="dup-section" style="border:1.5px solid ${f.addDup?'color-mix(in srgb,var(--bl) 60%,transparent)':'var(--b)'};border-radius:var(--rad);padding:13px 14px;margin-top:10px;transition:border-color .2s;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${f.addDup?'12px':'0'};">
+      <div>
+        <div style="font-weight:700;font-size:13px;">📄 Duplicate Copies <span style="font-size:11px;font-weight:400;color:var(--t2);">(optional)</span></div>
+        ${!f.addDup?'<div style="font-size:11px;color:var(--t2);margin-top:2px;">NCR / carbon copy sets</div>':''}
+      </div>
+      <div style="cursor:pointer;" onclick="S.form.addDup=!S.form.addDup;if(!S.form.addDup)S.form.dupSet=null;render(false);setTimeout(()=>{if(S.form.addDup)smoothScrollTo('#dup-section',60);},100);">
+        <div style="width:40px;height:22px;border-radius:11px;background:${f.addDup?'var(--bl)':'var(--b2)'};position:relative;transition:background .2s;">
+          <div style="position:absolute;top:3px;left:${f.addDup?'21px':'3px'};width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);"></div>
+        </div>
+      </div>
+    </div>
+    ${f.addDup?`
+    <div class="fg"><label class="fl">Select Copy Type</label>
+      <div class="pills">${setPills}</div>
+    </div>
+    ${selSet?`<div style="background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 35%,transparent);border-radius:var(--rsm);padding:9px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+      <div>
+        <div style="font-size:11px;color:var(--blt);font-weight:700;">📄 ${selSet.label} &bull; ${selSet.copies} copies/set</div>
+        ${f.qty>1?`<div style="font-size:10px;color:var(--blt);opacity:.8;">&#8377;${selSet.price} × ${f.qty} qty</div>`:''}
+      </div>
+      <div style="font-size:16px;font-weight:800;color:var(--blt);">+&#8377;${dupTotal.toLocaleString('en-IN')}</div>
+    </div>`:'<div style="font-size:11px;color:var(--t2);margin-top:4px;">Select a copy type above</div>'}
+    `:''}
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
+// FOAM SHEET ADD-ON
+// ════════════════════════════════════════════════
+function foamAddonHTML(f){
+  const cat=S.cats.find(c=>c.id===f.cat);
+  if(!cat||!S.foamSizes.length||!S.foamTypes.length)return '';
+  const foamEnabled=cat.foamOn||(f.sc&&cat.foamSubcats&&cat.foamSubcats.includes(f.sc));
+  if(!foamEnabled)return '';
+  const selSz=S.foamSizes.find(s=>s.id===f.foamSz);
+  const selFt=S.foamTypes.find(t=>t.id===f.foamFt);
+  const foamP=(f.foamSz&&f.foamFt)?(S.foamPrices[f.foamSz+'_'+f.foamFt]||0):0;
+  const szPills=f.addFoam?S.foamSizes.map(s=>{
+    const p=(f.foamFt&&S.foamPrices[s.id+'_'+f.foamFt])?S.foamPrices[s.id+'_'+f.foamFt]:null;
+    return `<div class="pill${f.foamSz===s.id?' on':''}" onclick="S.form.foamSz='${s.id}';render(false);setTimeout(()=>smoothScrollTo('#foam-types',60),80);">${s.l}${p!==null?`<span style="display:block;font-size:10px;opacity:.8;">&#8377;${p}</span>`:''}</div>`;
+  }).join(''):'';
+  const ftPills=f.addFoam?S.foamTypes.map(t=>{
+    const p=(f.foamSz&&S.foamPrices[f.foamSz+'_'+t.id])?S.foamPrices[f.foamSz+'_'+t.id]:null;
+    return `<div class="pill${f.foamFt===t.id?' on':''}" onclick="S.form.foamFt='${t.id}';render(false);">${t.ico} ${t.nm}${p!==null?`<span style="display:block;font-size:10px;opacity:.8;">&#8377;${p}</span>`:''}</div>`;
+  }).join(''):'';
+  return `<div id="foam-section" style="border:1.5px solid ${f.addFoam?'color-mix(in srgb,#f59e0b 60%,transparent)':'var(--b)'};border-radius:var(--rad);padding:13px 14px;margin-top:10px;transition:border-color .2s;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${f.addFoam?'12px':'0'};">
+      <div>
+        <div style="font-weight:700;font-size:13px;">🟧 Foam Sheet <span style="font-size:11px;font-weight:400;color:var(--t2);">(optional)</span></div>
+        ${!f.addFoam?'<div style="font-size:11px;color:var(--t2);margin-top:2px;">Mount print on foam board</div>':''}
+      </div>
+      <div style="cursor:pointer;" onclick="S.form.addFoam=!S.form.addFoam;if(!S.form.addFoam){S.form.foamSz=null;S.form.foamFt=null;}render(false);setTimeout(()=>{if(S.form.addFoam)smoothScrollTo('#foam-section',60);},100);">
+        <div style="width:40px;height:22px;border-radius:11px;background:${f.addFoam?'#f59e0b':'var(--b2)'};position:relative;transition:background .2s;">
+          <div style="position:absolute;top:3px;left:${f.addFoam?'21px':'3px'};width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);"></div>
+        </div>
+      </div>
+    </div>
+    ${f.addFoam?`
+    <div class="fg"><label class="fl">Foam Size</label><div class="pills">${szPills}</div></div>
+    <div class="fg" id="foam-types"><label class="fl">Thickness</label><div class="pills">${ftPills}</div></div>
+    ${foamP>0&&selSz&&selFt?`<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:var(--rsm);padding:9px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+      <div>
+        <div style="font-size:11px;color:#92400e;font-weight:700;">🟧 ${selSz.l} &bull; ${selFt.ico} ${selFt.nm}</div>
+        ${f.qty>1?`<div style="font-size:10px;color:#92400e;opacity:.8;">&#8377;${foamP} × ${f.qty} qty</div>`:''}
+      </div>
+      <div style="font-size:16px;font-weight:800;color:#92400e;">+&#8377;${(foamP*f.qty).toLocaleString('en-IN')}</div>
+    </div>`:f.foamSz&&f.foamFt?'<div style="font-size:11px;color:var(--r);margin-top:4px;">&#9888; No price set — contact admin</div>':selSz?'<div style="font-size:11px;color:var(--t2);margin-top:4px;">Select thickness above</div>':'<div style="font-size:11px;color:var(--t2);margin-top:4px;">Select size &amp; thickness</div>'}
     `:''}
   </div>`;
 }
@@ -1035,7 +1202,8 @@ function wS3sqft(f,cat,prev){
   </div>
 
   ${frameAddonHTML(f)}
-
+  ${foamAddonHTML(f)}
+  ${dupAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:14px;">Continue &rarr;</button>
   <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
 }
@@ -1047,7 +1215,13 @@ function wS3fixed(f,cat,prev){
   const selMat=mats.find(m=>m.id===f.mat);
   const previewPrice=f.custom?(parseFloat(f.cp)||null):selSz?((selMat&&selMat.price>0)?selMat.price:selSz.p):null;
 
-  const szPills=szs.map(sz=>`<div class="pill${f.sz===sz.id&&!f.custom?' on':''}" onclick="selSzAdv('${sz.id}');">${sz.l}<span style="display:block;font-size:10px;opacity:.7;">&#8377;${sz.p}</span></div>`).join('');
+  const showSides=cat&&cat.allowSides&&f.sz&&!f.custom;
+  const selSzForSides=showSides?szs.find(s=>s.id===f.sz):null;
+  const szPills=szs.map(sz=>{
+    // Show sides-aware price if applicable
+    const dispP=cat&&cat.allowSides?(sz.pSingle||sz.p):sz.p;
+    return `<div class="pill${f.sz===sz.id&&!f.custom?' on':''}" onclick="selSzAdv('${sz.id}');">${sz.l}<span style="display:block;font-size:10px;opacity:.7;">&#8377;${dispP}</span></div>`;
+  }).join('');
   const matPills=mats.map(m=>{
     const dp=(m.price>0)?m.price:(selSz?selSz.p:0);
     return `<div class="pill${f.mat===m.id?' on':''}" onclick="S.form.mat='${m.id}';render(false);setTimeout(()=>smoothScrollTo('#price-preview',80),80);">${m.nm}${dp>0?`<span style="display:block;font-size:10px;opacity:.8;">&#8377;${dp}</span>`:''}</div>`;
@@ -1074,6 +1248,35 @@ function wS3fixed(f,cat,prev){
     </div>`:''}
   </div>
 
+  ${showSides&&selSzForSides?`<div class="fg" id="sides-section">
+    <label class="fl">Print Side</label>
+    ${(()=>{
+      const selMat=mats.find(m=>m.id===f.mat);
+      const subKey=f.cat+'___'+f.sc;
+      const subR=f.sc&&selMat&&selMat.subRates&&selMat.subRates[subKey];
+      const prSingle=subR&&subR.pSingle!=null?subR.pSingle:(selSzForSides.pSingle||selSzForSides.p||0);
+      const prDouble=subR&&subR.pDouble!=null?subR.pDouble:(selSzForSides.pDouble||Math.round((selSzForSides.pSingle||selSzForSides.p||0)*1.7));
+      return `<div style="display:flex;gap:8px;">
+        <div class="sport${f.sides!=='double'?' hi':''}" style="flex:1;max-width:100%;border-radius:var(--rsm);padding:10px 12px;cursor:pointer;" onclick="S.form.sides='single';render(false);setTimeout(()=>smoothScrollTo('#mat-section',60),80);">
+          <div style="font-size:18px;">1️⃣</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:13px;${f.sides!=='double'?'color:#fff':''}">Single Side</div>
+            <div style="font-size:11px;${f.sides!=='double'?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">&#8377;${prSingle}</div>
+          </div>
+          <span style="${f.sides!=='double'?'color:#fff':'color:var(--t3);'}font-size:16px;">${f.sides!=='double'?'✓':'›'}</span>
+        </div>
+        <div class="sport${f.sides==='double'?' hi':''}" style="flex:1;max-width:100%;border-radius:var(--rsm);padding:10px 12px;cursor:pointer;" onclick="S.form.sides='double';render(false);setTimeout(()=>smoothScrollTo('#mat-section',60),80);">
+          <div style="font-size:18px;">2️⃣</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:13px;${f.sides==='double'?'color:#fff':''}">Double Side</div>
+            <div style="font-size:11px;${f.sides==='double'?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">&#8377;${prDouble}</div>
+          </div>
+          <span style="${f.sides==='double'?'color:#fff':'color:var(--t3);'}font-size:16px;">${f.sides==='double'?'✓':'›'}</span>
+        </div>
+      </div>`;
+    })()}
+  </div>`:''}
+
   ${mats.length?`<div class="fg" id="mat-section"><label class="fl">Material</label><div class="pills">${matPills}</div></div>`:''}
 
   ${previewPrice!==null&&selSz?`<div id="price-preview" style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
@@ -1082,7 +1285,8 @@ function wS3fixed(f,cat,prev){
   </div>`:''}
 
   ${frameAddonHTML(f)}
-
+  ${foamAddonHTML(f)}
+  ${dupAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:12px;">Continue &rarr;</button>
   <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
 }
@@ -1579,7 +1783,7 @@ function handleSearch(val){
 }
 
 function oRow(o){
-  return`<div class="oitem" onclick="SM.play('click');S.selId='${o.id}';S.view='inv';render(true);">
+  return`<div class="oitem" onclick="SM.play('click');S.selId='${o.id}';S.view='inv';render(true);"><span style='font-size:13px;'>👁</span>
     <div style="flex:1;min-width:0;">
       <div style="font-weight:700;font-size:13px;">${esc(o.cust?.nm||'Customer')} ${o.isNew?'<span class="sbadge s-new" style="font-size:9px;padding:2px 6px;">NEW</span>':''} ${o.otype==='quo'?'<span class="sbadge s-quo" style="font-size:9px;padding:2px 6px;">QUO</span>':''}</div>
       <div style="font-size:11px;color:var(--t2);">${esc(o.cat)}${o.sc?' · '+esc(o.sc):''} · ${esc(o.sz)} · ×${o.qty}</div>
@@ -1850,12 +2054,21 @@ function showQR(){
 function vSett(){
   if(S.sub==='cats')return sCats();if(S.sub==='szs')return sSzs();if(S.sub==='mats')return sMats();
   if(S.sub==='clr')return sClr();if(S.sub==='imgs')return sImgs();if(S.sub==='hold')return sHoldReasons();
-  if(S.sub==='frm')return sFrame();
+  if(S.sub==='frm')return sFrame();if(S.sub==='foam')return sFoam();if(S.sub==='addons')return sAddons();
   return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Settings</div>
   <div class="sync-banner"><div style="font-size:10px;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">Admin Code</div><div class="sync-code">${ADMIN_CODE}</div></div>
   <div class="flush" style="margin-bottom:10px;">
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Catalog</div>
-    ${sr('🪟','Frames','Sizes & Pricing',"S.sub='frm';render(false);")}${sr('🏷️','Categories','',"S.sub='cats';render(false);")}${sr('📐','Sizes & Prices','',"S.sub='szs';render(false);")}${sr('🧱','Materials',S.mats.length+' items',"S.sub='mats';render(false);")}${sr('🖼️','Catalog Images','',"S.sub='imgs';render(false);")}
+    ${sr('🏷️','Categories','',"S.sub='cats';render(false);")}
+    ${sr('📐','Sizes & Prices','',"S.sub='szs';render(false);")}
+    ${sr('🧱','Materials',S.mats.length+' items',"S.sub='mats';render(false);")}
+    ${sr('🖼️','Catalog Images','',"S.sub='imgs';render(false);")}
+  </div>
+  <div class="flush" style="margin-bottom:10px;">
+    <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Add-ons</div>
+    ${sr('🪟','Frames','Sizes & Pricing',"S.sub='frm';render(false);")}
+    ${sr('📄','Duplicate / NCR','Copy sets & categories',"S.sub='addons';render(false);")}
+    ${sr('🟧','Foam Sheet','Sizes & thickness prices',"S.sub='foam';render(false);")}
   </div>
   <div class="flush" style="margin-bottom:10px;">
     <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;padding:10px 14px 3px;">Controls</div>
@@ -1975,6 +2188,155 @@ function rmFrameType(id){
   SM.play('click');render(false);syncSettingsSave();
 }
 
+// ════════════════════════════════════════════════
+// FOAM SHEET SETTINGS (like sFrame)
+// ════════════════════════════════════════════════
+function sFoam(){
+  const matrixRows=S.foamSizes.map(sz=>{
+    const cells=S.foamTypes.map(ft=>{
+      const key=sz.id+'_'+ft.id;
+      const val=S.foamPrices[key]||0;
+      return `<td style="padding:4px 3px;"><input class="fi" type="number" value="${val}" min="0" style="width:62px;padding:5px 4px;text-align:right;font-size:12px;border-radius:6px;" onchange="setFoamPrice('${sz.id}','${ft.id}',this.value);" title="${sz.l} – ${ft.nm}"></td>`;
+    }).join('');
+    return `<tr><td style="padding:6px 8px;font-weight:700;font-size:12px;white-space:nowrap;color:var(--t);border-right:1px solid var(--b);background:var(--s2);">${sz.l}</td>${cells}</tr>`;
+  }).join('');
+  const typeHeaders=S.foamTypes.map(ft=>`<th style="padding:6px 4px;font-size:10px;font-weight:700;color:var(--t2);text-align:center;max-width:70px;">${ft.ico}<br>${ft.nm}</th>`).join('');
+  const sizeList=S.foamSizes.map(sz=>`
+    <div class="si"><div style="font-weight:700;">${sz.l}</div><button class="mat-del" onclick="SM.play('click');rmFoamSize('${sz.id}');">✕</button></div>`).join('');
+  const typeList=S.foamTypes.map(ft=>`
+    <div class="si"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">${ft.ico}</span><span style="font-weight:700;">${ft.nm}</span></div><button class="mat-del" onclick="SM.play('click');rmFoamType('${ft.id}');">✕</button></div>`).join('');
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
+    <button class="btn gho sm nop" onclick="SM.play('click');S.sub='addons';render(false);">← Back</button>
+    <div style="font-size:18px;font-weight:800;">🟧 Foam Sheet</div>
+  </div>
+  <div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:9px 12px;margin-bottom:12px;font-size:12px;color:var(--t2);">Set price for each Size × Thickness combination. Enter 0 = unavailable.</div>
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Price Matrix (&#8377;)</div>
+  <div style="overflow-x:auto;margin-bottom:14px;border:1px solid var(--b);border-radius:var(--rad);">
+    <table style="border-collapse:collapse;min-width:100%;background:var(--s);">
+      <thead><tr>
+        <th style="padding:8px;font-size:11px;font-weight:700;color:var(--t2);text-align:left;border-right:1px solid var(--b);border-bottom:1px solid var(--b);background:var(--s2);">Size \ Thickness</th>
+        ${typeHeaders}
+      </tr></thead>
+      <tbody>${matrixRows}</tbody>
+    </table>
+  </div>
+  <button class="btn suc sm" onclick="SM.play('status');syncSettingsSave();showToast('✅ Prices saved!');" style="width:auto;margin-bottom:16px;">💾 Save All Prices</button>
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Foam Sizes</div>
+  <div class="flush" style="margin-bottom:10px;">${sizeList||'<div style="padding:13px;text-align:center;color:var(--t2);">No sizes</div>'}</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="font-weight:800;margin-bottom:10px;">Add Size</div>
+    <div class="fg"><label class="fl">Label (e.g. A3)</label><input class="fi" id="nfms-l" type="text" placeholder="A3"></div>
+    <button class="btn pri" onclick="SM.play('click');addFoamSize();">+ Add Size</button>
+  </div>
+  <div style="font-size:13px;font-weight:800;margin-bottom:8px;">Foam Thicknesses</div>
+  <div class="flush" style="margin-bottom:10px;">${typeList||'<div style="padding:13px;text-align:center;color:var(--t2);">No types</div>'}</div>
+  <div class="card">
+    <div style="font-weight:800;margin-bottom:10px;">Add Thickness</div>
+    <div style="display:flex;gap:8px;">
+      <div class="fg" style="flex:1;"><label class="fl">Name</label><input class="fi" id="nfmt-n" type="text" placeholder="5mm Foam"></div>
+      <div class="fg" style="width:70px;"><label class="fl">Icon</label><input class="fi" id="nfmt-i" type="text" placeholder="⬛" maxlength="2" style="font-size:20px;text-align:center;"></div>
+    </div>
+    <button class="btn pri" onclick="SM.play('click');addFoamType();">+ Add Type</button>
+  </div>`;
+}
+function setFoamPrice(szId,ftId,v){const key=szId+'_'+ftId,p=parseFloat(v)||0;if(p>0)S.foamPrices[key]=p;else delete S.foamPrices[key];}
+function addFoamSize(){const l=gv('nfms-l').trim();if(!l){SM.play('error');alert('Enter a label');return;}S.foamSizes.push({id:'fms'+Date.now(),l});SM.play('tick');render(false);syncSettingsSave();}
+function rmFoamSize(id){S.foamSizes=S.foamSizes.filter(s=>s.id!==id);Object.keys(S.foamPrices).filter(k=>k.startsWith(id+'_')).forEach(k=>delete S.foamPrices[k]);render(false);syncSettingsSave();}
+function addFoamType(){const nm=gv('nfmt-n').trim(),ico=gv('nfmt-i').trim()||'⬜';if(!nm){SM.play('error');alert('Enter a name');return;}S.foamTypes.push({id:'fmt'+Date.now(),nm,ico});SM.play('tick');render(false);syncSettingsSave();}
+function rmFoamType(id){S.foamTypes=S.foamTypes.filter(t=>t.id!==id);Object.keys(S.foamPrices).filter(k=>k.endsWith('_'+id)).forEach(k=>delete S.foamPrices[k]);render(false);syncSettingsSave();}
+
+// ════════════════════════════════════════════════
+// ADD-ONS SETTINGS — per category & subcategory
+// ════════════════════════════════════════════════
+function sAddons(){
+  const tog=(on,color)=>`<div style="width:38px;height:21px;border-radius:11px;background:${on?color:'var(--b2)'};position:relative;transition:background .2s;flex-shrink:0;"><div style="position:absolute;top:2.5px;left:${on?'19px':'2.5px'};width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);"></div></div>`;
+
+  const catRows=S.cats.filter(c=>c.pricing!=='frame').map(c=>{
+    const hasSc=c.sc&&c.sc.length>0;
+    // Frame subcats (only if frameOn is false but some subcats enabled)
+    const frameSubs=hasSc&&!c.frameOn?`<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--b);"><div style="font-size:10px;color:var(--t2);margin-bottom:5px;">Or enable for specific types:</div><div style="display:flex;flex-wrap:wrap;gap:5px;">${c.sc.map(sc=>`<div onclick="toggleAddonSubcat('${c.id}','frame','${sc}');" style="padding:3px 9px;border-radius:20px;border:1.5px solid ${(c.frameSubcats||[]).includes(sc)?'var(--a)':'var(--b)'};background:${(c.frameSubcats||[]).includes(sc)?'color-mix(in srgb,var(--a) 15%,transparent)':'transparent'};font-size:11px;font-weight:${(c.frameSubcats||[]).includes(sc)?'700':'400'};color:${(c.frameSubcats||[]).includes(sc)?'var(--a)':'var(--t2)'};cursor:pointer;transition:all .15s;">${sc}</div>`).join('')}</div></div>`:'';
+    // Foam subcats
+    const foamSubs=hasSc&&!c.foamOn?`<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--b);"><div style="font-size:10px;color:var(--t2);margin-bottom:5px;">Or enable for specific types:</div><div style="display:flex;flex-wrap:wrap;gap:5px;">${c.sc.map(sc=>`<div onclick="toggleAddonSubcat('${c.id}','foam','${sc}');" style="padding:3px 9px;border-radius:20px;border:1.5px solid ${(c.foamSubcats||[]).includes(sc)?'#f59e0b':'var(--b)'};background:${(c.foamSubcats||[]).includes(sc)?'#fef3c7':'transparent'};font-size:11px;font-weight:${(c.foamSubcats||[]).includes(sc)?'700':'400'};color:${(c.foamSubcats||[]).includes(sc)?'#92400e':'var(--t2)'};cursor:pointer;transition:all .15s;">${sc}</div>`).join('')}</div></div>`:'';
+    // Dup subcats
+    const dupSubs=hasSc&&!c.dupOn?`<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--b);"><div style="font-size:10px;color:var(--t2);margin-bottom:5px;">Or enable for specific types:</div><div style="display:flex;flex-wrap:wrap;gap:5px;">${c.sc.map(sc=>`<div onclick="toggleAddonSubcat('${c.id}','dup','${sc}');" style="padding:3px 9px;border-radius:20px;border:1.5px solid ${(c.dupSubcats||[]).includes(sc)?'var(--bl)':'var(--b)'};background:${(c.dupSubcats||[]).includes(sc)?'var(--blb)':'transparent'};font-size:11px;font-weight:${(c.dupSubcats||[]).includes(sc)?'700':'400'};color:${(c.dupSubcats||[]).includes(sc)?'var(--blt)':'var(--t2)'};cursor:pointer;transition:all .15s;">${sc}</div>`).join('')}</div></div>`:'';
+    return `<div style="padding:12px 14px;border-bottom:1px solid var(--b);">
+      <div style="font-weight:700;font-size:13px;margin-bottom:10px;">${c.ico} ${c.nm}</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:var(--t);">🪟 Frame <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.frameOn=!c.frameOn;if(c.frameOn)c.frameSubcats=[];}render(false);syncSettingsSave();">${tog(c.frameOn,'var(--a)')}</div>
+        </div>
+        ${frameSubs}
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:var(--t);">🟧 Foam Sheet <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.foamOn=!c.foamOn;if(c.foamOn)c.foamSubcats=[];}render(false);syncSettingsSave();">${tog(c.foamOn,'#f59e0b')}</div>
+        </div>
+        ${foamSubs}
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:var(--t);">📄 Duplicate/NCR <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.dupOn=!c.dupOn;if(c.dupOn)c.dupSubcats=[];}render(false);syncSettingsSave();">${tog(c.dupOn,'var(--bl)')}</div>
+        </div>
+        ${dupSubs}
+      </div>
+    </div>`;
+  }).join('');
+
+  const dupRows=S.dupSets.map(d=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--b);">
+      <div><div style="font-weight:700;font-size:13px;">${d.label}</div><div style="font-size:11px;color:var(--t2);">${d.copies} copies per set</div></div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--t2);">&#8377;</span>
+        <input class="fi" type="number" value="${d.price}" style="width:65px;padding:5px 7px;text-align:right;font-size:13px;" onchange="updDupSet('${d.id}',this.value);">
+        <button class="mat-del" onclick="SM.play('click');rmDupSet('${d.id}');">✕</button>
+      </div>
+    </div>`).join('');
+
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
+    <button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button>
+    <div style="font-size:18px;font-weight:800;">✨ Add-ons</div>
+  </div>
+
+  <div style="font-size:13px;font-weight:800;margin-bottom:4px;">Per Category &amp; Type</div>
+  <div style="font-size:12px;color:var(--t2);margin-bottom:10px;">Toggle add-ons for all types, or enable only for specific subcategory types</div>
+  <div class="flush" style="margin-bottom:16px;">${catRows}</div>
+
+  <div style="font-size:13px;font-weight:800;margin-bottom:4px;">📄 Duplicate / NCR Sets</div>
+  <div style="font-size:12px;color:var(--t2);margin-bottom:10px;">Price per set in addition to print price</div>
+  <div class="flush" style="margin-bottom:10px;">${dupRows||'<div style="padding:14px;text-align:center;color:var(--t2);">No sets</div>'}</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="font-weight:800;margin-bottom:10px;">Add Copy Set</div>
+    <div class="fg"><label class="fl">Label</label><input class="fi" id="nds-l" type="text" placeholder="e.g. Duplicate (2-ply)"></div>
+    <div style="display:flex;gap:8px;">
+      <div class="fg" style="flex:1;"><label class="fl">Copies</label><input class="fi" id="nds-c" type="number" value="2" min="2" max="6"></div>
+      <div class="fg" style="flex:1;"><label class="fl">Price/set (&#8377;)</label><input class="fi" id="nds-p" type="number" value="3" placeholder="3"></div>
+    </div>
+    <button class="btn pri" onclick="SM.play('click');addDupSet();">+ Add Set</button>
+  </div>
+
+  <div style="font-size:13px;font-weight:800;margin-bottom:6px;">🟧 Foam Sheet Prices</div>
+  <button class="btn gho" style="width:auto;margin-bottom:16px;" onclick="SM.play('click');S.sub='foam';render(false);">Open Foam Settings →</button>
+
+  <div style="font-size:13px;font-weight:800;margin-bottom:6px;">🪟 Frame Prices</div>
+  <button class="btn gho" style="width:auto;" onclick="SM.play('click');S.sub='frm';render(false);">Open Frame Settings →</button>`;
+}
+
+function toggleAddonSubcat(catId,addon,sc){
+  const c=S.cats.find(x=>x.id===catId);if(!c)return;
+  const key=addon==='frame'?'frameSubcats':addon==='foam'?'foamSubcats':'dupSubcats';
+  if(!c[key])c[key]=[];
+  const idx=c[key].indexOf(sc);
+  if(idx>=0)c[key].splice(idx,1);else c[key].push(sc);
+  SM.play('tick');render(false);syncSettingsSave();
+}
+function addDupSet(){
+  const l=gv('nds-l').trim(),c=parseInt(gv('nds-c'))||2,p=parseFloat(gv('nds-p'))||0;
+  if(!l){SM.play('error');alert('Enter a label');return;}
+  S.dupSets.push({id:'dup'+Date.now(),label:l,copies:c,price:p});
+  SM.play('tick');render(false);syncSettingsSave();
+}
+function rmDupSet(id){S.dupSets=S.dupSets.filter(d=>d.id!==id);render(false);syncSettingsSave();}
+function updDupSet(id,v){const d=S.dupSets.find(x=>x.id===id);if(d){d.price=parseFloat(v)||0;syncSettingsSave();}}
+
 function sr(i,t,s,oc){return`<div class="si" onclick="${oc}"><div><div style="font-weight:700;font-size:13px;">${i} ${t}</div>${s?`<div style="font-size:11px;color:var(--t2);">${s}</div>`:''}</div><span style="color:var(--t3);font-size:18px;">›</span></div>`;}
 function bkS(){S.sub=null;render(false);}
 
@@ -1990,26 +2352,47 @@ function sSzs(){
   const szs=S.sizes[S.szcat]||[];
   const selCat=S.cats.find(c=>c.id===S.szcat);
   const isSqft=selCat&&selCat.pricing==='sqft';
+  const hasSides=selCat&&selCat.allowSides;
 
   const catOpts=S.cats.map(c=>`<option value="${c.id}"${c.id===S.szcat?' selected':''}>${c.ico} ${c.nm}</option>`).join('');
 
-  const rows=szs.map(sz=>isSqft
-    ?`<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--b);">
+  const rows=szs.map(sz=>{
+    if(isSqft){
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--b);">
         <div>
           <div style="font-weight:700;font-size:13px;">${sz.l}</div>
           <div style="font-size:11px;color:var(--t2);">${sz.w} &times; ${sz.h} ${sz.cu||'ft'} &rarr; ${toSqft(sz.w||0,sz.h||0,sz.cu||'ft').toFixed(2)} sq.ft</div>
         </div>
         <button class="mat-del" onclick="SM.play('click');rmSz('${S.szcat}','${sz.id}');">✕</button>
-      </div>`
-    :`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--b);">
-        <div style="font-weight:700;font-size:13px;">${sz.l}</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:12px;color:var(--t2);">&#8377;</span>
-          <input class="fi" type="number" value="${sz.p}" style="width:80px;padding:6px 8px;text-align:right;" onchange="updSz('${S.szcat}','${sz.id}',this.value);">
+      </div>`;
+    }
+    if(hasSides){
+      return `<div style="padding:10px 14px;border-bottom:1px solid var(--b);">
+        <div style="font-weight:700;font-size:13px;margin-bottom:7px;">${sz.l}</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:5px 9px;">
+            <span style="font-size:11px;color:var(--t2);font-weight:700;">1️⃣ Single</span>
+            <span style="font-size:11px;color:var(--t2);">&#8377;</span>
+            <input class="fi" type="number" value="${sz.pSingle||sz.p||0}" style="width:65px;padding:4px 6px;text-align:right;font-size:13px;background:transparent;border:none;color:var(--t);" onchange="updSzSide('${S.szcat}','${sz.id}','single',this.value);" title="Single side price">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:5px 9px;">
+            <span style="font-size:11px;color:var(--blt);font-weight:700;">2️⃣ Double</span>
+            <span style="font-size:11px;color:var(--blt);">&#8377;</span>
+            <input class="fi" type="number" value="${sz.pDouble||0}" style="width:65px;padding:4px 6px;text-align:right;font-size:13px;background:transparent;border:none;color:var(--blt);" onchange="updSzSide('${S.szcat}','${sz.id}','double',this.value);" title="Double side price">
+          </div>
           <button class="mat-del" onclick="SM.play('click');rmSz('${S.szcat}','${sz.id}');">✕</button>
         </div>
-      </div>`
-  ).join('');
+      </div>`;
+    }
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--b);">
+      <div style="font-weight:700;font-size:13px;">${sz.l}</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--t2);">&#8377;</span>
+        <input class="fi" type="number" value="${sz.p}" style="width:80px;padding:6px 8px;text-align:right;" onchange="updSz('${S.szcat}','${sz.id}',this.value);">
+        <button class="mat-del" onclick="SM.play('click');rmSz('${S.szcat}','${sz.id}');">✕</button>
+      </div>
+    </div>`;
+  }).join('');
 
   const addForm=isSqft?`
     <div class="card">
@@ -2025,14 +2408,24 @@ function sSzs(){
       <div style="font-size:11px;color:var(--t2);margin-bottom:8px;">Price is calculated automatically from the material rate.</div>
       <button class="btn pri" onclick="SM.play('click');addSz();">+ Add Preset</button>
     </div>`:
-    `<div class="card">
+  hasSides?`
+    <div class="card">
       <div style="font-weight:800;margin-bottom:10px;">Add Size</div>
-      <div style="display:flex;gap:8px;align-items:flex-end;">
-        <div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Label</label><input class="fi" id="ns-l" type="text" placeholder="e.g. A3"></div>
-        <div class="fg" style="width:90px;margin-bottom:0;"><label class="fl">Price (&#8377;)</label><input class="fi" id="ns-p" type="number" placeholder="0"></div>
-        <button class="btn pri sm" onclick="SM.play('click');addSz();" style="width:auto;padding:10px 14px;margin-bottom:0;">+ Add</button>
+      <div class="fg"><label class="fl">Label (e.g. A3)</label><input class="fi" id="ns-l" type="text" placeholder="A3"></div>
+      <div style="display:flex;gap:8px;">
+        <div class="fg" style="flex:1;"><label class="fl">Single Side (&#8377;)</label><input class="fi" id="ns-ps" type="number" placeholder="35"></div>
+        <div class="fg" style="flex:1;"><label class="fl">Double Side (&#8377;)</label><input class="fi" id="ns-pd" type="number" placeholder="60"></div>
       </div>
-    </div>`;
+      <button class="btn pri" onclick="SM.play('click');addSz();">+ Add</button>
+    </div>`:
+  `<div class="card">
+    <div style="font-weight:800;margin-bottom:10px;">Add Size</div>
+    <div style="display:flex;gap:8px;align-items:flex-end;">
+      <div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Label</label><input class="fi" id="ns-l" type="text" placeholder="e.g. A3"></div>
+      <div class="fg" style="width:90px;margin-bottom:0;"><label class="fl">Price (&#8377;)</label><input class="fi" id="ns-p" type="number" placeholder="0"></div>
+      <button class="btn pri sm" onclick="SM.play('click');addSz();" style="width:auto;padding:10px 14px;margin-bottom:0;">+ Add</button>
+    </div>
+  </div>`;
 
   return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
     <button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button>
@@ -2044,33 +2437,100 @@ function sSzs(){
   ${isSqft?`<div style="background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 35%,transparent);border-radius:var(--rsm);padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--blt);">
     📐 <b>Sqft pricing</b> — presets are shortcuts for customers. Rate is set in Materials.
   </div>`:''}
+  ${hasSides?`<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--t2);">
+    1️⃣2️⃣ <b>Single &amp; Double side pricing</b> — set separate rates per size below.
+  </div>`:''}
   <div class="flush" style="margin-bottom:10px;">${rows||'<div style="padding:16px;text-align:center;color:var(--t2);font-size:13px;">No sizes yet</div>'}</div>
   ${addForm}`;
+}
+function updSzSide(cat,id,side,v){
+  const sz=(S.sizes[cat]||[]).find(s=>s.id===id);if(!sz)return;
+  const p=parseFloat(v)||0;
+  if(side==='single'){sz.pSingle=p;sz.p=p;}
+  else{sz.pDouble=p;}
+  syncSettingsSave();
 }
 
 function sMats(){
   const rows=S.mats.map(m=>{
     const sqftCats=m.cats.filter(id=>{const c=S.cats.find(x=>x.id===id);return c&&c.pricing==='sqft';});
     const fixedCats=m.cats.filter(id=>{const c=S.cats.find(x=>x.id===id);return c&&c.pricing!=='sqft';});
-    const catNames=m.cats.map(id=>S.cats.find(c=>c.id===id)?.nm||id).join(', ');
+
+    // Build subRate rows for each cat that has subcategories
+    const subRateRows=m.cats.map(catId=>{
+      const cat=S.cats.find(c=>c.id===catId);
+      if(!cat||!cat.sc||!cat.sc.length)return '';
+      const isSqft=cat.pricing==='sqft';
+      return cat.sc.map(sc=>{
+        const subKey=catId+'___'+sc;
+        const existing=m.subRates&&m.subRates[subKey];
+        const hasSides=!isSqft&&cat.allowSides;
+        if(isSqft){
+          const val=existing!=null?existing.rate:'';
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--b);">
+            <span style="font-size:11px;color:var(--t2);">${cat.ico} ${sc}</span>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <span style="font-size:10px;color:var(--t2);">&#8377;/sqft</span>
+              <input class="fi" type="number" value="${val}" placeholder="—" style="width:60px;padding:4px 5px;text-align:right;font-size:12px;"
+                oninput="setMatSubRate('${m.id}','${subKey}','rate',this.value);"
+                title="${cat.nm} › ${sc} — rate/sqft (blank = use default)">
+            </div>
+          </div>`;
+        }
+        if(hasSides){
+          const vs=existing!=null&&existing.pSingle!=null?existing.pSingle:'';
+          const vd=existing!=null&&existing.pDouble!=null?existing.pDouble:'';
+          return `<div style="padding:6px 0;border-bottom:1px dashed var(--b);">
+            <div style="font-size:11px;color:var(--t2);margin-bottom:5px;">${cat.ico} ${sc}</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:3px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:4px 7px;">
+                <span style="font-size:10px;color:var(--t2);white-space:nowrap;">1️⃣ Single &#8377;</span>
+                <input class="fi" type="number" value="${vs}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;"
+                  oninput="setMatSubRate('${m.id}','${subKey}','pSingle',this.value);"
+                  title="Single side price for ${sc}">
+              </div>
+              <div style="display:flex;align-items:center;gap:3px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:4px 7px;">
+                <span style="font-size:10px;color:var(--blt);white-space:nowrap;">2️⃣ Double &#8377;</span>
+                <input class="fi" type="number" value="${vd}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;color:var(--blt);"
+                  oninput="setMatSubRate('${m.id}','${subKey}','pDouble',this.value);"
+                  title="Double side price for ${sc}">
+              </div>
+            </div>
+          </div>`;
+        }
+        // Plain fixed
+        const val=existing!=null?existing.price:'';
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--b);">
+          <span style="font-size:11px;color:var(--t2);">${cat.ico} ${sc}</span>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span style="font-size:10px;color:var(--t2);">&#8377;/unit</span>
+            <input class="fi" type="number" value="${val}" placeholder="—" style="width:60px;padding:4px 5px;text-align:right;font-size:12px;"
+              oninput="setMatSubRate('${m.id}','${subKey}','price',this.value);"
+              title="${cat.nm} › ${sc} — price/unit (blank = use default)">
+          </div>
+        </div>`;
+      }).join('');
+    }).join('');
+
     return `<div style="padding:12px 14px;border-bottom:1px solid var(--b);">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;">
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:13px;">${m.nm}</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px;">${catNames}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px;">${m.cats.map(id=>S.cats.find(c=>c.id===id)?.nm||id).join(', ')}</div>
         </div>
         <button class="mat-del" onclick="SM.play('click');rmMat('${m.id}');" style="flex-shrink:0;">✕</button>
       </div>
-      <div style="display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:${subRateRows?'10px':'0'};">
         ${sqftCats.length?`<div style="display:flex;align-items:center;gap:5px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:5px 9px;">
           <span style="font-size:11px;color:var(--blt);font-weight:700;">&#8377;/sq.ft</span>
-          <input class="fi" type="number" value="${m.rate||0}" style="width:64px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--blt);" onchange="updMatRate('${m.id}',this.value);">
+          <input class="fi" type="number" value="${m.rate||0}" style="width:60px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--blt);" onchange="updMatRate('${m.id}',this.value);" title="Default rate/sqft">
         </div>`:''}
         ${fixedCats.length?`<div style="display:flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:5px 9px;">
           <span style="font-size:11px;color:var(--t2);font-weight:700;">&#8377;/unit</span>
-          <input class="fi" type="number" value="${m.price||0}" style="width:64px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--t);" onchange="updMatPrice('${m.id}',this.value);" title="0 = use size price">
+          <input class="fi" type="number" value="${m.price||0}" style="width:60px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--t);" onchange="updMatPrice('${m.id}',this.value);" title="Default price/unit (0 = use size price)">
         </div>`:''}
       </div>
+      ${subRateRows?`<details style="margin-top:2px;"><summary style="font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;list-style:none;">▸ Subcategory-specific rates</summary><div style="padding:8px 0 2px;">${subRateRows}</div></details>`:''}
     </div>`;
   }).join('');
 
@@ -2086,7 +2546,7 @@ function sMats(){
     <div style="font-size:18px;font-weight:800;">Materials</div>
   </div>
   <div style="font-size:12px;color:var(--t2);margin-bottom:10px;padding:0 2px;">
-    <b>Sqft categories:</b> set rate per sq.ft &nbsp;|&nbsp; <b>Fixed categories:</b> set price per unit (0 = use size price)
+    Set default rates below. Expand <b>▸ Subcategory rates</b> on any material to set rates per type — for Digital Print, set separate <b>Single</b> and <b>Double</b> side prices per type.
   </div>
   <div class="flush" style="margin-bottom:10px;">${rows||'<div style="padding:16px;text-align:center;color:var(--t2);">No materials</div>'}</div>
   <div class="card">
@@ -2099,6 +2559,14 @@ function sMats(){
     <div class="fg"><label class="fl">Applies To</label><div style="display:flex;flex-direction:column;gap:2px;margin-top:4px;">${catChecks}</div></div>
     <button class="btn pri" onclick="SM.play('click');addMat();">+ Add Material</button>
   </div>`;
+}
+function setMatSubRate(matId,subKey,field,val){
+  const m=S.mats.find(x=>x.id===matId);if(!m)return;
+  if(!m.subRates)m.subRates={};
+  const v=parseFloat(val);
+  if(isNaN(v)||val===''){delete m.subRates[subKey];}
+  else{if(!m.subRates[subKey])m.subRates[subKey]={};m.subRates[subKey][field]=v;}
+  syncSettingsSave();
 }
 
 function sImgs(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Catalog Images</div></div>${S.cats.map(c=>`<div class="card" style="margin-bottom:9px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span style="font-size:20px;">${c.ico}</span><span style="font-weight:700;">${c.nm}</span></div>${S.imgs[c.id]?`<img src="${S.imgs[c.id]}" style="width:100%;height:95px;object-fit:cover;border-radius:9px;margin-bottom:8px;">`:''}  <div style="display:flex;gap:7px;"><button class="btn gho sm" style="flex:1;" onclick="SM.play('click');document.getElementById('ci-${c.id}').click();">📷 ${S.imgs[c.id]?'Change':'Add'}</button>${S.imgs[c.id]?`<button class="btn dan sm" onclick="SM.play('click');delete S.imgs['${c.id}'];render(false);">Remove</button>`:''}</div><input type="file" id="ci-${c.id}" accept="image/*" style="display:none;" onchange="pickCatImg(this,'${c.id}');"></div>`).join('')}`;}
@@ -2123,12 +2591,17 @@ function addSz(){
   const l=gv('ns-l').trim();if(!l)return;
   const selCat=S.cats.find(c=>c.id===S.szcat);
   const isSqft=selCat&&selCat.pricing==='sqft';
+  const hasSides=selCat&&selCat.allowSides;
   if(!S.sizes[S.szcat])S.sizes[S.szcat]=[];
   if(isSqft){
     const w=parseFloat(gv('ns-w')),h=parseFloat(gv('ns-h'));
     const cu=document.getElementById('ns-u')?document.getElementById('ns-u').value:'ft';
     if(!w||!h){SM.play('error');alert('Enter width and height');return;}
     S.sizes[S.szcat].push({id:'sz'+Date.now(),l,w,h,cu});
+  }else if(hasSides){
+    const ps=parseFloat(gv('ns-ps'))||0,pd=parseFloat(gv('ns-pd'))||0;
+    if(!ps){SM.play('error');alert('Enter single side price');return;}
+    S.sizes[S.szcat].push({id:'sz'+Date.now(),l,p:ps,pSingle:ps,pDouble:pd});
   }else{
     const p=parseFloat(gv('ns-p'));if(!p){SM.play('error');alert('Enter a price');return;}
     S.sizes[S.szcat].push({id:'sz'+Date.now(),l,p});
