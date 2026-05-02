@@ -396,6 +396,13 @@ body.light .mod{background:rgba(248,242,255,.98);}
 .addon-body{animation:fadeIn .22s var(--sp);}
 /* Settings card grid hover */
 .sett-card:hover{border-color:var(--a)!important;transform:translateY(-2px);}
+/* File viewer overlay */
+.fv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeIn .2s var(--sp);}
+.fv-img{max-width:92vw;max-height:65vh;border-radius:10px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:fvZoom .25s var(--sp);}
+@keyframes fvZoom{from{transform:scale(.88);opacity:0;}to{transform:scale(1);opacity:1;}}
+/* UPI zoom */
+.upi-thumb{cursor:zoom-in;transition:transform .2s var(--sp);}
+.upi-thumb:hover{transform:scale(1.03);}
 
 @media print{
   #bgc,#welcome,#splash,#alog,.hdr,.bnav,.nop,#mods,#infoSheet{display:none!important;}
@@ -810,7 +817,7 @@ function renderNav(){
     n.innerHTML=`<button class="nb${S.view==='browse'?' on':''}" onclick="goView('browse');"><span class="nico">🛍️</span>New Order</button><button class="nb${S.view==='quotations'?' on':''}" onclick="goView('quotations');"><span class="nico">📋</span>Quotations</button>`;
   }else{
     const nc=S.orders.filter(o=>o.isNew).length;
-    n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
+    n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');S.form=ff();goView('new-order');"><span class="nico">➕</span>New Order</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
   }
 }
 
@@ -827,6 +834,7 @@ function render(animate=false){
     }else{
       if(S.view==='dash')html=vDash();
       else if(S.view==='orders')html=vOrders();
+      else if(S.view==='new-order')html=vBrowse();
       else if(S.view==='sett')html=vSett();
       else if(S.view==='inv')html=vInv();
     }
@@ -1227,7 +1235,6 @@ function wS3sqft(f,cat,prev){
 
   ${frameAddonHTML(f)}
   ${foamAddonHTML(f)}
-  ${dupAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:14px;">Continue &rarr;</button>
   <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
 }
@@ -1310,7 +1317,6 @@ function wS3fixed(f,cat,prev){
 
   ${frameAddonHTML(f)}
   ${foamAddonHTML(f)}
-  ${dupAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:12px;">Continue &rarr;</button>
   <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
 }
@@ -1483,6 +1489,42 @@ function updateOrderDfee(id, newFee){
   showToast('✅ Design fee updated → ₹'+fee.toLocaleString('en-IN'));
 }
 
+// ════════════════════════════════════════════════
+// FILE VIEWER
+// ════════════════════════════════════════════════
+function openFileViewer(url,name,type){
+  const isImg=type&&type.startsWith('image/');
+  const isPdf=type==='application/pdf'||name.endsWith('.pdf');
+  const overlay=document.createElement('div');
+  overlay.className='fv-overlay';
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+  overlay.innerHTML=`
+    <div style="width:92vw;max-width:480px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="color:#fff;font-weight:700;font-size:14px;truncate;max-width:70%;">${esc(name)}</div>
+        <button onclick="this.closest('.fv-overlay').remove();" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+      ${isImg?`<img src="${url}" class="fv-img" style="width:100%;">`:
+        isPdf?`<div style="background:rgba(255,255,255,.1);border-radius:10px;padding:32px;text-align:center;"><div style="font-size:48px;margin-bottom:8px;">📄</div><div style="color:#fff;font-weight:700;margin-bottom:4px;">${esc(name)}</div><div style="color:rgba(255,255,255,.6);font-size:12px;">PDF Document</div></div>`:
+        `<div style="background:rgba(255,255,255,.1);border-radius:10px;padding:32px;text-align:center;"><div style="font-size:48px;margin-bottom:8px;">📎</div><div style="color:#fff;font-weight:700;margin-bottom:4px;">${esc(name)}</div><div style="color:rgba(255,255,255,.6);font-size:12px;">File</div></div>`}
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        ${isImg||isPdf?`<button onclick="window.open('${url}','_blank');" style="flex:1;padding:12px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">👁 Preview</button>`:''}
+        <a href="${url}" download="${esc(name)}" style="flex:1;padding:12px;background:var(--a);border-radius:10px;font-size:13px;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="setTimeout(()=>this.closest('.fv-overlay').remove(),300);">⬇️ Download</a>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+// UPI zoom overlay
+function openUpiZoom(src){
+  const overlay=document.createElement('div');
+  overlay.className='fv-overlay';
+  overlay.onclick=()=>overlay.remove();
+  overlay.innerHTML=`<img src="${src}" class="fv-img" style="max-height:80vh;cursor:zoom-out;">
+    <div style="color:rgba(255,255,255,.6);font-size:12px;margin-top:10px;">Tap anywhere to close</div>`;
+  document.body.appendChild(overlay);
+}
+
 function adjQ(d){
   S.form.qty=Math.max(1,S.form.qty+d);
   const v=document.getElementById('qv'),i=document.getElementById('qi');
@@ -1538,6 +1580,7 @@ async function submitOrder(){
     if(SB){try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(!error&&data&&data[0]){const idx=S.orders.findIndex(x=>x.id===localId);if(idx!==-1)S.orders[idx]={...S.orders[idx],id:data[0].id};setTimeout(()=>sbLoad(),700);}else if(error)console.error(error);}catch(e){console.error(e);}}
     SM.play('order');if(!isQuo)Confetti.launch(80);
     S.form=ff();
+    if(S.portal==='admin'&&S.view==='new-order'){S.view='orders';render(true);return;}
     const mc=document.getElementById('mc');
     if(mc)mc.innerHTML=`<div style="text-align:center;padding:48px 24px;animation:fadeIn .4s var(--sp);">
       <div style="font-size:52px;margin-bottom:14px;animation:bounce .6s var(--sp) infinite;">${isQuo?'📋':'🎉'}</div>
@@ -1625,12 +1668,12 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
   let fileSec='';
   const files=o.files||[];
   if(files.length){
-    fileSec=`<div style="padding:10px 16px;border-top:1px solid var(--b);background:var(--s2);">
+    fileSec=`<div style="padding:10px 16px;border-top:1px solid rgba(128,128,128,.15);background:var(--s2);">
       <div style="font-size:11px;color:var(--t2);margin-bottom:6px;">📎 Attached files:</div>
-      ${files.map(fi=>{const href=fi.url||fi.data||'#';const isImg=fi.type&&fi.type.startsWith('image/');return`<a href="${href}" target="_blank" download="${esc(fi.name)}" class="dl-link" style="margin-bottom:4px;display:inline-flex;">⬇️ ${esc(fi.name)}${fi.size?` <span style="font-size:10px;opacity:.6;margin-left:4px;">(${(fi.size/1024).toFixed(0)}KB)</span>`:''}</a>${isImg&&fi.url?`<br><img src="${href}" style="max-width:100%;max-height:120px;border-radius:6px;margin:4px 0;object-fit:contain;">`:''}<br>`;}).join('')}
+      ${files.map(fi=>{const href=fi.url||fi.data||'#';const isImg=fi.type&&fi.type.startsWith('image/');return`<div onclick="openFileViewer('${href}','${esc(fi.name)}','${fi.type||''}');" class="dl-link" style="margin-bottom:6px;cursor:pointer;">📎 ${esc(fi.name)}${fi.size?` <span style="font-size:10px;opacity:.6;margin-left:4px;">(${(fi.size/1024).toFixed(0)}KB)</span>`:''}</div>`;}).join('')}
     </div>`;
   } else if(o.fname&&o.fileData&&o.fileData.startsWith('data:')){
-    fileSec=`<div style="padding:10px 16px;border-top:1px solid var(--b);background:var(--s2);"><div style="font-size:11px;color:var(--t2);margin-bottom:5px;">📎 Attached:</div><a href="${o.fileData}" download="${esc(o.fname)}" class="dl-link">⬇️ Download ${esc(o.fname)}</a>${o.fileType&&o.fileType.startsWith('image/')?`<img src="${o.fileData}" style="max-width:100%;max-height:130px;border-radius:8px;margin-top:8px;object-fit:contain;">`:''}</div>`;
+    fileSec=`<div style="padding:10px 16px;background:var(--s2);"><div style="font-size:11px;color:var(--t2);margin-bottom:5px;">📎 Attached:</div><div onclick="openFileViewer('${o.fileData}','${esc(o.fname)}','${o.fileType||''}');" class="dl-link" style="cursor:pointer;">📎 ${esc(o.fname)}</div></div>`;
   }
   return`<div class="inv-wrap">
     <div class="inv-head">
@@ -1686,9 +1729,9 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
       <div class="inv-grand-total"><span>Total Amount</span><span>₹${(o.total||0).toLocaleString('en-IN')}</span></div>
       ${o.pm?`<div style="font-size:11px;color:var(--t2);margin-top:4px;">Paid via: <b style="color:var(--t);">${esc(o.pm)}</b></div>`:''}
     </div>
-    ${o.note?`<div style="padding:10px 16px;border-top:1px solid var(--b);font-size:12px;color:var(--t2);">📝 ${esc(o.note)}</div>`:''}
+    ${o.note?`<div style="padding:10px 16px;border-top:1px solid rgba(128,128,128,.15);font-size:12px;color:var(--t2);">📝 ${esc(o.note)}</div>`:''}
     ${fileSec}
-    ${o.upiSS?`<div style="padding:10px 16px;border-top:1px solid var(--b);"><div style="font-size:11px;color:var(--t2);margin-bottom:4px;">UPI Screenshot:</div><img src="${o.upiSS}" style="max-width:100%;max-height:130px;border-radius:8px;object-fit:contain;"></div>`:''}
+    ${o.upiSS?`<div style="padding:10px 16px;border-top:1px solid rgba(128,128,128,.15);"><div style="font-size:11px;color:var(--t2);margin-bottom:4px;">UPI Screenshot:</div><img src="${o.upiSS}" class="upi-thumb" onclick="openUpiZoom('${o.upiSS}');" style="max-width:100%;max-height:130px;border-radius:8px;object-fit:contain;"></div>`:''}
     <div class="inv-foot"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div><div class="inv-foot-text" style="margin-top:3px;">${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div></div>
   </div>`;
 }
@@ -1719,13 +1762,17 @@ function vInv(){
   </div>
   <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">📋 Update Status</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
-      <button class="btn suc sm" onclick="SM.play('click');setJobStatus('${o.id}','accepted');" ${js!=='new'&&js!=='hold'?'disabled':''}>✅ Accept</button>
-      <button class="btn war sm" onclick="SM.play('click');showHoldModal('${o.id}');" ${js==='completed'||js==='ready'?'disabled':''}>⏸️ Hold</button>
-      <button class="btn pu sm" onclick="SM.play('click');setJobStatus('${o.id}','inprocess');" ${js!=='accepted'&&js!=='hold'?'disabled':''}>⚙️ In Process</button>
-      <button class="btn or sm" onclick="SM.play('click');setJobStatus('${o.id}','ready');" ${js!=='inprocess'?'disabled':''}>📦 Ready</button>
-      <button class="btn suc sm" style="grid-column:1/-1;" onclick="SM.play('click');setJobStatus('${o.id}','completed');" ${js!=='ready'?'disabled':''}>🎉 Complete</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">
+      <button class="btn suc sm" onclick="SM.play('click');setJobStatus('${o.id}','accepted');"
+        style="${js==='new'||js==='hold'?'':'opacity:.35;pointer-events:none;'}" ${js==='new'||js==='hold'?'':'disabled'}>✅ Accept</button>
+      <button class="btn war sm" onclick="SM.play('click');showHoldModal('${o.id}');"
+        style="${js!=='hold'&&js!=='completed'?'':'opacity:.35;pointer-events:none;'}" ${js!=='hold'&&js!=='completed'?'':'disabled'}>⏸️ Hold</button>
+      <button class="btn pu sm" onclick="SM.play('click');setJobStatus('${o.id}','inprocess');"
+        style="${js==='accepted'?'':'opacity:.35;pointer-events:none;'}" ${js==='accepted'?'':'disabled'}>⚙️ In Process</button>
+      <button class="btn or sm" onclick="SM.play('click');setJobStatus('${o.id}','ready');"
+        style="${js==='inprocess'?'':'opacity:.35;pointer-events:none;'}" ${js==='inprocess'?'':'disabled'}>📦 Ready</button>
     </div>
+    <button class="btn suc sm" style="width:100%;${js==='completed'?'opacity:.35;pointer-events:none;':''}" onclick="SM.play('click');setJobStatus('${o.id}','completed');" ${js==='completed'?'disabled':''}>🎉 Completed</button>
   </div>
   <div class="pay-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
