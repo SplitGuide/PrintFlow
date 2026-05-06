@@ -328,18 +328,18 @@ body.light .fi option{background:#f0e8ff;color:#1e0a3c;}
 .inv-table{width:100%;border-collapse:collapse;}
 .inv-table th{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;padding:7px 8px;background:var(--s2);text-align:left;}
 .inv-table th:not(:first-child){text-align:right;}
-.inv-table td{font-size:12px;padding:8px 8px;border-bottom:1px solid var(--b);color:var(--t);vertical-align:middle;}
+.inv-table td{font-size:12px;padding:8px 8px;border-bottom:1px solid rgba(128,128,128,.12);color:var(--t);vertical-align:middle;}
 .inv-table td:not(:first-child){text-align:right;}
 .inv-table tr:last-child td{border-bottom:none;}
-.inv-totals{background:var(--s2);padding:12px 16px;border-top:1px solid var(--b);}
+.inv-totals{background:var(--s2);padding:12px 16px;}
 .inv-tot-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;}
 .inv-tot-row span:first-child{color:var(--t2);}
 .inv-tot-row span:last-child{font-weight:600;color:var(--t);}
-.inv-tot-divider{height:1px;background:var(--b);margin:6px 0;}
+.inv-tot-divider{display:none;}
 .inv-grand-total{display:flex;justify-content:space-between;align-items:center;padding:8px 0 4px;font-size:16px;font-weight:800;}
 .inv-grand-total span:first-child{color:var(--t);}
 .inv-grand-total span:last-child{color:var(--a);font-size:18px;}
-.inv-foot{background:color-mix(in srgb,var(--a) 8%,var(--s));padding:10px 16px;border-top:1px solid var(--b);text-align:center;}
+.inv-foot{background:color-mix(in srgb,var(--a) 8%,var(--s));padding:10px 16px;text-align:center;}
 .inv-foot-text{font-size:10px;color:var(--t2);}
 .send-inv{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:var(--rxs);background:rgba(255,255,255,.2);font-size:11px;font-weight:700;color:#fff;cursor:pointer;text-decoration:none;transition:background .2s;}
 .send-inv:hover{background:rgba(255,255,255,.3);}
@@ -440,7 +440,7 @@ body.light .mod{background:rgba(248,242,255,.98);}
   <div class="splash-bottom">
     <a class="sh" href="tel:+919035346417">📞 Helpline</a>
     <button id="info-btn" onclick="openInfo();">ⓘ</button>
-    <div id="admin-corner" onclick="SM.play('click');goALog();">🔐 Admin</div>
+    <div id="admin-corner" onclick="SM.play('click');goALog();">🔐 Staff</div>
   </div>
 </div>
 
@@ -458,8 +458,13 @@ body.light .mod{background:rgba(248,242,255,.98);}
 
 <div id="alog">
   <div class="alcard">
-    <div style="font-size:17px;font-weight:800;margin-bottom:2px;">🔐 Admin Access</div>
-    <div style="font-size:12px;color:var(--t2);margin-bottom:14px;">Enter your 4-digit code</div>
+    <div style="font-size:17px;font-weight:800;margin-bottom:6px;">🔐 Staff Access</div>
+    <!-- Portal toggle -->
+    <div style="display:flex;background:var(--s2);border:1px solid var(--b);border-radius:30px;padding:3px;margin-bottom:16px;gap:2px;" id="portal-toggle">
+      <button id="ptb-emp" onclick="selectPortalType('employee');" style="flex:1;padding:7px;border:none;border-radius:26px;font-size:12px;font-weight:700;cursor:pointer;background:var(--a);color:#fff;transition:all .2s;">👷 Employee</button>
+      <button id="ptb-own" onclick="selectPortalType('owner');" style="flex:1;padding:7px;border:none;border-radius:26px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--t2);transition:all .2s;">👑 Owner</button>
+    </div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:14px;" id="portal-hint">Enter Employee PIN</div>
     <div class="cbs">
       <input class="cb" id="c1" type="number" min="0" max="9" oninput="SM.play('tick');ci(this,'c2');" onkeydown="ck(event,this,'');">
       <input class="cb" id="c2" type="number" min="0" max="9" oninput="SM.play('tick');ci(this,'c3');" onkeydown="ck(event,this,'c1');">
@@ -476,7 +481,11 @@ body.light .mod{background:rgba(248,242,255,.98);}
     <div><div class="hlogo">Vikrant <span>Offset</span></div><div style="font-size:9px;color:var(--t3);">Printers · Belagavi</div></div>
     <div class="hright">
       <div class="pill-sync" id="hs" style="display:none;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect"><div class="sdot conn" id="hsdot"></div><span id="hstxt" style="font-size:10px;">Sync</span></div>
-      <span class="pbadge" id="pbadge">Admin</span>
+      <div id="portal-switcher" onclick="SM.play('click');switchPortal();" title="Switch portal" style="display:flex;align-items:center;gap:5px;cursor:pointer;background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:3px 8px 3px 4px;transition:all .2s;">
+        <div id="portal-dot" style="width:8px;height:8px;border-radius:50%;background:var(--a);transition:background .2s;"></div>
+        <span class="pbadge" id="pbadge" style="background:transparent;color:var(--t);padding:0;font-size:11px;">Employee</span>
+        <span style="font-size:10px;color:var(--t2);">⇄</span>
+      </div>
       <button class="ibtn" id="dkbtn" onclick="darkToggle();">☀️</button>
       <button class="ibtn" id="hMuteBtn" onclick="SM.toggle();">🔊</button>
       <button class="ibtn" onclick="bkSplash();">⇄</button>
@@ -549,6 +558,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInfo();});
 // ════════════════════════════════════════════════
 const BIZ={name:'Vikrant Offset Printers',addr:'200/6, Dr. R K Marg, 8th Cross, Hindwadi, Belgaum',ph:'+91 9035346417',ph2:'+91 9448146417',email:'vikrantoffsetprinters@yahoo.com',gstin:'29ALUPK4698K1ZX',adminWa:'919035346417',googleReview:'https://g.page/r/vikrant-offset-printers/review',upiId:'vikrantkalkundrikar-1@oksbi'};
 const ADMIN_CODE='6417';
+const OWNER_CODE='1234'; // Change this to your owner PIN
 const SB_URL='https://tdvvutxnowysptkivpgu.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkdnZ1dHhub3d5c3B0a2l2cGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTc5NzYsImV4cCI6MjA5MjI3Mzk3Nn0.uARR0Er4tCCP9KU-joawEc385Fe6Ml9JbQlgYsupdXk';
 const STATUS_META={new:{label:'New',icon:'🆕',cls:'s-new',dot:'sd-new'},accepted:{label:'Accepted',icon:'✅',cls:'s-accepted',dot:'sd-accepted'},hold:{label:'On Hold',icon:'⏸️',cls:'s-hold',dot:'sd-hold'},inprocess:{label:'In Process',icon:'⚙️',cls:'s-inprocess',dot:'sd-inprocess'},ready:{label:'Ready',icon:'📦',cls:'s-ready',dot:'sd-ready'},completed:{label:'Completed',icon:'🎉',cls:'s-completed',dot:'sd-completed'},paid:{label:'Paid',icon:'💰',cls:'s-paid',dot:'sd-paid'},quotation:{label:'Quotation',icon:'📋',cls:'s-quo',dot:'sd-quo'}};
@@ -560,7 +570,7 @@ const DEFAULT_HOLD_REASONS=['File low resolution','File size not proper','File f
 const S={
   portal:null,view:null,orders:[],form:null,selId:null,sub:null,szcat:null,
   dark:true,scheme:'red',imgs:{},searchQ:'',holdReasons:[...DEFAULT_HOLD_REASONS],
-  quoSearch:'',quoResults:null,
+  quoSearch:'',quoResults:null,multiSel:new Set(),accMonth:null,
   cats:[
     {id:'flex',nm:'Flex Printing',ico:'🖼️',sc:['Indoor Flex','Outdoor Flex','Glossy Flex'],pricing:'sqft',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
     {id:'cards',nm:'Business Cards',ico:'💳',sc:['Single Side','Double Side','Matte Lam','Gloss Lam'],pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
@@ -629,7 +639,7 @@ const S={
   },
 };
 
-function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null,customDFee:null};}
+function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null,customDFee:null,finalFiles:[]};}
 
 // ════════════════════════════════════════════════
 // SUPABASE
@@ -728,7 +738,7 @@ async function syncSettingsLoad(){
 }
 
 async function dbAdd(o){if(!SB){const id='L'+Date.now();S.orders.unshift({id,...o});renderNav();return id;}try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(error)throw error;return data[0]?.id;}catch(e){alert('❌ Save failed: '+e.message);return null;}}
-async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
+async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id',finalFiles:'final_files',advancePaid:'advance_paid',advanceMethod:'advance_method',advanceSS:'advance_ss'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
 async function dbDel(id){
   const o=S.orders.find(x=>x.id===id);
   S.orders=S.orders.filter(x=>x.id!==id);
@@ -742,11 +752,11 @@ async function dbDel(id){
   }
 }
 const safeJ=(v,fb)=>{try{if(typeof v==='string'&&(v.startsWith('[')||v.startsWith('{')))return JSON.parse(v);return v||fb;}catch(e){return fb;}};
-function r2o(r){return{id:r.id,invNo:r.inv_no||'',at:r.at,cust:{nm:r.cust_name||'',ph:r.cust_phone||'',em:r.cust_email||''},ctype:r.customer_type||'ind',coname:r.company_name||'',gstin:r.gstin||'',otype:r.order_type||'order',cat:r.cat_name||'',sz:r.size_name||'',mat:r.mat_name||'',sc:r.subcategory||'',qty:r.qty||1,uprice:+r.unit_price||0,dfee:+r.design_fee||0,delfee:+r.delivery_fee||0,preg:+r.pre_gst||0,gst:+r.gst_amt||0,sub:+r.subtotal||0,total:+r.total||0,note:r.notes||'',del:r.delivery||false,daddr:r.address||'',status:r.status||'pending',pm:r.pay_method||'',isNew:r.is_new||false,appr:r.approval_status||'pending',upiSS:r.upi_screenshot||'',files:safeJ(r.attached_files,[]),fname:r.attached_file_name||'',fileData:r.attached_file_data||'',fileType:r.attached_file_type||'',jobStatus:r.job_status||'new',holdReasons:safeJ(r.hold_reasons,[]),payRequested:r.pay_requested||false,statusHistory:safeJ(r.status_history,[]),fromQuoId:r.from_quotation_id||null};}
+function r2o(r){return{id:r.id,invNo:r.inv_no||'',at:r.at,cust:{nm:r.cust_name||'',ph:r.cust_phone||'',em:r.cust_email||''},ctype:r.customer_type||'ind',coname:r.company_name||'',gstin:r.gstin||'',otype:r.order_type||'order',cat:r.cat_name||'',sz:r.size_name||'',mat:r.mat_name||'',sc:r.subcategory||'',qty:r.qty||1,uprice:+r.unit_price||0,dfee:+r.design_fee||0,delfee:+r.delivery_fee||0,preg:+r.pre_gst||0,gst:+r.gst_amt||0,sub:+r.subtotal||0,total:+r.total||0,note:r.notes||'',del:r.delivery||false,daddr:r.address||'',status:r.status||'pending',pm:r.pay_method||'',isNew:r.is_new||false,appr:r.approval_status||'pending',upiSS:r.upi_screenshot||'',files:safeJ(r.attached_files,[]),fname:r.attached_file_name||'',fileData:r.attached_file_data||'',fileType:r.attached_file_type||'',jobStatus:r.job_status||'new',holdReasons:safeJ(r.hold_reasons,[]),payRequested:r.pay_requested||false,statusHistory:safeJ(r.status_history,[]),fromQuoId:r.from_quotation_id||null,finalFiles:safeJ(r.final_files||'[]',[]).filter(f=>f&&f._isFinal),advancePaid:+(r.advance_paid||0),advanceMethod:r.advance_method||'',advanceSS:r.advance_ss||''};}
 function o2r(o){
   // Use first file for legacy columns, full list in attached_files
   const firstFile=o.files&&o.files.length?o.files[0]:null;
-  return{inv_no:o.invNo,at:o.at,cust_name:o.cust?.nm||'',cust_phone:o.cust?.ph||'',cust_email:o.cust?.em||'',customer_type:o.ctype||'ind',company_name:o.coname||'',gstin:o.gstin||'',order_type:o.otype||'order',cat_name:o.cat||'',size_name:o.sz||'',mat_name:o.mat||'',subcategory:o.sc||'',qty:o.qty||1,unit_price:o.uprice||0,design_fee:o.dfee||0,delivery_fee:o.delfee||0,pre_gst:o.preg||0,gst_amt:o.gst||0,subtotal:o.sub||0,total:o.total||0,notes:o.note||'',delivery:o.del||false,address:o.daddr||'',status:o.status||'pending',pay_method:o.pm||'',is_new:o.isNew||false,approval_status:o.appr||'pending',upi_screenshot:o.upiSS||'',attached_files:JSON.stringify(o.files||[]),attached_file_name:firstFile?.name||'',attached_file_data:firstFile?.url||firstFile?.data||'',attached_file_type:firstFile?.type||'',job_status:o.jobStatus||'new',hold_reasons:JSON.stringify(o.holdReasons||[]),pay_requested:o.payRequested||false,status_history:JSON.stringify(o.statusHistory||[]),from_quotation_id:o.fromQuoId||null};
+  return{inv_no:o.invNo,at:o.at,cust_name:o.cust?.nm||'',cust_phone:o.cust?.ph||'',cust_email:o.cust?.em||'',customer_type:o.ctype||'ind',company_name:o.coname||'',gstin:o.gstin||'',order_type:o.otype||'order',cat_name:o.cat||'',size_name:o.sz||'',mat_name:o.mat||'',subcategory:o.sc||'',qty:o.qty||1,unit_price:o.uprice||0,design_fee:o.dfee||0,delivery_fee:o.delfee||0,pre_gst:o.preg||0,gst_amt:o.gst||0,subtotal:o.sub||0,total:o.total||0,notes:o.note||'',delivery:o.del||false,address:o.daddr||'',status:o.status||'pending',pay_method:o.pm||'',is_new:o.isNew||false,approval_status:o.appr||'pending',upi_screenshot:o.upiSS||'',attached_files:JSON.stringify(o.files||[]),attached_file_name:firstFile?.name||'',attached_file_data:firstFile?.url||firstFile?.data||'',attached_file_type:firstFile?.type||'',job_status:o.jobStatus||'new',hold_reasons:JSON.stringify(o.holdReasons||[]),pay_requested:o.payRequested||false,status_history:JSON.stringify(o.statusHistory||[]),from_quotation_id:o.fromQuoId||null,final_files:JSON.stringify((o.finalFiles||[]).map(f=>({...f,_isFinal:true}))),advance_paid:o.advancePaid||0,advance_method:o.advanceMethod||'',advance_ss:o.advanceSS||''};
 }
 
 // ════════════════════════════════════════════════
@@ -799,12 +809,78 @@ function genQuoNo(){return'QUO-'+Date.now().toString().slice(-6);}
 // PORTAL NAV
 // ════════════════════════════════════════════════
 function bkSplash(){document.getElementById('app').style.display='none';document.getElementById('alog').style.display='none';document.getElementById('splash').style.display='flex';}
+function switchPortal(){
+  if(S.portal==='owner'){
+    // Switch down to employee (no PIN needed)
+    S.portal='employee';S.view='dash';
+    document.getElementById('pbadge').textContent='Employee';
+    const pd=document.getElementById('portal-dot');if(pd)pd.style.background='var(--a)';
+    SM.play('click');renderNav();render(true);
+  }else{
+    // Switch up to owner — require PIN
+    _loginPortal='owner';
+    // Show inline PIN modal
+    showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:4px;">👑 Owner Access</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:14px;">Enter Owner PIN to continue</div>
+    <div class="cbs" id="sw-cbs">
+      <input class="cb" id="sw1" type="number" min="0" max="9" oninput="SM.play('tick');swCI(this,'sw2');" onkeydown="swCK(event,this,'');">
+      <input class="cb" id="sw2" type="number" min="0" max="9" oninput="SM.play('tick');swCI(this,'sw3');" onkeydown="swCK(event,this,'sw1');">
+      <input class="cb" id="sw3" type="number" min="0" max="9" oninput="SM.play('tick');swCI(this,'sw4');" onkeydown="swCK(event,this,'sw2');">
+      <input class="cb" id="sw4" type="number" min="0" max="9" oninput="SM.play('tick');swCI(this,'');"  onkeydown="swCK(event,this,'sw3');">
+    </div>
+    <button class="btn pri" style="margin-bottom:8px;" onclick="SM.play('click');verifySwitchOwner();">Unlock →</button>
+    <button class="btn gho" style="width:100%;" onclick="SM.play('click');closeM();">Cancel</button>`);
+    setTimeout(()=>document.getElementById('sw1')?.focus(),80);
+  }
+}
+function swCI(el,next){if(el.value.length>=1&&next){const n=document.getElementById(next);if(n){n.focus();n.select();}verifySwitchOwnerAuto();}}
+function swCK(e,el,prev){if(e.key==='Backspace'&&!el.value&&prev){const p=document.getElementById(prev);if(p){p.focus();p.select();}}}
+function verifySwitchOwnerAuto(){
+  const code=['sw1','sw2','sw3','sw4'].map(i=>document.getElementById(i)?.value||'').join('');
+  if(code.length===4)verifySwitchOwner();
+}
+function verifySwitchOwner(){
+  const code=['sw1','sw2','sw3','sw4'].map(i=>document.getElementById(i)?.value||'').join('');
+  if(code===OWNER_CODE){
+    closeM();S.portal='owner';S.view='dash';
+    document.getElementById('pbadge').textContent='Owner';
+    const pd=document.getElementById('portal-dot');if(pd)pd.style.background='#7c3aed';
+    SM.play('payment');renderNav();render(true);
+  }else{
+    SM.play('error');['sw1','sw2','sw3','sw4'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+    document.getElementById('sw1')?.focus();
+    const cbs=document.getElementById('sw-cbs');if(cbs){cbs.style.animation='none';requestAnimationFrame(()=>cbs.style.animation='shake .3s ease');}
+  }
+}
+
 function goCust(){SM.play('click');document.getElementById('splash').style.display='none';S.portal='cust';S.view='browse';S.form=ff();document.getElementById('app').style.display='flex';document.getElementById('pbadge').textContent='Customer';document.getElementById('pbadge').style.background='#2563eb';renderNav();render(true);}
 function goALog(){SM.play('click');document.getElementById('splash').style.display='none';document.getElementById('alog').style.display='flex';setTimeout(()=>document.getElementById('c1').focus(),80);}
-function goAdmin(){document.getElementById('alog').style.display='none';S.portal='admin';S.view='dash';document.getElementById('app').style.display='flex';document.getElementById('pbadge').textContent='Admin';document.getElementById('pbadge').style.background='var(--a)';SM.play('payment');renderNav();render(true);setTimeout(()=>sbLoad(),300);}
+function goAdmin(){document.getElementById('alog').style.display='none';S.portal='employee';S.view='dash';document.getElementById('app').style.display='flex';document.getElementById('pbadge').textContent='Employee';document.getElementById('pbadge').style.background='transparent';const _pd=document.getElementById('portal-dot');if(_pd)_pd.style.background='var(--a)';SM.play('payment');renderNav();render(true);setTimeout(()=>sbLoad(),300);}
+function goOwner(){document.getElementById('alog').style.display='none';S.portal='owner';S.view='dash';document.getElementById('app').style.display='flex';document.getElementById('pbadge').textContent='Owner';document.getElementById('pbadge').style.background='transparent';const _pd2=document.getElementById('portal-dot');if(_pd2)_pd2.style.background='#7c3aed';SM.play('payment');renderNav();render(true);setTimeout(()=>sbLoad(),300);}
 function ci(el,nx){el.value=el.value.slice(-1);if(el.value&&nx)document.getElementById(nx)?.focus();}
 function ck(e,el,pv){if(e.key==='Backspace'&&!el.value&&pv)document.getElementById(pv)?.focus();}
-function verifyA(){const code=['c1','c2','c3','c4'].map(i=>document.getElementById(i).value).join('');if(code===ADMIN_CODE){goAdmin();}else{SM.play('error');['c1','c2','c3','c4'].forEach(i=>document.getElementById(i).value='');document.getElementById('c1').focus();const card=document.querySelector('.alcard');if(card){card.style.animation='none';requestAnimationFrame(()=>card.style.animation='shake .3s ease');}}}
+let _loginPortal='employee';
+function selectPortalType(type){
+  _loginPortal=type;
+  const eb=document.getElementById('ptb-emp'),ob=document.getElementById('ptb-own'),hint=document.getElementById('portal-hint');
+  if(type==='employee'){
+    eb.style.background='var(--a)';eb.style.color='#fff';
+    ob.style.background='transparent';ob.style.color='var(--t2)';
+    if(hint)hint.textContent='Enter Employee PIN';
+  }else{
+    ob.style.background='var(--a)';ob.style.color='#fff';
+    eb.style.background='transparent';eb.style.color='var(--t2)';
+    if(hint)hint.textContent='Enter Owner PIN';
+  }
+  ['c1','c2','c3','c4'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('c1').focus();
+}
+function verifyA(){
+  const code=['c1','c2','c3','c4'].map(i=>document.getElementById(i).value).join('');
+  const valid=_loginPortal==='owner'?code===OWNER_CODE:code===ADMIN_CODE;
+  if(valid){_loginPortal==='owner'?goOwner():goAdmin();}
+  else{SM.play('error');['c1','c2','c3','c4'].forEach(i=>document.getElementById(i).value='');document.getElementById('c1').focus();const card=document.querySelector('.alcard');if(card){card.style.animation='none';requestAnimationFrame(()=>card.style.animation='shake .3s ease');}}
+}
 
 // ════════════════════════════════════════════════
 // RENDER — animate only on true navigation
@@ -817,7 +893,11 @@ function renderNav(){
     n.innerHTML=`<button class="nb${S.view==='browse'?' on':''}" onclick="goView('browse');"><span class="nico">🛍️</span>New Order</button><button class="nb${S.view==='quotations'?' on':''}" onclick="goView('quotations');"><span class="nico">📋</span>Quotations</button>`;
   }else{
     const nc=S.orders.filter(o=>o.isNew).length;
-    n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');S.form=ff();goView('new-order');"><span class="nico">➕</span>New Order</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
+    if(S.portal==='owner'){
+      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='accounts'?' on':''}" onclick="goView('accounts');"><span class="nico">📒</span>Accounts</button>`;
+    }else{
+      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');if(S.view==='new-order'&&S.form&&S.form.step>0){goView('new-order');}else{S.form=ff();goView('new-order');}"><span class="nico">➕</span>New Order</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
+    }
   }
 }
 
@@ -834,6 +914,8 @@ function render(animate=false){
     }else{
       if(S.view==='dash')html=vDash();
       else if(S.view==='orders')html=vOrders();
+      else if(S.view==='multi-inv')html=vMultiInv();
+      else if(S.view==='accounts')html=vAccounts();
       else if(S.view==='new-order')html=vBrowse();
       else if(S.view==='sett')html=vSett();
       else if(S.view==='inv')html=vInv();
@@ -938,18 +1020,32 @@ function typeSelectorHTML(sel){
 }
 function selectType(type){
   SM.play('click');
+  if(!S.form)S.form=ff();
   S.form.ctype=type;
+  // Animate pill in DOM before re-render wipes it
   const pill=document.getElementById('typeSelPill');
   if(pill)pill.style.left=type==='co'?'calc(50%)':'4px';
-  document.querySelectorAll('.type-opt').forEach((el,i)=>{el.className='type-opt '+(type===(i===0?'ind':'co')?'active':'inactive');});
-  setTimeout(()=>{S.form.step=1;render(true);},350);
+  document.querySelectorAll('.type-opt').forEach((el,i)=>{
+    el.className='type-opt '+(type===(i===0?'ind':'co')?'active':'inactive');
+  });
+  // Use requestAnimationFrame so animation frame paints first,
+  // then immediately set step and render — no setTimeout race condition
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(!S.form)S.form=ff();
+      S.form.ctype=type;  // re-assert in case render fired between frames
+      S.form.step=1;
+      render(true);
+    });
+  });
 }
 
 // ════════════════════════════════════════════════
 // CUSTOMER WIZARD
 // ════════════════════════════════════════════════
 function vBrowse(){
-  const f=S.form;if(!f)return'';
+  if(!S.form)S.form=ff();
+  const f=S.form;
   if(f.step===0)return wS0();
   const isC=f.ctype==='co',labs=isC?['Type','Info','Company','Category','Size','Design','Review']:['Type','Info','Category','Size','Design','Review'],s=f.step;
   const dots=labs.map((_,i)=>{const n=i+1,cls=n<s?'done':n===s?'now':'wait';return(i?`<div class="sln${n<=s?' done':''}"></div>`:'')+`<div class="step ${cls}">${n<s?'✓':n}</div>`;}).join('');
@@ -959,9 +1055,10 @@ function vBrowse(){
 }
 
 function wS0(){
+  const isAdmin=S.portal==='employee'||S.portal==='owner';
   return`<div style="text-align:center;padding-top:10px;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:8px;">Welcome! 👋</div>
-    <div style="font-size:13px;color:var(--t2);margin-bottom:24px;">Are you ordering as an individual or a company?</div>
+    ${isAdmin?'':'<div style="font-size:22px;font-weight:800;margin-bottom:8px;">Welcome! 👋</div>'}
+    <div style="font-size:13px;color:var(--t2);margin-bottom:24px;">${isAdmin?'Select order type:':'Are you ordering as an individual or a company?'}</div>
     ${typeSelectorHTML(S.form.ctype)}
     <div style="font-size:11px;color:var(--t3);">Tap to select — continues automatically</div>
   </div>`;
@@ -1200,7 +1297,9 @@ function wS3sqft(f,cat,prev){
   <div class="fg" id="dims-section"><label class="fl">Dimensions</label>
     ${szPresets.length?`<div class="pills" style="margin-bottom:10px;">${presetPills}
       <div class="pill${f.custom&&!f.sz?' on':''}" onclick="S.form.custom=true;S.form.sz=null;render(false);">&#9999; Custom</div>
-    </div>`:''}
+    </div>
+    ${o.advanceSS?`<div style="margin-top:6px;"><img src="${o.advanceSS}" class="upi-thumb" onclick="openUpiZoom('${o.advanceSS}');" style="max-width:100%;max-height:110px;border-radius:6px;object-fit:contain;" title="UPI Screenshot — tap to zoom"></div>`:''}
+    `:''}
     <div style="display:flex;gap:8px;align-items:flex-end;">
       <div style="flex:1;"><div style="font-size:11px;color:var(--t2);margin-bottom:3px;">Width</div>
         <input class="fi" id="cw" type="number" placeholder="e.g. 4" value="${f.cw}" oninput="S.form.cw=this.value;S.form.custom=true;S.form.sz=null;render(false);">
@@ -1353,7 +1452,7 @@ function wS4(){
         </div>
         ${f.design==='us'?'<div style="margin-left:auto;font-size:18px;color:rgba(255,255,255,.8);">✓</div>':'<div style="margin-left:auto;font-size:18px;color:var(--t3);">›</div>'}
       </div>
-      ${f.design==='us'&&S.portal==='admin'?`<div style="background:color-mix(in srgb,var(--a) 8%,transparent);border:1px solid color-mix(in srgb,var(--a) 25%,transparent);border-radius:var(--rsm);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      ${f.design==='us'&&(S.portal==='employee'||S.portal==='owner')?`<div style="background:color-mix(in srgb,var(--a) 8%,transparent);border:1px solid color-mix(in srgb,var(--a) 25%,transparent);border-radius:var(--rsm);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div>
           <div style="font-size:12px;font-weight:700;color:var(--t);">Design Charge</div>
           <div style="font-size:10px;color:var(--t2);">Edit for this order</div>
@@ -1365,6 +1464,14 @@ function wS4(){
             oninput="S.form.customDFee=this.value===''?null:parseFloat(this.value)||0;render(false);">
           <button style="font-size:11px;color:var(--t2);background:none;border:none;cursor:pointer;padding:4px;" onclick="S.form.customDFee=S.dFee;render(false);" title="Reset to default">↺</button>
         </div>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="font-size:12px;font-weight:700;color:var(--t);margin-bottom:6px;">🖨️ Final Design Files <span style="font-weight:400;color:var(--t2);font-size:11px;">(for print unit)</span></div>
+        <div class="fup${f.finalFiles&&f.finalFiles.length?' fok':''}" onclick="document.getElementById('ffInp').click();" style="min-height:56px;">
+          ${f.finalFiles&&f.finalFiles.length?`<div style="color:var(--gt);font-weight:700;">✅ ${f.finalFiles.length} file${f.finalFiles.length>1?'s':''} uploaded</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">Tap to add more</div>`:'<div style="font-size:13px;">🖨️ Upload final print-ready files</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">CDR, AI, PDF, PSD…</div>'}
+        </div>
+        <input type="file" id="ffInp" accept="image/*,.pdf,.ai,.psd,.eps,.cdr,.svg,.zip" multiple style="display:none;" onchange="pickFinalFiles(this);">
+        ${f.finalFiles&&f.finalFiles.length?`<div class="files-list">${f.finalFiles.map((fi,i)=>`<div class="file-item"><span class="file-item-name">🖨️ ${esc(fi.name)}</span><button class="file-item-del" onclick="S.form.finalFiles.splice(${i},1);render(false);">✕</button></div>`).join('')}</div>`:''}
       </div>`:''}
     </div>
   </div>
@@ -1474,6 +1581,52 @@ function wn4(){
   S.form.step=S.form.ctype==='co'?6:5;SM.play('click');render(true);
 }
 
+async function addFinalFilesToOrder(orderId, inp){
+  const o=S.orders.find(x=>x.id===orderId);if(!o)return;
+  if(!o.finalFiles)o.finalFiles=[];
+  const rawFiles=Array.from(inp.files);
+  if(!rawFiles.length)return;
+  showToast('⏳ Uploading '+rawFiles.length+' file'+(rawFiles.length>1?'s':'')+'…');
+  let added=0;
+  for(const f of rawFiles){
+    const readBase64=()=>new Promise(res=>{
+      const r=new FileReader();
+      r.onload=e=>res(e.target.result);
+      r.readAsDataURL(f);
+    });
+    if(SB){
+      try{
+        const path=`final/${Date.now()}-${Math.random().toString(36).slice(2,6)}/${f.name}`;
+        const{data,error}=await SB.storage.from('design-files').upload(path,f,{cacheControl:'3600',upsert:false});
+        if(error)throw error;
+        const{data:ud}=SB.storage.from('design-files').getPublicUrl(path);
+        o.finalFiles.push({name:f.name,url:ud.publicUrl,path,type:f.type,size:f.size,_isFinal:true});
+        added++;
+      }catch(err){
+        console.warn('Storage upload failed, using base64 fallback',err);
+        const data=await readBase64();
+        o.finalFiles.push({name:f.name,data,type:f.type,size:f.size,_isFinal:true});
+        added++;
+      }
+    }else{
+      const data=await readBase64();
+      o.finalFiles.push({name:f.name,data,type:f.type,size:f.size,_isFinal:true});
+      added++;
+    }
+  }
+  dbUpd(orderId,{finalFiles:o.finalFiles});
+  SM.play('status');
+  showToast('✅ '+added+' file'+(added>1?'s':'')+' added!');
+  render(false);
+}
+function removeFinalFile(orderId,idx){
+  const o=S.orders.find(x=>x.id===orderId);if(!o||!o.finalFiles)return;
+  const removed=o.finalFiles.splice(idx,1)[0];
+  if(removed&&removed.path&&SB)SB.storage.from('design-files').remove([removed.path]).catch(()=>{});
+  dbUpd(orderId,{finalFiles:o.finalFiles});
+  SM.play('click');render(false);
+}
+
 function updateOrderDfee(id, newFee){
   const o=S.orders.find(x=>x.id===id);if(!o)return;
   const fee=parseFloat(newFee)||0;
@@ -1531,6 +1684,32 @@ function adjQ(d){
   if(v)v.textContent=S.form.qty;if(i)i.value=S.form.qty;
 }
 
+async function pickFinalFiles(inp){
+  const rawFiles=Array.from(inp.files);
+  if(!S.form.finalFiles)S.form.finalFiles=[];
+  for(const f of rawFiles){
+    if(SB){
+      try{
+        const path=`final/${Date.now()}-${Math.random().toString(36).slice(2,6)}/${f.name}`;
+        showToast('⏳ Uploading '+f.name+'…');
+        const{data,error}=await SB.storage.from('design-files').upload(path,f,{cacheControl:'3600',upsert:false});
+        if(error)throw error;
+        const{data:ud}=SB.storage.from('design-files').getPublicUrl(path);
+        S.form.finalFiles.push({name:f.name,url:ud.publicUrl,path,type:f.type,size:f.size,_isFinal:true});
+        showToast('✅ '+f.name+' uploaded!');
+      }catch(err){
+        const r=new FileReader();
+        r.onload=e=>{S.form.finalFiles.push({name:f.name,data:e.target.result,type:f.type,size:f.size,_isFinal:true});render(false);};
+        r.readAsDataURL(f);
+      }
+    }else{
+      const r=new FileReader();
+      r.onload=e=>{S.form.finalFiles.push({name:f.name,data:e.target.result,type:f.type,size:f.size,_isFinal:true});render(false);};
+      r.readAsDataURL(f);
+    }
+  }
+  SM.play('status');render(false);
+}
 async function pickFiles(inp){
   const rawFiles=Array.from(inp.files);
   for(const f of rawFiles){
@@ -1575,12 +1754,12 @@ async function submitOrder(){
       note:f.note,del:f.del,daddr:f.daddr||'',
       status:'pending',pm:'',isNew:true,appr:'pending',upiSS:'',
       files:f.files||[],fname:f.files[0]?.name||'',fileData:f.files[0]?.data||'',fileType:f.files[0]?.type||'',
-      jobStatus:'new',holdReasons:[],payRequested:false,statusHistory:initHistory,fromQuoId:f.fromQuoId||null};
+      jobStatus:'new',holdReasons:[],payRequested:false,statusHistory:initHistory,fromQuoId:f.fromQuoId||null,advancePaid:0,advanceMethod:''};
     const localId='L'+Date.now();S.orders.unshift({id:localId,...o});
     if(SB){try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(!error&&data&&data[0]){const idx=S.orders.findIndex(x=>x.id===localId);if(idx!==-1)S.orders[idx]={...S.orders[idx],id:data[0].id};setTimeout(()=>sbLoad(),700);}else if(error)console.error(error);}catch(e){console.error(e);}}
     SM.play('order');if(!isQuo)Confetti.launch(80);
     S.form=ff();
-    if(S.portal==='admin'&&S.view==='new-order'){S.view='orders';render(true);return;}
+    if((S.portal==='employee'||S.portal==='owner')&&S.view==='new-order'){S.view='orders';render(true);return;}
     const mc=document.getElementById('mc');
     if(mc)mc.innerHTML=`<div style="text-align:center;padding:48px 24px;animation:fadeIn .4s var(--sp);">
       <div style="font-size:52px;margin-bottom:14px;animation:bounce .6s var(--sp) infinite;">${isQuo?'📋':'🎉'}</div>
@@ -1721,18 +1900,27 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
         </table>
       </div>
     </div>
-    <div class="inv-totals">
+    <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);">
       <div class="inv-tot-row"><span>Taxable Amount</span><span>₹${(o.preg||0).toLocaleString('en-IN')}</span></div>
       <div class="inv-tot-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
       <div class="inv-tot-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
-      <div class="inv-tot-divider"></div>
       <div class="inv-grand-total"><span>Total Amount</span><span>₹${(o.total||0).toLocaleString('en-IN')}</span></div>
       ${o.pm?`<div style="font-size:11px;color:var(--t2);margin-top:4px;">Paid via: <b style="color:var(--t);">${esc(o.pm)}</b></div>`:''}
+    ${o.advancePaid>0?`<div style="margin-top:8px;padding:8px 10px;background:color-mix(in srgb,var(--a) 10%,transparent);border:1px solid color-mix(in srgb,var(--a) 30%,transparent);border-radius:var(--rsm);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:11px;color:var(--a);font-weight:700;">✅ Advance Paid${o.advanceMethod?' via '+esc(o.advanceMethod):''}</span>
+        <span style="font-size:13px;font-weight:800;color:var(--a);">₹${(o.advancePaid).toLocaleString('en-IN')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+        <span style="font-size:11px;color:var(--t2);">Balance Due</span>
+        <span style="font-size:13px;font-weight:800;color:var(--r);">₹${Math.max(0,(o.total||0)-(o.advancePaid||0)).toLocaleString('en-IN')}</span>
+      </div>
+    </div>`:''}
     </div>
     ${o.note?`<div style="padding:10px 16px;border-top:1px solid rgba(128,128,128,.15);font-size:12px;color:var(--t2);">📝 ${esc(o.note)}</div>`:''}
     ${fileSec}
     ${o.upiSS?`<div style="padding:10px 16px;border-top:1px solid rgba(128,128,128,.15);"><div style="font-size:11px;color:var(--t2);margin-bottom:4px;">UPI Screenshot:</div><img src="${o.upiSS}" class="upi-thumb" onclick="openUpiZoom('${o.upiSS}');" style="max-width:100%;max-height:130px;border-radius:8px;object-fit:contain;"></div>`:''}
-    <div class="inv-foot"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div><div class="inv-foot-text" style="margin-top:3px;">${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div></div>
+    <div class="inv-foot" style="border-top:1px solid rgba(0,0,0,.07);"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div><div class="inv-foot-text" style="margin-top:3px;">${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div></div>
   </div>`;
 }
 
@@ -1740,8 +1928,8 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
 // INVOICE VIEW
 // ════════════════════════════════════════════════
 function vInv(){
-  const o=S.orders.find(x=>x.id===S.selId);if(!o){goView(S.portal==='admin'?'orders':'browse');return'';}
-  const isA=S.portal==='admin',js=o.jobStatus||'new',isPaid=o.status!=='pending',ph=(o.cust?.ph||'').replace(/\D/g,'');
+  const o=S.orders.find(x=>x.id===S.selId);if(!o){goView((S.portal==='employee'||S.portal==='owner')?'orders':'browse');return'';}
+  const isA=S.portal==='employee'||S.portal==='owner',js=o.jobStatus||'new',isPaid=o.status!=='pending',ph=(o.cust?.ph||'').replace(/\D/g,'');
   const emSubj=encodeURIComponent(`${o.otype==='quo'?'Quotation':'Invoice'} ${o.invNo}`);
   const emBody=encodeURIComponent(`Dear ${o.cust?.nm},\n\n${o.cat} – ${o.sz}\nQty: ${o.qty} · Total: ₹${o.total.toLocaleString('en-IN')}\nRef#: ${o.invNo}\n\n${BIZ.name} | ${BIZ.ph}`);
   const waContact=encodeURIComponent(`Hi! Regarding *${o.invNo}* – ${o.cat}`);
@@ -1761,6 +1949,26 @@ function vInv(){
     </div>
   </div>
   <div class="card" style="margin-bottom:10px;">
+    <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;">🖨️ Final Design Files</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:8px;">Files for the printing unit to download</div>
+    ${(o.finalFiles&&o.finalFiles.length)?`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">${o.finalFiles.map((fi,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 10px;">
+        <div onclick="openFileViewer('${fi.url||fi.data||''}','${esc(fi.name)}','${fi.type||''}');" style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0;">
+          <span style="font-size:16px;">🖨️</span>
+          <div style="min-width:0;"><div style="font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(fi.name)}</div>${fi.size?`<div style="font-size:10px;color:var(--t2);">${(fi.size/1024).toFixed(0)}KB</div>`:''}</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0;">
+          <a href="${fi.url||fi.data||'#'}" download="${esc(fi.name)}" style="font-size:11px;padding:4px 8px;background:var(--a);color:#fff;border-radius:6px;text-decoration:none;font-weight:700;">⬇️</a>
+          <button style="font-size:11px;padding:4px 8px;background:var(--rb);color:var(--rt);border:none;border-radius:6px;cursor:pointer;" onclick="removeFinalFile('${o.id}',${i});">✕</button>
+        </div>
+      </div>`).join('')}</div>`:'<div style="font-size:12px;color:var(--t2);padding:8px 0;">No files uploaded yet</div>'}
+    <div class="fup" onclick="document.getElementById('aff_${o.id}').click();" style="min-height:60px;border-style:dashed;cursor:pointer;">
+      <div style="font-size:20px;margin-bottom:4px;">🖨️</div>
+      <div style="font-size:12px;font-weight:700;">Tap to upload final design files</div>
+      <div style="font-size:10px;color:var(--t2);margin-top:2px;">PDF · CDR · AI · PSD · PNG · ZIP · Multiple files allowed</div>
+    </div>
+    <input type="file" id="aff_${o.id}" accept="image/*,.pdf,.ai,.psd,.eps,.cdr,.svg,.zip" multiple style="display:none;" onchange="addFinalFilesToOrder('${o.id}',this);">
+  </div>
+  <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">📋 Update Status</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">
       <button class="btn suc sm" onclick="SM.play('click');setJobStatus('${o.id}','accepted');"
@@ -1773,6 +1981,22 @@ function vInv(){
         style="${js==='inprocess'?'':'opacity:.35;pointer-events:none;'}" ${js==='inprocess'?'':'disabled'}>📦 Ready</button>
     </div>
     <button class="btn suc sm" style="width:100%;${js==='completed'?'opacity:.35;pointer-events:none;':''}" onclick="SM.play('click');setJobStatus('${o.id}','completed');" ${js==='completed'?'disabled':''}>🎉 Completed</button>
+  </div>
+  <div class="card" style="margin-bottom:10px;">
+    <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">💵 Advance Payment</div>
+    ${o.advancePaid>0?`
+    <div style="background:var(--gb);border:1px solid color-mix(in srgb,var(--g) 50%,transparent);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--gt);">✅ Advance Recorded</div>
+          <div style="font-size:11px;color:var(--gt);opacity:.8;">${o.advanceMethod?'via '+esc(o.advanceMethod):''}  •  Balance: ₹${Math.max(0,(o.total||0)-(o.advancePaid||0)).toLocaleString('en-IN')}</div>
+        </div>
+        <div style="font-size:18px;font-weight:900;color:var(--gt);">₹${o.advancePaid.toLocaleString('en-IN')}</div>
+      </div>
+    </div>`:``}
+    <button class="btn pri sm" style="width:auto;" onclick="SM.play('click');showAdvancePay('${o.id}');">
+      ${o.advancePaid>0?'✏️ Edit Advance':'💵 Record Advance Payment'}
+    </button>
   </div>
   <div class="pay-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -1832,17 +2056,26 @@ function renderTimeline(js,holdReasons){
 // ADMIN DASHBOARD
 // ════════════════════════════════════════════════
 function vDash(){
-  const td=new Date().toDateString(),tod=S.orders.filter(o=>new Date(o.at).toDateString()===td&&o.otype!=='quo');
-  const totRev=S.orders.filter(o=>o.otype!=='quo').reduce((s,o)=>s+o.total,0),todRev=tod.reduce((s,o)=>s+o.total,0);
-  const nc=S.orders.filter(o=>o.isNew).length,onHold=S.orders.filter(o=>o.jobStatus==='hold'),quos=S.orders.filter(o=>o.otype==='quo');
+  const td=new Date().toDateString();
+  const tod=S.orders.filter(o=>new Date(o.at).toDateString()===td&&o.otype!=='quo');
+  const nc=S.orders.filter(o=>o.isNew).length;
+  const onHold=S.orders.filter(o=>o.jobStatus==='hold');
   const pend=S.orders.filter(o=>o.status==='pending'&&o.otype!=='quo');
+  const isOwner=S.portal==='owner';
+  const totRev=isOwner?S.orders.filter(o=>o.otype!=='quo').reduce((s,o)=>s+(o.total||0),0):0;
+  const todRev=isOwner?tod.reduce((s,o)=>s+(o.total||0),0):0;
+  const pin=isOwner?OWNER_CODE:ADMIN_CODE;
   return`<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:13px;">
     <div><div style="font-size:19px;font-weight:800;">${greet()}</div><div style="font-size:12px;color:var(--t2);">${today()}</div></div>
-    <div style="text-align:right;"><div style="font-size:9px;color:var(--t3);text-transform:uppercase;">Pin</div><div style="font-size:19px;font-weight:800;letter-spacing:4px;color:var(--a);font-family:monospace;">${ADMIN_CODE}</div></div>
+    <div style="text-align:right;"><div style="font-size:9px;color:var(--t3);text-transform:uppercase;">Pin</div><div style="font-size:19px;font-weight:800;letter-spacing:4px;color:${isOwner?'#7c3aed':'var(--a)'};font-family:monospace;">${pin}</div></div>
   </div>
   <div class="mets">
+    ${isOwner?`
     <div class="met" onclick="SM.play('click');metD('total');"><div class="mlbl">Total Revenue</div><div class="mval" style="color:var(--a);">₹${fk(totRev)}</div><div class="msub">${S.orders.filter(o=>o.otype!=='quo').length} orders</div></div>
-    <div class="met" onclick="SM.play('click');metD('today');"><div class="mlbl">Today's Total</div><div class="mval" style="color:var(--g);">₹${fk(todRev)}</div><div class="msub">${tod.length} orders today</div></div>
+    <div class="met" onclick="SM.play('click');metD('today');"><div class="mlbl">Today's Revenue</div><div class="mval" style="color:var(--g);">₹${fk(todRev)}</div><div class="msub">${tod.length} orders</div></div>
+    `:`
+    <div class="met" onclick="SM.play('click');metD('today');"><div class="mlbl">Today's Orders</div><div class="mval" style="color:var(--g);">${tod.length}</div><div class="msub">orders received</div></div>
+    `}
     <div class="met" onclick="SM.play('click');metD('pending');"><div class="mlbl">Pending</div><div class="mval" style="color:var(--or);">${pend.length}</div><div class="msub">unpaid orders</div></div>
     <div class="met" onclick="SM.play('click');metD('hold');"><div class="mlbl">On Hold</div><div class="mval" style="color:var(--y);">${onHold.length}</div><div class="msub">need attention</div></div>
   </div>
@@ -1882,9 +2115,443 @@ function buildOrdersList(q){
   return Object.entries(groups).map(([d,g])=>`<div class="dgrp"><span>${g.l}</span><span>${g.items.length} · ₹${g.rev.toLocaleString('en-IN')}</span></div>${g.items.map(o=>oRow(o)).join('')}`).join('');
 }
 
+// ════════════════════════════════════════════════
+// COMBINED / MULTI-ORDER INVOICE
+// ════════════════════════════════════════════════
+function vMultiInv(){
+  const ids=[...S.multiSel];
+  const orders=ids.map(id=>S.orders.find(o=>o.id===id)).filter(Boolean);
+  if(!orders.length){S.view='orders';return vOrders();}
+  const first=orders[0];
+  const grandTotal=orders.reduce((s,o)=>s+(o.total||0),0);
+  const grandSub=orders.reduce((s,o)=>s+(o.preg||0),0);
+  const grandGst=orders.reduce((s,o)=>s+(o.gst||0),0);
+  const cgst=Math.round(grandGst/2);
+  const multiInvNo=orders.map(o=>o.invNo).join('+');
+
+  const rows=orders.map((o,i)=>`
+    <tr>
+      <td><div style="font-weight:700;">${esc(o.cat)}${o.sc?' – '+esc(o.sc):''}</div>
+        <div style="font-size:11px;color:var(--t2);">${esc(o.sz)}${o.mat?' · '+esc(o.mat):''}${o.note?' · '+esc(o.note):''}</div>
+        <div style="font-size:10px;color:var(--t3);">${esc(o.invNo)}</div>
+      </td>
+      <td>${o.qty}</td>
+      <td>₹${(o.uprice||0).toLocaleString('en-IN')}</td>
+      <td>₹${(o.sub||0).toLocaleString('en-IN')}</td>
+    </tr>
+    ${o.dfee?`<tr><td style="font-size:11px;color:var(--t2);padding-left:12px;">↳ Design Fee</td><td>1</td><td>₹${o.dfee.toLocaleString('en-IN')}</td><td>₹${o.dfee.toLocaleString('en-IN')}</td></tr>`:''}
+    ${o.delfee?`<tr><td style="font-size:11px;color:var(--t2);padding-left:12px;">↳ Delivery</td><td>1</td><td>₹${o.delfee.toLocaleString('en-IN')}</td><td>₹${o.delfee.toLocaleString('en-IN')}</td></tr>`:''}
+  `).join('');
+
+  return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <button class="btn gho sm nop" onclick="SM.play('click');S.view='orders';render(true);">← Back</button>
+    <div style="font-size:17px;font-weight:800;">Combined Invoice</div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px;padding:0;overflow:hidden;">
+    <div style="background:var(--a);padding:14px 16px;">
+      <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:700;text-transform:uppercase;letter-spacing:.4px;">${BIZ.name}</div>
+      <div style="font-size:20px;font-weight:900;color:#fff;margin-top:2px;">COMBINED INVOICE</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;">${multiInvNo}</div>
+    </div>
+    <div style="padding:12px 16px;border-bottom:1px solid rgba(128,128,128,.12);">
+      <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Bill To</div>
+      <div style="font-weight:800;font-size:14px;">${esc(first.cust?.nm||'')}</div>
+      ${first.cust?.ph?`<div style="font-size:12px;color:var(--t2);">${esc(first.cust.ph)}</div>`:''}
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="inv-table" style="min-width:100%;">
+        <thead><tr>
+          <th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);">
+      <div class="inv-row"><span>Taxable Amount</span><span>₹${grandSub.toLocaleString('en-IN')}</span></div>
+      <div class="inv-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-row" style="font-size:16px;font-weight:800;margin-top:8px;color:var(--a);">
+        <span>Total Amount</span><span>₹${grandTotal.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+    <div class="inv-foot" style="border-top:1px solid rgba(0,0,0,.07);"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div></div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+    <button class="btn pri sm" onclick="SM.play('click');generateAndShareMultiInv();" style="flex:1;">📲 Send Payment Request</button>
+    <button class="btn gho sm" onclick="SM.play('click');downloadMultiInvoicePng();" style="flex:1;">⬇️ Download PNG</button>
+    <button class="btn gho sm" onclick="SM.play('click');printMultiInvoice();" style="flex:1;">🖨️ Print / HTML</button>
+  </div>
+  <button class="btn gho sm nop" style="width:100%;" onclick="S.multiSel=new Set();S.view='orders';render(true);">✕ Clear Selection</button>`;
+}
+
+async function generateMultiInvoicePng(orders){
+  return new Promise(resolve=>{
+    const W=600,pad=28;
+    const first=orders[0];
+    const grandTotal=orders.reduce((s,o)=>s+(o.total||0),0);
+    const grandSub=orders.reduce((s,o)=>s+(o.preg||0),0);
+    const grandGst=orders.reduce((s,o)=>s+(o.gst||0),0);
+    const cgst=Math.round(grandGst/2);
+    // Build rows
+    const rows=[];
+    orders.forEach(o=>{
+      rows.push([`${o.cat||''}${o.sc?' – '+o.sc:''} – ${o.sz||''}${o.mat?' ('+o.mat+')':''}  [${o.invNo}]`,o.qty,(o.uprice||0).toLocaleString('en-IN'),(o.sub||0).toLocaleString('en-IN')]);
+      if(o.dfee)rows.push(['  ↳ Design Fee',1,o.dfee.toLocaleString('en-IN'),o.dfee.toLocaleString('en-IN')]);
+      if(o.delfee)rows.push(['  ↳ Delivery',1,o.delfee.toLocaleString('en-IN'),o.delfee.toLocaleString('en-IN')]);
+    });
+    // Height
+    let H=80+8+14+16+13+12+26+rows.length*26+8+18*3+6+22+24+38+48;
+    const cv=document.createElement('canvas'),ctx=cv.getContext('2d');
+    cv.width=W;cv.height=H;
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+    // Header
+    ctx.fillStyle='#ef4444';ctx.fillRect(0,0,W,80);
+    ctx.fillStyle='#fff';
+    ctx.font='bold 15px Arial';ctx.fillText(BIZ.name,pad,26);
+    ctx.font='10px Arial';ctx.fillText(BIZ.addr,pad,41);ctx.fillText(BIZ.ph+' · '+BIZ.email,pad,55);
+    ctx.font='9px Arial';ctx.fillText('GSTIN: '+BIZ.gstin,pad,69);
+    ctx.textAlign='right';
+    ctx.font='bold 17px Arial';ctx.fillText('COMBINED INVOICE',W-pad,26);
+    ctx.font='11px Arial';ctx.fillText(orders.map(o=>o.invNo).join(' + '),W-pad,43);
+    ctx.fillText(fd(new Date().toISOString()),W-pad,58);
+    ctx.textAlign='left';
+    // Bill to
+    let y=94;
+    ctx.fillStyle='#aaa';ctx.font='bold 8px Arial';ctx.fillText('BILL TO',pad,y);y+=13;
+    ctx.fillStyle='#111';ctx.font='bold 13px Arial';ctx.fillText(first.cust?.nm||'',pad,y);y+=15;
+    if(first.cust?.ph){ctx.fillStyle='#555';ctx.font='11px Arial';ctx.fillText(first.cust.ph,pad,y);y+=13;}
+    // Table header
+    y+=6;
+    ctx.fillStyle='#ef4444';ctx.fillRect(pad,y,W-pad*2,26);
+    ctx.fillStyle='#fff';ctx.font='bold 10px Arial';
+    ctx.fillText('Description',pad+6,y+17);
+    ctx.textAlign='right';
+    ctx.fillText('Qty',W-290,y+17);ctx.fillText('Rate (₹)',W-160,y+17);ctx.fillText('Amount (₹)',W-pad,y+17);
+    ctx.textAlign='left';y+=26;
+    // Rows
+    rows.forEach(([d,q2,r,a],ri)=>{
+      ctx.fillStyle=ri%2===0?'#f9f9f9':'#fff';ctx.fillRect(pad,y,W-pad*2,26);
+      ctx.strokeStyle='#e5e5e5';ctx.lineWidth=.5;ctx.strokeRect(pad,y,W-pad*2,26);
+      ctx.fillStyle='#111';ctx.font='11px Arial';
+      let disp=d;const maxW=W-pad*2-200;
+      while(ctx.measureText(disp).width>maxW&&disp.length>6)disp=disp.slice(0,-4)+'…';
+      ctx.fillText(disp,pad+6,y+17);
+      ctx.textAlign='right';ctx.fillText(String(q2),W-290,y+17);ctx.fillText('₹'+r,W-160,y+17);
+      ctx.font='bold 11px Arial';ctx.fillText('₹'+a,W-pad,y+17);
+      ctx.textAlign='left';y+=26;
+    });
+    // Totals
+    y+=10;
+    const totLines=[['Taxable Amount','₹'+grandSub.toLocaleString('en-IN')],['CGST @ 9%','₹'+cgst.toLocaleString('en-IN')],['SGST @ 9%','₹'+cgst.toLocaleString('en-IN')]];
+    totLines.forEach(([l,v])=>{ctx.textAlign='right';ctx.fillStyle='#666';ctx.fillText(l,W-160,y);ctx.fillStyle='#222';ctx.fillText(v,W-pad,y);ctx.textAlign='left';y+=18;});
+    y+=6;
+    ctx.fillStyle='#111';ctx.font='bold 14px Arial';ctx.textAlign='right';ctx.fillText('Total Amount',W-160,y);
+    ctx.fillStyle='#ef4444';ctx.fillText('₹'+grandTotal.toLocaleString('en-IN'),W-pad,y);ctx.textAlign='left';
+    // UPI
+    y+=22;ctx.fillStyle='#f0fdf4';ctx.fillRect(pad,y-12,W-pad*2,28);
+    ctx.strokeStyle='#22c55e';ctx.lineWidth=.8;ctx.strokeRect(pad,y-12,W-pad*2,28);
+    ctx.fillStyle='#15803d';ctx.font='bold 10px Arial';ctx.textAlign='center';
+    ctx.fillText('💳 Pay via UPI: '+BIZ.upiId,W/2,y+4);ctx.textAlign='left';y+=22;
+    // Footer
+    y+=8;ctx.fillStyle='#aaa';ctx.font='10px Arial';ctx.textAlign='center';
+    ctx.fillText('Thank you for choosing '+BIZ.name+'!',W/2,y);y+=14;
+    ctx.fillText(BIZ.ph+' · '+BIZ.ph2+' · '+BIZ.email,W/2,y);
+    ctx.textAlign='left';
+    resolve(cv.toDataURL('image/png'));
+  });
+}
+
+async function generateAndShareMultiInv(){
+  const ids=[...S.multiSel];
+  const orders=ids.map(id=>S.orders.find(o=>o.id===id)).filter(Boolean);
+  if(!orders.length)return;
+  showToast('⏳ Generating combined invoice…');
+  try{
+    const imgData=await generateMultiInvoicePng(orders);
+    const ph=(orders[0].cust?.ph||'').replace(/\D/g,'');
+    const grandTotal=orders.reduce((s,o)=>s+(o.total||0),0);
+    const itemList=orders.map(o=>`• ${o.cat} – ${o.sz} (${o.invNo})`).join('\n');
+    const msg=`💰 *Combined Invoice*
+
+${BIZ.name}
+
+${itemList}
+
+💳 *Total: ₹${grandTotal.toLocaleString('en-IN')}*
+
+✅ Pay via UPI:
+📲 ${BIZ.upiId}
+
+📞 ${BIZ.ph}`;
+    showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:4px;">💰 Combined Invoice</div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:14px;">${orders.length} orders · ₹${grandTotal.toLocaleString('en-IN')}</div>
+      <div style="border-radius:var(--rsm);overflow:hidden;margin-bottom:12px;border:1px solid var(--b);"><img src="${imgData}" style="width:100%;display:block;"></div>
+      <a href="${imgData}" download="Combined-Invoice.png" class="btn suc" style="margin-bottom:8px;">⬇️ Download PNG</a>
+      ${ph?`<a href="https://wa.me/${ph}?text=${encodeURIComponent(msg)}" target="_blank" class="btn suc" style="margin-bottom:8px;background:#25d366;">📱 Send via WhatsApp</a>`:''}
+      <button class="btn gho" style="width:100%;" onclick="SM.play('click');closeM();">Close</button>`);
+  }catch(e){console.error(e);showToast('❌ Failed to generate');}
+}
+
+async function downloadMultiInvoicePng(){
+  const ids=[...S.multiSel];
+  const orders=ids.map(id=>S.orders.find(o=>o.id===id)).filter(Boolean);
+  if(!orders.length)return;
+  showToast('⏳ Generating…');
+  try{const imgData=await generateMultiInvoicePng(orders);const a=document.createElement('a');a.href=imgData;a.download='Combined-Invoice.png';a.click();showToast('✅ Downloaded!');}
+  catch(e){showToast('❌ Failed');}
+}
+
+function printMultiInvoice(){
+  const ids=[...S.multiSel];
+  const orders=ids.map(id=>S.orders.find(o=>o.id===id)).filter(Boolean);
+  if(!orders.length)return;
+  const first=orders[0],grandTotal=orders.reduce((s,o)=>s+(o.total||0),0);
+  const grandSub=orders.reduce((s,o)=>s+(o.preg||0),0),grandGst=orders.reduce((s,o)=>s+(o.gst||0),0);
+  const cgst=Math.round(grandGst/2);
+  const itemRows=orders.map(o=>`<tr><td><strong>${esc(o.cat)}${o.sc?' – '+esc(o.sc):''} – ${esc(o.sz)}</strong>${o.mat?`<br><small>${esc(o.mat)}</small>`:''}<br><small style="color:#888">${esc(o.invNo)}</small></td><td>${o.qty}</td><td>${(o.uprice||0).toLocaleString('en-IN')}</td><td>${(o.sub||0).toLocaleString('en-IN')}</td></tr>${o.dfee?`<tr><td style="padding-left:16px;color:#888">↳ Design Fee</td><td>1</td><td>${o.dfee.toLocaleString('en-IN')}</td><td>${o.dfee.toLocaleString('en-IN')}</td></tr>`:''}${o.delfee?`<tr><td style="padding-left:16px;color:#888">↳ Delivery</td><td>1</td><td>${o.delfee.toLocaleString('en-IN')}</td><td>${o.delfee.toLocaleString('en-IN')}</td></tr>`:''}`).join('');
+  const h=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Combined Invoice</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}body{background:#fff;color:#000;padding:20px;font-size:12px;}.h{background:#ef4444;padding:14px 16px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;}.h *{color:#fff!important;}.bn{font-size:16px;font-weight:700;}.it{font-size:18px;font-weight:900;text-align:right;}.body{padding:12px 16px;border:1px solid #ddd;border-top:none;}.bl{font-size:9px;font-weight:700;text-transform:uppercase;color:#888;margin-bottom:4px;}.bname{font-weight:700;font-size:13px;}table{width:100%;border-collapse:collapse;margin:12px 0 0;}th{text-align:left;padding:6px 8px;border-bottom:2px solid #333;font-size:10px;color:#555;font-weight:700;}th:not(:first-child){text-align:right;}td{padding:6px 8px;border-bottom:1px solid #eee;font-size:11px;}td:not(:first-child){text-align:right;}.tot{padding:10px 16px;background:#f8f8f8;border:1px solid #ddd;border-top:none;}.tr{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;}.tr span:first-child{color:#555;}.grand{display:flex;justify-content:space-between;padding:10px 0 3px;font-size:14px;font-weight:700;margin-top:4px;}.grand span:last-child{color:#ef4444;}.foot{margin-top:12px;text-align:center;font-size:10px;color:#888;}</style></head><body>
+  <div class="h"><div><div class="bn">${BIZ.name}</div><div style="font-size:10px;opacity:.85;margin-top:3px;">${BIZ.addr}<br>${BIZ.ph} · ${BIZ.email}</div></div><div><div class="it">COMBINED INVOICE</div><div style="font-size:11px;opacity:.85;text-align:right;margin-top:2px;">${orders.map(o=>o.invNo).join(' + ')}</div></div></div>
+  <div class="body"><div class="bl">BILL TO</div><div class="bname">${esc(first.cust?.nm||'')}</div>${first.cust?.ph?`<div style="font-size:10px;color:#555;">${esc(first.cust.ph)}</div>`:''}
+  <table><thead><tr><th>Description</th><th>Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>${itemRows}</tbody></table></div>
+  <div class="tot"><div class="tr"><span>Taxable Amount</span><span>₹${grandSub.toLocaleString('en-IN')}</span></div><div class="tr"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div><div class="tr"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div><div class="grand"><span>Total Amount</span><span>₹${grandTotal.toLocaleString('en-IN')}</span></div></div>
+  <div class="foot">Thank you for choosing ${BIZ.name}!<br>${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div>
+  <script>window.onload=function(){window.print();window.onafterprint=function(){window.close();};};<\/script></body></html>`;
+  try{const blob=new Blob([h],{type:'text/html'});const burl=URL.createObjectURL(blob);const w=window.open(burl,'_blank');if(w)setTimeout(()=>URL.revokeObjectURL(burl),10000);else{const a=document.createElement('a');a.href=burl;a.download='Combined-Invoice.html';a.click();}}
+  catch(e){alert('Allow popups for printing.');}
+}
+
+// ════════════════════════════════════════════════
+// MULTI-ORDER COMBINED INVOICE
+// ════════════════════════════════════════════════
+function vMultiInv(){
+  const ids=[...S.multiSel];
+  const orders=ids.map(id=>S.orders.find(o=>o.id===id)).filter(Boolean);
+  if(!orders.length){S.view='orders';return vOrders();}
+  const first=orders[0];
+  const grandTotal=orders.reduce((s,o)=>s+(o.total||0),0);
+  const grandPreg=orders.reduce((s,o)=>s+(o.preg||0),0);
+  const cgst=Math.round(orders.reduce((s,o)=>s+(o.gst||0),0)/2);
+  const invNos=orders.map(o=>o.invNo).join(', ');
+
+  const rows=orders.map((o,i)=>`
+    <tr style="background:${i%2===0?'var(--s2)':'var(--s)'};">
+      <td>
+        <div style="font-weight:700;font-size:12px;">${esc(o.cat)}${o.sc?' – '+esc(o.sc):''}</div>
+        <div style="font-size:10px;color:var(--t2);margin-top:1px;">${esc(o.sz)}${o.mat?' · '+esc(o.mat):''}</div>
+        <div style="font-size:10px;color:var(--t3);">${esc(o.invNo)}</div>
+      </td>
+      <td>${o.qty}</td>
+      <td>₹${(o.uprice||0).toLocaleString('en-IN')}</td>
+      <td>₹${(o.sub||0).toLocaleString('en-IN')}</td>
+    </tr>
+    ${o.dfee?`<tr style="background:${i%2===0?'var(--s2)':'var(--s)'};">
+      <td style="padding-left:20px;font-size:11px;color:var(--t2);">↳ Design Fee</td>
+      <td>1</td><td>₹${(o.dfee||0).toLocaleString('en-IN')}</td>
+      <td>₹${(o.dfee||0).toLocaleString('en-IN')}</td>
+    </tr>`:''}
+    ${o.delf?`<tr style="background:${i%2===0?'var(--s2)':'var(--s)'};">
+      <td style="padding-left:20px;font-size:11px;color:var(--t2);">↳ Delivery</td>
+      <td>1</td><td>₹${(o.delf||0).toLocaleString('en-IN')}</td>
+      <td>₹${(o.delf||0).toLocaleString('en-IN')}</td>
+    </tr>`:''}
+  `).join('<tr><td colspan="4" style="padding:3px 8px;background:rgba(0,0,0,.04);"></td></tr>');
+
+  const inv=`<div class="inv-wrap">
+    <div class="inv-head">
+      <div class="inv-head-row">
+        <div class="inv-biz">
+          <div class="inv-biz-name">${BIZ.name}</div>
+          <div class="inv-biz-addr">${BIZ.addr}<br>${BIZ.ph} · ${BIZ.email}</div>
+          <div style="font-size:9px;opacity:.7;font-family:monospace;margin-top:2px;">GSTIN: ${BIZ.gstin}</div>
+        </div>
+        <div class="inv-type-block">
+          <div class="inv-type-label">COMBINED INVOICE</div>
+          <div class="inv-num" style="font-size:10px;">${esc(invNos)}</div>
+          <div class="inv-date">${fd(new Date().toISOString())}</div>
+        </div>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div class="inv-bill-label">Bill To</div>
+          ${first.ctype==='co'&&first.coname?`<div class="inv-bill-name">${esc(first.coname)}</div>`:''}
+          <div class="inv-bill-name">${esc(first.cust?.nm||'')}</div>
+          ${first.cust?.ph?`<div class="inv-bill-sub">${esc(first.cust.ph)}</div>`:''}
+          ${first.gstin?`<div class="inv-bill-sub" style="font-family:monospace;font-size:10px;">GSTIN: ${esc(first.gstin)}</div>`:''}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:var(--t2);">${orders.length} order${orders.length>1?'s':''}</div>
+        </div>
+      </div>
+      <div style="border-radius:var(--rxs);overflow:hidden;border:1px solid rgba(0,0,0,.09);">
+        <table class="inv-table">
+          <thead><tr><th>Item</th><th style="text-align:right;">Qty</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);">
+      <div class="inv-tot-row"><span>Taxable Amount</span><span>₹${grandPreg.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-grand-total"><span>Grand Total</span><span>₹${grandTotal.toLocaleString('en-IN')}</span></div>
+    </div>
+    <div class="inv-foot" style="border-top:1px solid rgba(0,0,0,.07);"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div><div class="inv-foot-text" style="margin-top:3px;">${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div></div>
+  </div>`;
+
+  return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <button class="btn gho sm nop" onclick="SM.play('click');S.view='orders';render(true);">← Back</button>
+    <div style="font-size:18px;font-weight:800;">Combined Invoice</div>
+  </div>
+  <div style="font-size:12px;color:var(--t2);margin-bottom:10px;">${orders.length} orders selected · Grand Total: <b style="color:var(--a);">₹${grandTotal.toLocaleString('en-IN')}</b></div>
+  ${inv}
+  <div style="display:flex;gap:8px;margin-top:10px;" class="nop">
+    <button class="btn pri" style="flex:1;" onclick="SM.play('click');downloadMultiInvoicePng();">⬇️ Download PNG</button>
+    <button class="btn gho" style="flex:1;" onclick="SM.play('click');S.multiSel=new Set();S.view='orders';render(true);">✕ Clear &amp; Close</button>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
+// OWNER PORTAL — ACCOUNTS & GST
+// ════════════════════════════════════════════════
+function vAccounts(){
+  const now=new Date();
+  const thisMonth=now.getMonth(),thisYear=now.getFullYear();
+  const [mFilter,setMFilter]=[S.accMonth||(thisYear+'-'+(String(thisMonth+1).padStart(2,'0'))),v=>S.accMonth=v];
+
+  // Parse filter
+  const [fy,fm]=mFilter.split('-').map(Number);
+
+  // Filter orders for selected month
+  const mo=S.orders.filter(o=>{
+    if(!o.at)return false;
+    const d=new Date(o.at);
+    return d.getFullYear()===fy&&(d.getMonth()+1)===fm&&o.otype!=='quo';
+  });
+
+  const totalRevenue=mo.reduce((s,o)=>s+(o.total||0),0);
+  const totalTaxable=mo.reduce((s,o)=>s+(o.preg||0),0);
+  const totalGst=mo.reduce((s,o)=>s+(o.gst||0),0);
+  const cgst=Math.round(totalGst/2);
+  const sgst=cgst;
+  const totalOrders=mo.length;
+  const paidOrders=mo.filter(o=>o.status!=='pending').length;
+  const paidRevenue=mo.filter(o=>o.status!=='pending').reduce((s,o)=>s+(o.total||0),0);
+  const pendingRevenue=totalRevenue-paidRevenue;
+  const totalAdvance=mo.reduce((s,o)=>s+(o.advancePaid||0),0);
+
+  // Category breakdown
+  const catMap={};
+  mo.forEach(o=>{
+    const k=o.cat||'Other';
+    if(!catMap[k])catMap[k]={count:0,revenue:0};
+    catMap[k].count++;catMap[k].revenue+=(o.total||0);
+  });
+  const catRows=Object.entries(catMap).sort((a,b)=>b[1].revenue-a[1].revenue)
+    .map(([cat,d])=>`<tr>
+      <td style="padding:8px 10px;font-size:12px;">${cat}</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;">${d.count}</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;font-weight:700;">₹${d.revenue.toLocaleString('en-IN')}</td>
+    </tr>`).join('');
+
+  // Month selector — last 12 months
+  const months=[];
+  for(let i=0;i<12;i++){
+    const d=new Date(thisYear,thisMonth-i,1);
+    const val=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    const lab=d.toLocaleString('default',{month:'long',year:'numeric'});
+    months.push(`<option value="${val}"${val===mFilter?' selected':''}>${lab}</option>`);
+  }
+
+  const statCard=(ico,label,val,sub,color='var(--a)')=>`
+    <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--rad);padding:14px;">
+      <div style="font-size:22px;margin-bottom:4px;">${ico}</div>
+      <div style="font-size:11px;color:var(--t2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;">${label}</div>
+      <div style="font-size:22px;font-weight:900;color:${color};margin-top:2px;">${val}</div>
+      ${sub?`<div style="font-size:10px;color:var(--t2);margin-top:2px;">${sub}</div>`:''}
+    </div>`;
+
+  return `<div style="font-size:18px;font-weight:800;margin-bottom:4px;">📒 Accounts</div>
+  <div style="font-size:12px;color:var(--t2);margin-bottom:14px;">GST & Revenue Summary — Owner Only</div>
+
+  <div class="fg"><label class="fl">Month</label>
+    <select class="fi" onchange="S.accMonth=this.value;render(false);">${months.join('')}</select>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;">
+    ${statCard('💰','Total Revenue','₹'+totalRevenue.toLocaleString('en-IN'),totalOrders+' orders')}
+    ${statCard('✅','Collected','₹'+paidRevenue.toLocaleString('en-IN'),paidOrders+' paid','var(--g)')}
+    ${statCard('⏳','Pending','₹'+pendingRevenue.toLocaleString('en-IN'),(totalOrders-paidOrders)+' orders','var(--or)')}
+    ${statCard('💵','Advance Received','₹'+totalAdvance.toLocaleString('en-IN'),'Prepayments','#7c3aed')}
+  </div>
+
+  <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--rad);padding:14px;margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:800;margin-bottom:12px;">🧾 GST Summary</div>
+    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--b);">
+      <span style="font-size:12px;color:var(--t2);">Taxable Value</span>
+      <span style="font-size:13px;font-weight:700;">₹${totalTaxable.toLocaleString('en-IN')}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--b);">
+      <span style="font-size:12px;color:var(--t2);">CGST @ 9%</span>
+      <span style="font-size:13px;font-weight:700;">₹${cgst.toLocaleString('en-IN')}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--b);">
+      <span style="font-size:12px;color:var(--t2);">SGST @ 9%</span>
+      <span style="font-size:13px;font-weight:700;">₹${sgst.toLocaleString('en-IN')}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0 4px;">
+      <span style="font-size:13px;font-weight:800;">Total GST</span>
+      <span style="font-size:15px;font-weight:900;color:var(--a);">₹${totalGst.toLocaleString('en-IN')}</span>
+    </div>
+    <div style="font-size:10px;color:var(--t2);margin-top:4px;">Filing: GSTR-1 (outward supplies) · GSTIN: ${BIZ.gstin}</div>
+  </div>
+
+  ${catRows?`<div style="background:var(--s);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:800;padding:12px 14px;border-bottom:1px solid var(--b);">📊 Revenue by Category</div>
+    <table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:var(--s2);">
+        <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--t2);">Category</th>
+        <th style="padding:8px 10px;text-align:center;font-size:11px;color:var(--t2);">Orders</th>
+        <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--t2);">Revenue</th>
+      </tr></thead>
+      <tbody>${catRows}</tbody>
+    </table>
+  </div>`:'<div style="padding:20px;text-align:center;color:var(--t2);">No orders for this month</div>'}
+
+  <button class="btn gho" style="width:100%;" onclick="SM.play('click');exportGstCsv();">⬇️ Export Month CSV</button>`;
+}
+
+function exportGstCsv(){
+  const [fy,fm]=(S.accMonth||'').split('-').map(Number);
+  const mo=S.orders.filter(o=>{
+    if(!o.at||o.otype==='quo')return false;
+    const d=new Date(o.at);
+    return d.getFullYear()===fy&&(d.getMonth()+1)===fm;
+  });
+  const rows=[['Invoice No','Date','Customer','Category','Size','Qty','Taxable','CGST 9%','SGST 9%','Total','Status','Payment']];
+  mo.forEach(o=>{
+    const cgst=Math.round((o.gst||0)/2);
+    rows.push([o.invNo,new Date(o.at).toLocaleDateString('en-IN'),o.cust?.nm||'',o.cat,o.sz,o.qty,o.preg||0,cgst,cgst,o.total||0,o.status,o.pm||'']);
+  });
+    const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`GST_${S.accMonth}.csv`;a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ CSV exported!');
+}
+
 function vOrders(){
   S.orders.filter(o=>o.isNew).forEach(o=>dbUpd(o.id,{isNew:false}));
-  return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">All Orders</div>
+  const ms=S.multiSel,mMode=ms.size>0;
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <div style="font-size:18px;font-weight:800;">All Orders</div>
+    ${mMode
+      ?`<div style="display:flex;gap:6px;"><button class="btn pri sm" onclick="SM.play('click');S.view='multi-inv';render(true);" style="width:auto;">🧾 Combine (${ms.size})</button><button class="btn gho sm" onclick="S.multiSel=new Set();render(false);" style="width:auto;">✕ Clear</button></div>`
+      :`<button class="btn gho sm" onclick="showToast('Tap ☑ on orders to select');S.multiSel=new Set();render(false);" style="width:auto;font-size:11px;">☑ Multi-select</button>`}
+  </div>
   <div class="sw2"><span class="si2">🔍</span><input class="fi" id="searchInp" type="text" placeholder="Search name, phone, invoice…" value="${esc(S.searchQ)}" oninput="handleSearch(this.value);" autocomplete="off" autocorrect="off" spellcheck="false">${S.searchQ?`<button class="sc2" onclick="handleSearch('');document.getElementById('searchInp').value='';">✕</button>`:''}</div>
   <div class="flush" id="ordWrap">${buildOrdersList(S.searchQ.toLowerCase())}</div>`;
 }
@@ -1897,7 +2564,13 @@ function handleSearch(val){
 }
 
 function oRow(o){
-  return`<div class="oitem" onclick="SM.play('click');S.selId='${o.id}';S.view='inv';render(true);"><span style='font-size:13px;'>👁</span>
+  const sel=S.multiSel.has(o.id),anyMode=S.multiSel.size>0;
+  function toggleSel(e){e.stopPropagation();if(S.multiSel.has(o.id))S.multiSel.delete(o.id);else S.multiSel.add(o.id);render(false);}
+  return`<div class="oitem${sel?' sel-row':''}" style="${sel?'background:color-mix(in srgb,var(--a) 8%,transparent);border-left:3px solid var(--a);':''}"
+    onclick="${anyMode?`event.stopPropagation();if(S.multiSel.has('${o.id}'))S.multiSel.delete('${o.id}');else S.multiSel.add('${o.id}');render(false);`:`SM.play('click');S.selId='${o.id}';S.view='inv';render(true);`}">
+    ${anyMode
+      ?`<div style="width:22px;height:22px;border-radius:50%;border:2px solid ${sel?'var(--a)':'var(--t3)'};background:${sel?'var(--a)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;">${sel?'<span style="color:#fff;font-size:12px;">✓</span>':''}</div>`
+      :`<span style='font-size:13px;'>👁</span>`}
     <div style="flex:1;min-width:0;">
       <div style="font-weight:700;font-size:13px;">${esc(o.cust?.nm||'Customer')} ${o.isNew?'<span class="sbadge s-new" style="font-size:9px;padding:2px 6px;">NEW</span>':''} ${o.otype==='quo'?'<span class="sbadge s-quo" style="font-size:9px;padding:2px 6px;">QUO</span>':''}</div>
       <div style="font-size:11px;color:var(--t2);">${esc(o.cat)}${o.sc?' · '+esc(o.sc):''} · ${esc(o.sz)} · ×${o.qty}</div>
@@ -1977,7 +2650,7 @@ async function generateInvoicePng(o){
     H+=8+18*3+6+22+24; // totals section + total line + footer gap
     H+=38;             // footer text (2 lines)
     H+=16;             // UPI line
-    H+=20;             // bottom padding
+    H+=40;             // bottom padding + safety buffer
 
     const cv=document.createElement('canvas'),ctx=cv.getContext('2d');
     cv.width=W;cv.height=H;
@@ -2044,10 +2717,8 @@ async function generateInvoicePng(o){
     const totLines=[['Taxable Amount','₹'+(o.preg||0).toLocaleString('en-IN')],['CGST @ 9%','₹'+cgst.toLocaleString('en-IN')],['SGST @ 9%','₹'+cgst.toLocaleString('en-IN')]];
     totLines.forEach(([l,v])=>{ctx.textAlign='right';ctx.fillStyle='#666';ctx.fillText(l,W-160,y);ctx.fillStyle='#222';ctx.fillText(v,W-pad,y);ctx.textAlign='left';y+=18;});
 
-    // Grand total line
-    ctx.strokeStyle='#ef4444';ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.moveTo(W-250,y-4);ctx.lineTo(W-pad,y-4);ctx.stroke();
-    y+=4;
+    // Grand total — extra spacing only, no line
+    y+=6;
     ctx.fillStyle='#111';ctx.font='bold 14px Arial';
     ctx.textAlign='right';ctx.fillText('Total Amount',W-160,y);
     ctx.fillStyle='#ef4444';ctx.fillText('₹'+(o.total||0).toLocaleString('en-IN'),W-pad,y);
@@ -2075,14 +2746,46 @@ async function generateInvoicePng(o){
   });
 }
 
-async function sendPayReq(id){
+function sendPayReq(id){
+  const o=S.orders.find(x=>x.id===id);if(!o)return;
+  // If advance paid, ask which amount to request
+  if(o.advancePaid>0){
+    const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
+    showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:6px;">📲 Send Payment Request</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:16px;">Advance of <b>₹${o.advancePaid.toLocaleString('en-IN')}</b> already received. Which amount should be requested?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn pri" onclick="SM.play('click');closeM();doSendPayReq('${id}','full');" style="text-align:left;padding:13px 16px;">
+        <div style="font-weight:800;font-size:14px;">💳 Full Total — ₹${(o.total||0).toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;opacity:.8;margin-top:2px;">Customer pays complete bill (advance not deducted)</div>
+      </button>
+      <button class="btn suc" onclick="SM.play('click');closeM();doSendPayReq('${id}','balance');" style="text-align:left;padding:13px 16px;">
+        <div style="font-weight:800;font-size:14px;">✅ Balance Only — ₹${bal.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;opacity:.8;margin-top:2px;">Deduct ₹${o.advancePaid.toLocaleString('en-IN')} advance — customer pays remaining</div>
+      </button>
+      <button class="btn gho" onclick="SM.play('click');closeM();">Cancel</button>
+    </div>`);
+  }else{
+    doSendPayReq(id,'full');
+  }
+}
+
+async function doSendPayReq(id, mode='full'){
   const btn=document.getElementById('payReqBtn');if(btn){btn.disabled=true;btn.textContent='Generating…';}
   const o=S.orders.find(x=>x.id===id);if(!o)return;
   try{
-    const imgData=await generateInvoicePng(o);await dbUpd(id,{payRequested:true});SM.play('status');showToast('💰 Payment request sent!');
-    const ph=(o.cust?.ph||'').replace(/\D/g,''),msg=`💰 *Payment Request – ${o.invNo}*\n\n${BIZ.name}\n🖨️ ${o.cat}${o.sc?' – '+o.sc:''} – ${o.sz}\n📦 Qty: ${o.qty}\n💳 *Total: ₹${o.total.toLocaleString('en-IN')}*\n\n✅ *Pay via UPI:*\n📲 vikrantkalkundrikar-1@oksbi\n\n📍 ${BIZ.addr}\n📞 ${BIZ.ph}`;
+    const reqAmt=mode==='balance'?Math.max(0,(o.total||0)-(o.advancePaid||0)):(o.total||0);
+    const advNote=mode==='balance'&&o.advancePaid>0?`\n💵 *Advance Paid: ₹${o.advancePaid.toLocaleString('en-IN')}*`:'';
+    const imgData=await generateInvoicePng(o);
+    await dbUpd(id,{payRequested:true});SM.play('status');showToast('💰 Payment request sent!');
+    const ph=(o.cust?.ph||'').replace(/\D/g,'');
+    const msg=`💰 *Payment Request – ${o.invNo}*\n\n${BIZ.name}\n🖨️ ${o.cat}${o.sc?' – '+o.sc:''} – ${o.sz}\n📦 Qty: ${o.qty}${advNote}\n💳 *Amount Due: ₹${reqAmt.toLocaleString('en-IN')}*\n\n✅ *Pay via UPI:*\n📲 vikrantkalkundrikar-1@oksbi\n\n📍 ${BIZ.addr}\n📞 ${BIZ.ph}`;
     if(ph)window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
-    showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:4px;">💰 Request Sent</div><div style="font-size:12px;color:var(--t2);margin-bottom:14px;">Share invoice image below.</div><div style="border-radius:var(--rsm);overflow:hidden;margin-bottom:12px;border:1px solid var(--b);"><img src="${imgData}" style="width:100%;display:block;"></div><a href="${imgData}" download="Invoice-${esc(o.invNo||'inv')}.png" class="btn suc" style="margin-bottom:8px;">⬇️ Download Invoice PNG</a><button class="btn gho" style="width:100%;" onclick="SM.play('click');closeM();">Close</button>`);render(false);
+    showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:4px;">💰 Request Sent</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:6px;">Amount requested: <b style="color:var(--a);">₹${reqAmt.toLocaleString('en-IN')}</b>${mode==='balance'?' (balance after advance)':''}</div>
+    <div style="border-radius:var(--rsm);overflow:hidden;margin-bottom:12px;border:1px solid var(--b);"><img src="${imgData}" style="width:100%;display:block;"></div>
+    <a href="${imgData}" download="Invoice-${esc(o.invNo||'inv')}.png" class="btn suc" style="margin-bottom:8px;">⬇️ Download Invoice PNG</a>
+    <button class="btn gho" style="width:100%;" onclick="SM.play('click');closeM();">Close</button>`);
+    render(false);
   }catch(e){console.error(e);if(btn){btn.disabled=false;btn.textContent='📲 Send Payment Request';}}
 }
 
@@ -2117,6 +2820,93 @@ function showUPI(id){
   <button class="btn gho" style="width:100%;" onclick="SM.play('click');closeM();">Cancel</button>`);
 }
 function pickUPI(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{_upiSS=e.target.result;const b=document.getElementById('upibox');if(b)b.innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:110px;border-radius:8px;object-fit:contain;"><div style="font-size:11px;color:var(--gt);margin-top:5px;font-weight:700;">✅ Attached</div>`;};r.readAsDataURL(f);}
+let _advSS=null; // temp advance UPI screenshot
+
+function showAdvancePay(id){
+  _advSS=null;
+  const o=S.orders.find(x=>x.id===id);if(!o)return;
+  const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
+  const isUpi=(o.advanceMethod||'').toLowerCase().includes('upi');
+  showMod(`<div style="font-size:17px;font-weight:800;margin-bottom:4px;">💵 Advance Payment</div>
+  <div style="font-size:12px;color:var(--t2);margin-bottom:14px;">Order Total: ₹${(o.total||0).toLocaleString('en-IN')}${o.advancePaid>0?' · Previously: ₹'+o.advancePaid.toLocaleString('en-IN'):''}</div>
+  <div class="fg"><label class="fl">Advance Amount (₹)</label>
+    <input class="fi" id="adv-amt" type="number" min="0" max="${o.total||999999}" placeholder="e.g. 500" value="${o.advancePaid||''}" style="font-size:16px;font-weight:700;" oninput="advAmtChange(${o.total||0})">
+  </div>
+  <div class="fg"><label class="fl">Payment Method</label>
+    <div class="pills" id="adv-method-pills" style="margin-bottom:6px;">
+      ${['Cash','UPI','Card','Cheque'].map(m=>`<div class="pill${(o.advanceMethod||'')=== m?' on':''}" onclick="selectAdvMethod('${m}');">${m}</div>`).join('')}
+    </div>
+    <input class="fi" id="adv-method-inp" type="text" placeholder="e.g. UPI / Cash" value="${esc(o.advanceMethod||'')}" oninput="advMethodChange(this.value)">
+  </div>
+  <div id="adv-ss-section" style="display:${isUpi?'block':'none'};">
+    <div class="fg" style="margin-bottom:0;">
+      <label class="fl">UPI Screenshot <span style="font-weight:400;color:var(--t2);">(optional)</span></label>
+      <div id="adv-ss-box" onclick="document.getElementById('adv-ss-inp').click();" style="border:1.5px dashed var(--b);border-radius:var(--rsm);padding:12px;text-align:center;cursor:pointer;transition:border-color .2s;"
+        onmouseover="this.style.borderColor='var(--a)'" onmouseout="this.style.borderColor='var(--b)'">
+        ${o.advanceSS?`<img src="${o.advanceSS}" style="max-width:100%;max-height:110px;border-radius:6px;object-fit:contain;" id="adv-ss-preview">
+        <div style="font-size:11px;color:var(--t2);margin-top:6px;">Tap to change</div>`:
+        `<div style="font-size:22px;margin-bottom:4px;">📸</div>
+        <div style="font-size:12px;font-weight:700;">Upload UPI Screenshot</div>
+        <div style="font-size:10px;color:var(--t2);margin-top:2px;">JPG / PNG</div>`}
+      </div>
+      <input type="file" id="adv-ss-inp" accept="image/*" style="display:none;" onchange="advSSPicked(this)">
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--t2);margin:10px 0 4px;">Balance after advance: <b style="color:var(--r);" id="adv-bal-preview">₹${bal.toLocaleString('en-IN')}</b></div>
+  <div style="display:flex;gap:8px;margin-top:10px;">
+    <button class="btn pri" style="flex:1;" onclick="recordAdvance('${id}');">✅ Save</button>
+    ${o.advancePaid>0?`<button class="btn dan sm" onclick="recordAdvance('${id}',true);">🗑️ Clear</button>`:''}
+    <button class="btn gho" onclick="closeM();">Cancel</button>
+  </div>`);
+}
+
+function advAmtChange(total){
+  const v=parseFloat(document.getElementById('adv-amt')?.value)||0;
+  const bal=Math.max(0,total-v);
+  const el=document.getElementById('adv-bal-preview');
+  if(el)el.textContent='₹'+bal.toLocaleString('en-IN');
+}
+function selectAdvMethod(m){
+  document.querySelectorAll('#adv-method-pills .pill').forEach(p=>p.classList.remove('on'));
+  event.target.classList.add('on');
+  const inp=document.getElementById('adv-method-inp');
+  if(inp)inp.value=m;
+  advMethodChange(m);
+}
+function advMethodChange(val){
+  const sec=document.getElementById('adv-ss-section');
+  if(sec)sec.style.display=val.toLowerCase().includes('upi')?'block':'none';
+}
+function advSSPicked(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    _advSS=e.target.result;
+    const box=document.getElementById('adv-ss-box');
+    if(box)box.innerHTML=`<img src="${_advSS}" style="max-width:100%;max-height:110px;border-radius:6px;object-fit:contain;"><div style="font-size:11px;color:var(--t2);margin-top:6px;">Tap to change</div>`;
+  };
+  r.readAsDataURL(f);
+}
+
+function recordAdvance(id, clear=false){
+  const o=S.orders.find(x=>x.id===id);if(!o)return;
+  if(clear){
+    o.advancePaid=0;o.advanceMethod='';o.advanceSS='';
+    dbUpd(id,{advancePaid:0,advanceMethod:'',advanceSS:''});
+    _advSS=null;closeM();SM.play('click');showToast('✅ Advance cleared');render(false);return;
+  }
+  const amt=parseFloat(document.getElementById('adv-amt')?.value)||0;
+  const method=(document.getElementById('adv-method-inp')?.value||'').trim();
+  if(!amt||amt<=0){SM.play('error');alert('Enter a valid advance amount');return;}
+  if(amt>(o.total||0)){SM.play('error');alert('Advance cannot exceed order total ₹'+(o.total||0).toLocaleString('en-IN'));return;}
+  const ss=_advSS||o.advanceSS||'';
+  o.advancePaid=amt;o.advanceMethod=method;o.advanceSS=ss;
+  dbUpd(id,{advancePaid:amt,advanceMethod:method,advanceSS:ss});
+  _advSS=null;closeM();SM.play('payment');
+  showToast('✅ Advance ₹'+amt.toLocaleString('en-IN')+' recorded'+(ss?' with screenshot':'')+'!');
+  render(false);
+}
+
 async function markPaid(id,method,ss){const upd={status:'paid-'+method.split(' ')[0].toLowerCase(),pm:method};if(ss)upd.upiSS=ss;await dbUpd(id,upd);_upiSS=null;closeM();SM.play('payment');Confetti.launch(40);showToast('💰 Payment recorded!');render(false);}
 
 // ════════════════════════════════════════════════
@@ -2125,7 +2915,7 @@ async function markPaid(id,method,ss){const upd={status:'paid-'+method.split(' '
 function printInvoice(id){
   const o=S.orders.find(x=>x.id===id);if(!o)return;SM.play('click');
   const cgst=Math.round((o.gst||0)/2),isQ=o.otype==='quo';
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${isQ?'Quotation':'Invoice'} ${esc(o.invNo)}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}body{background:#fff;color:#000;padding:20px;font-size:12px;}.h{background:#ef4444;padding:14px 16px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;}.h *{color:#fff!important;}.bn{font-size:16px;font-weight:700;}.ba{font-size:10px;opacity:.85;line-height:1.5;margin-top:3px;}.it{font-size:18px;font-weight:900;text-align:right;}.in{font-size:11px;opacity:.85;text-align:right;margin-top:2px;}.body{padding:12px 16px;border:1px solid #ddd;border-top:none;}.bl{font-size:9px;font-weight:700;text-transform:uppercase;color:#888;margin-bottom:4px;}.bname{font-weight:700;font-size:13px;}.bsub{font-size:10px;color:#555;margin-top:1px;}table{width:100%;border-collapse:collapse;margin:12px 0 0;}th{text-align:left;padding:6px 8px;border-bottom:2px solid #333;font-size:10px;color:#555;font-weight:700;}th:not(:first-child){text-align:right;}td{padding:6px 8px;border-bottom:1px solid #eee;font-size:11px;}td:not(:first-child){text-align:right;}.tot{padding:10px 16px;background:#f8f8f8;border:1px solid #ddd;border-top:none;}.tr{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;}.tr span:first-child{color:#555;}.grand{display:flex;justify-content:space-between;padding:7px 0 3px;font-size:14px;font-weight:700;border-top:1.5px solid #ef4444;margin-top:5px;}.grand span:last-child{color:#ef4444;}.foot{margin-top:12px;text-align:center;font-size:10px;color:#888;}</style></head><body>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${isQ?'Quotation':'Invoice'} ${esc(o.invNo)}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}body{background:#fff;color:#000;padding:20px;font-size:12px;}.h{background:#ef4444;padding:14px 16px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;}.h *{color:#fff!important;}.bn{font-size:16px;font-weight:700;}.ba{font-size:10px;opacity:.85;line-height:1.5;margin-top:3px;}.it{font-size:18px;font-weight:900;text-align:right;}.in{font-size:11px;opacity:.85;text-align:right;margin-top:2px;}.body{padding:12px 16px;border:1px solid #ddd;border-top:none;}.bl{font-size:9px;font-weight:700;text-transform:uppercase;color:#888;margin-bottom:4px;}.bname{font-weight:700;font-size:13px;}.bsub{font-size:10px;color:#555;margin-top:1px;}table{width:100%;border-collapse:collapse;margin:12px 0 0;}th{text-align:left;padding:6px 8px;border-bottom:2px solid #333;font-size:10px;color:#555;font-weight:700;}th:not(:first-child){text-align:right;}td{padding:6px 8px;border-bottom:1px solid #eee;font-size:11px;}td:not(:first-child){text-align:right;}.tot{padding:10px 16px;background:#f8f8f8;border:1px solid #ddd;border-top:none;}.tr{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;}.tr span:first-child{color:#555;}.grand{display:flex;justify-content:space-between;padding:10px 0 3px;font-size:14px;font-weight:700;margin-top:4px;}.grand span:last-child{color:#ef4444;}.foot{margin-top:12px;text-align:center;font-size:10px;color:#888;}</style></head><body>
   <div class="h"><div><div class="bn">${BIZ.name}</div><div class="ba">${BIZ.addr}<br>${BIZ.ph} · ${BIZ.ph2}<br>${BIZ.email}</div><div style="font-size:9px;opacity:.7;font-family:monospace;margin-top:2px;">GSTIN: ${BIZ.gstin}</div></div><div><div class="it">${isQ?'QUOTATION':'TAX INVOICE'}</div><div class="in">#${esc(o.invNo)}</div><div class="in">${fd(o.at)}</div></div></div>
   <div class="body"><div class="bl">BILL TO</div>${o.ctype==='co'&&o.coname?`<div class="bname">${esc(o.coname)}</div>`:''}<div class="bname">${esc(o.cust?.nm||'')}</div>${o.cust?.ph?`<div class="bsub">${esc(o.cust.ph)}</div>`:''}${o.gstin?`<div class="bsub" style="font-family:monospace;">GSTIN: ${esc(o.gstin)}</div>`:''}
   <table><thead><tr><th>Description</th><th>Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>
@@ -2166,6 +2956,7 @@ function showQR(){
 // SETTINGS
 // ════════════════════════════════════════════════
 function vSett(){
+  if(S.portal==='owner'){S.view='dash';return vDash();}
   if(S.sub==='cats')return sCats();if(S.sub==='szs')return sSzs();if(S.sub==='mats')return sMats();
   if(S.sub==='clr')return sClr();if(S.sub==='imgs')return sImgs();if(S.sub==='hold')return sHoldReasons();
   if(S.sub==='frm')return sFrame();if(S.sub==='foam')return sFoam();if(S.sub==='addons')return sAddons();
@@ -2745,7 +3536,7 @@ function closeMov(e){if(e.target.classList.contains('mov'))closeM();}
 // ════════════════════════════════════════════════
 // GLOBAL EVENTS
 // ════════════════════════════════════════════════
-document.addEventListener('click',e=>{if(e.target.id==='bk-btn')goView(S.portal==='admin'?'orders':'browse');});
+document.addEventListener('click',e=>{if(e.target.id==='bk-btn')goView((S.portal==='employee'||S.portal==='owner')?'orders':'browse');});
 document.addEventListener('touchstart',()=>{try{SM.init();}catch(e){}},{once:true});
 </script>
 </body>
