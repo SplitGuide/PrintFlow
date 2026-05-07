@@ -894,9 +894,9 @@ function renderNav(){
   }else{
     const nc=S.orders.filter(o=>o.isNew).length;
     if(S.portal==='owner'){
-      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='accounts'?' on':''}" onclick="goView('accounts');"><span class="nico">📒</span>Accounts</button>`;
+      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='accounts'?' on':''}" onclick="goView('accounts');"><span class="nico">📒</span>Accounts</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
     }else{
-      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');if(S.view==='new-order'&&S.form&&S.form.step>0){goView('new-order');}else{S.form=ff();goView('new-order');}"><span class="nico">➕</span>New Order</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button>`;
+      n.innerHTML=`<button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');if(S.view==='new-order'&&S.form&&S.form.step>0){goView('new-order');}else{S.form=ff();goView('new-order');}"><span class="nico">➕</span>New Order</button>`;
     }
   }
 }
@@ -2956,7 +2956,7 @@ function showQR(){
 // SETTINGS
 // ════════════════════════════════════════════════
 function vSett(){
-  if(S.portal==='owner'){S.view='dash';return vDash();}
+  if(S.portal==='employee'){S.view='dash';return vDash();}
   if(S.sub==='cats')return sCats();if(S.sub==='szs')return sSzs();if(S.sub==='mats')return sMats();
   if(S.sub==='clr')return sClr();if(S.sub==='imgs')return sImgs();if(S.sub==='hold')return sHoldReasons();
   if(S.sub==='frm')return sFrame();if(S.sub==='foam')return sFoam();if(S.sub==='addons')return sAddons();
