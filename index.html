@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <title>Vikrant Offset Printers</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --a:#ef4444;
-  --t:#f0eaff;--t2:#a090c0;--t3:#6a5a8a;
+  --t:#f0eaff;--t2:#bbaad8;--t3:#9a8ab8;
   --s:rgba(20,8,45,.82);--s2:rgba(30,12,60,.68);--s3:rgba(40,18,75,.52);
   --b:rgba(160,100,255,.18);--b2:rgba(160,100,255,.32);
   --g:#22c55e;--gb:rgba(34,197,94,.14);--gt:#4ade80;
@@ -22,7 +22,7 @@
   --sp:cubic-bezier(.34,1.28,.64,1);--ease:cubic-bezier(.25,.46,.45,.94);
 }
 body.light{--t:#1e0a3c;--t2:#5a3a8a;--t3:#9a80c0;--s:rgba(255,252,255,.9);--s2:rgba(245,238,255,.84);--s3:rgba(232,220,255,.68);--b:rgba(120,60,200,.15);--b2:rgba(120,60,200,.28);}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:pan-y;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;font-size:15px;color:var(--t);}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:pan-y;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;font-size:15px;color:var(--t);scroll-behavior:smooth;}
 body{display:flex;flex-direction:column;}
 #bgc{position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%;}
 #app{display:flex;flex-direction:column;height:100%;overflow:hidden;position:relative;z-index:1;}
@@ -37,6 +37,10 @@ body.light #bgc{opacity:.45;}
 @keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}60%{transform:translateY(-3px)}}
 @keyframes glow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--a) 40%,transparent)}50%{box-shadow:0 0 18px 4px color-mix(in srgb,var(--a) 22%,transparent)}}
 @keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* Focus rings — keyboard & switch access */
+:focus-visible{outline:2px solid var(--a);outline-offset:2px;border-radius:var(--rxs);}
+.btn:focus-visible,.ibtn:focus-visible,.nb:focus-visible,.cb:focus-visible,.fi:focus-visible{outline:2px solid var(--a);outline-offset:2px;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--a);outline-offset:2px;}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes slideRight{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
 /* Status chain animation */
@@ -67,9 +71,9 @@ body.light #bgc{opacity:.45;}
 #admin-corner:hover{border-color:var(--a);color:var(--a);}
 .sh{padding:5px 12px;border-radius:20px;background:var(--g);font-size:10px;font-weight:700;color:#fff;text-decoration:none;transition:background .2s;}
 .sh:hover{background:#15803d;}
-#info-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .2s;}
+#info-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .2s;}
 #info-btn:hover{border-color:var(--a);color:var(--a);}
-#muteBtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .2s;position:absolute;top:16px;right:16px;}
+#muteBtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);backdrop-filter:blur(12px);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .2s;position:absolute;top:12px;right:12px;}
 #muteBtn:hover{border-color:var(--a);color:var(--a);}
 
 /* INFO SHEET */
@@ -101,7 +105,7 @@ body.light .alcard{background:rgba(245,240,255,.97);}
 body.light .hdr{background:rgba(240,232,255,.92);}
 .hlogo{font-size:14px;font-weight:800;}.hlogo span{color:var(--a);}
 .hright{display:flex;align-items:center;gap:6px;}
-.ibtn{width:32px;height:32px;border-radius:var(--rsm);border:1px solid var(--b);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--t);transition:all .2s;text-decoration:none;}
+.ibtn{width:44px;height:44px;border-radius:var(--rsm);border:1px solid var(--b);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--t);transition:all .2s;text-decoration:none;}
 .ibtn:hover{background:var(--a);border-color:var(--a);}
 .ibtn:active{transform:scale(.85);}
 .pbadge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;background:var(--a);color:#fff;}
@@ -114,12 +118,12 @@ body.light .hdr{background:rgba(240,232,255,.92);}
 /* BOTTOM NAV */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,2,20,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--b);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom,0);}
 body.light .bnav{background:rgba(235,225,252,.95);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 6px;cursor:pointer;color:var(--t3);font-size:10px;font-weight:600;gap:2px;border:none;background:none;font-family:inherit;transition:color .2s;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;cursor:pointer;color:var(--t3);font-size:11px;font-weight:600;gap:3px;border:none;background:none;font-family:inherit;transition:color .2s;}
 .nb:active{transform:scale(.85);}
 .nb.on{color:var(--a);}
 .nb.on .nico{animation:bounce .4s var(--sp);}
 .nico{font-size:20px;line-height:1;}
-.nbadge{background:var(--r);color:#fff;border-radius:20px;font-size:9px;font-weight:800;padding:1px 5px;}
+.nbadge{background:var(--r);color:#fff;border-radius:20px;font-size:10px;font-weight:800;padding:2px 6px;}
 
 /* MAIN */
 .main{
@@ -129,6 +133,7 @@ body.light .bnav{background:rgba(235,225,252,.95);}
   position:relative;z-index:1;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-y:contain;
+  contain:layout style;
 }
 .card{background:var(--s);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:var(--rad);border:1px solid var(--b);padding:15px;margin-bottom:11px;}
 .flush{background:var(--s);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:var(--rad);border:1px solid var(--b);overflow:hidden;margin-bottom:11px;}
@@ -141,9 +146,9 @@ body.light .bnav{background:rgba(235,225,252,.95);}
 .met{background:var(--s);backdrop-filter:blur(12px);border-radius:var(--rad);border:1px solid var(--b);padding:13px;cursor:pointer;transition:transform .22s var(--sp),border-color .2s,box-shadow .2s;}
 .met:hover{border-color:var(--a);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.18);}
 .met:active{transform:scale(.96);}
-.mlbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.mlbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
 .mval{font-size:22px;font-weight:800;}
-.msub{font-size:10px;color:var(--t3);margin-top:2px;}
+.msub{font-size:11px;color:var(--t3);margin-top:2px;}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 17px;border-radius:var(--rsm);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:transform .18s var(--sp),filter .15s,box-shadow .15s;text-decoration:none;width:100%;}
@@ -170,7 +175,7 @@ body.light .bnav{background:rgba(235,225,252,.95);}
 /* FORMS */
 .fg{margin-bottom:12px;}
 .fl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px;display:block;}
-.fi{width:100%;padding:11px 12px;border:1.5px solid var(--b2);border-radius:var(--rsm);font-family:inherit;font-size:14px;color:var(--t);background:var(--s2);outline:none;transition:border-color .2s,box-shadow .2s;}
+.fi{width:100%;padding:12px 13px;border:1.5px solid var(--b2);border-radius:var(--rsm);font-family:inherit;font-size:16px;color:var(--t);background:var(--s2);outline:none;transition:border-color .2s,box-shadow .2s;min-height:48px;}
 .fi:focus{border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 12%,transparent);}
 textarea.fi{resize:vertical;}
 .err-txt{font-size:11px;color:var(--r);font-weight:600;margin-top:4px;}
@@ -397,6 +402,10 @@ body.light .mod{background:rgba(248,242,255,.98);}
 /* Settings card grid hover */
 .sett-card:hover{border-color:var(--a)!important;transform:translateY(-2px);}
 /* File viewer overlay */
+.skeleton{background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--rsm);}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-row{padding:12px 14px;border-bottom:1px solid var(--b);display:flex;flex-direction:column;gap:7px;}
+
 .fv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeIn .2s var(--sp);}
 .fv-img{max-width:92vw;max-height:65vh;border-radius:10px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:fvZoom .25s var(--sp);}
 @keyframes fvZoom{from{transform:scale(.88);opacity:0;}to{transform:scale(1);opacity:1;}}
@@ -425,7 +434,7 @@ body.light .mod{background:rgba(248,242,255,.98);}
 </div>
 
 <div id="splash">
-  <button id="muteBtn" onclick="SM.toggle();" title="Toggle sounds">🔊</button>
+  <button id="muteBtn" onclick="SM.toggle();" title="Toggle sounds" aria-label="Toggle sound">🔊</button>
   <div style="text-align:center;">
     <div class="slogo">Vikrant <span>Offset</span></div>
     <div style="font-size:11px;color:var(--t2);margin-top:2px;">Printers · Belagavi</div>
@@ -481,11 +490,11 @@ body.light .mod{background:rgba(248,242,255,.98);}
     <div><div class="hlogo">Vikrant <span>Offset</span></div><div style="font-size:9px;color:var(--t3);">Printers · Belagavi</div></div>
     <div class="hright">
       <div class="pill-sync" id="hs" style="display:none;cursor:pointer;" onclick="if(!SB)sbInit();" title="Tap to reconnect"><div class="sdot conn" id="hsdot"></div><span id="hstxt" style="font-size:10px;">Sync</span></div>
-      <div id="portal-switcher" onclick="SM.play('click');switchPortal();" title="Switch portal" style="display:flex;align-items:center;gap:5px;cursor:pointer;background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:3px 8px 3px 4px;transition:all .2s;">
-        <div id="portal-dot" style="width:8px;height:8px;border-radius:50%;background:var(--a);transition:background .2s;"></div>
-        <span class="pbadge" id="pbadge" style="background:transparent;color:var(--t);padding:0;font-size:11px;">Employee</span>
-        <span style="font-size:10px;color:var(--t2);">⇄</span>
-      </div>
+      <button id="portal-switcher" onclick="SM.play('click');switchPortal();" title="Switch portal (tap to change)" aria-label="Switch portal" style="display:flex;align-items:center;gap:5px;cursor:pointer;background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:5px 10px 5px 6px;transition:all .2s;min-height:36px;">
+        <div id="portal-dot" style="width:8px;height:8px;border-radius:50%;background:var(--a);transition:background .2s;flex-shrink:0;"></div>
+        <span id="pbadge" style="font-size:11px;font-weight:700;color:var(--t);">Employee</span>
+        <span style="font-size:11px;color:var(--t2);" title="Tap to switch portal">⇄</span>
+      </button>
       <button class="ibtn" id="dkbtn" onclick="darkToggle();">☀️</button>
       <button class="ibtn" id="hMuteBtn" onclick="SM.toggle();">🔊</button>
       <button class="ibtn" onclick="bkSplash();">⇄</button>
