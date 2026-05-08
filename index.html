@@ -1941,63 +1941,36 @@ function vInv(){
       <div style="font-size:12px;color:var(--t2);">Adjust design fee for this order${o.dfee!==S.dFee?'<div style="font-size:10px;color:var(--a);font-weight:700;margin-top:2px;">Custom charge applied</div>':''}</div>
       <div style="display:flex;align-items:center;gap:6px;">
         <span style="color:var(--t2);">&#8377;</span>
-        <input class="fi" type="number" min="0" value="${o.dfee||0}"
-          style="width:90px;text-align:right;font-size:16px;font-weight:800;padding:6px 10px;"
-          onchange="updateOrderDfee('${o.id}',this.value);">
-        <button style="font-size:11px;color:var(--t2);background:none;border:none;cursor:pointer;padding:4px;" onclick="updateOrderDfee('${o.id}',${S.dFee});this.previousElementSibling.previousElementSibling.value=${S.dFee};" title="Reset to default ₹${S.dFee}">↺</button>
+        <input class="fi" type="number" min="0" value="${o.dfee||0}" style="width:90px;text-align:right;font-size:16px;font-weight:800;padding:6px 10px;" onchange="updateOrderDfee('${o.id}',this.value);">
+        <button style="font-size:11px;color:var(--t2);background:none;border:none;cursor:pointer;padding:4px;" onclick="updateOrderDfee('${o.id}',${S.dFee});this.previousElementSibling.previousElementSibling.value=${S.dFee};" title="Reset to default">↺</button>
       </div>
     </div>
   </div>
   <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;">🖨️ Final Design Files</div>
     <div style="font-size:11px;color:var(--t2);margin-bottom:8px;">Files for the printing unit to download</div>
-    ${(o.finalFiles&&o.finalFiles.length)?`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">${o.finalFiles.map((fi,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 10px;">
-        <div onclick="openFileViewer('${fi.url||fi.data||''}','${esc(fi.name)}','${fi.type||''}');" style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0;">
-          <span style="font-size:16px;">🖨️</span>
-          <div style="min-width:0;"><div style="font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(fi.name)}</div>${fi.size?`<div style="font-size:10px;color:var(--t2);">${(fi.size/1024).toFixed(0)}KB</div>`:''}</div>
-        </div>
-        <div style="display:flex;gap:5px;flex-shrink:0;">
-          <a href="${fi.url||fi.data||'#'}" download="${esc(fi.name)}" style="font-size:11px;padding:4px 8px;background:var(--a);color:#fff;border-radius:6px;text-decoration:none;font-weight:700;">⬇️</a>
-          <button style="font-size:11px;padding:4px 8px;background:var(--rb);color:var(--rt);border:none;border-radius:6px;cursor:pointer;" onclick="removeFinalFile('${o.id}',${i});">✕</button>
-        </div>
-      </div>`).join('')}</div>`:'<div style="font-size:12px;color:var(--t2);padding:8px 0;">No files uploaded yet</div>'}
+    ${(o.finalFiles&&o.finalFiles.length)?`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">${o.finalFiles.map((fi,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 10px;"><div onclick="openFileViewer('${fi.url||fi.data||''}','${esc(fi.name)}','${fi.type||''}');" style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0;"><span style="font-size:16px;">🖨️</span><div style="min-width:0;"><div style="font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(fi.name)}</div>${fi.size?`<div style="font-size:10px;color:var(--t2);">${(fi.size/1024).toFixed(0)}KB</div>`:''}</div></div><div style="display:flex;gap:5px;flex-shrink:0;"><a href="${fi.url||fi.data||'#'}" download="${esc(fi.name)}" style="font-size:11px;padding:4px 8px;background:var(--a);color:#fff;border-radius:6px;text-decoration:none;font-weight:700;">⬇️</a><button style="font-size:11px;padding:4px 8px;background:var(--rb);color:var(--rt);border:none;border-radius:6px;cursor:pointer;" onclick="removeFinalFile('${o.id}',${i});">✕</button></div></div>`).join('')}</div>`:'<div style="font-size:12px;color:var(--t2);padding:8px 0;">No files uploaded yet</div>'}
     <div class="fup" onclick="document.getElementById('aff_${o.id}').click();" style="min-height:60px;border-style:dashed;cursor:pointer;">
       <div style="font-size:20px;margin-bottom:4px;">🖨️</div>
       <div style="font-size:12px;font-weight:700;">Tap to upload final design files</div>
       <div style="font-size:10px;color:var(--t2);margin-top:2px;">PDF · CDR · AI · PSD · PNG · ZIP · Multiple files allowed</div>
     </div>
     <input type="file" id="aff_${o.id}" accept="image/*,.pdf,.ai,.psd,.eps,.cdr,.svg,.zip" multiple style="display:none;" onchange="addFinalFilesToOrder('${o.id}',this);">
-  </div>`:''}
+  </div>
   <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">📋 Update Status</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">
-      <button class="btn suc sm" onclick="SM.play('click');setJobStatus('${o.id}','accepted');"
-        style="${js==='new'||js==='hold'?'':'opacity:.35;pointer-events:none;'}" ${js==='new'||js==='hold'?'':'disabled'}>✅ Accept</button>
-      <button class="btn war sm" onclick="SM.play('click');showHoldModal('${o.id}');"
-        style="${js!=='hold'&&js!=='completed'?'':'opacity:.35;pointer-events:none;'}" ${js!=='hold'&&js!=='completed'?'':'disabled'}>⏸️ Hold</button>
-      <button class="btn pu sm" onclick="SM.play('click');setJobStatus('${o.id}','inprocess');"
-        style="${js==='accepted'?'':'opacity:.35;pointer-events:none;'}" ${js==='accepted'?'':'disabled'}>⚙️ In Process</button>
-      <button class="btn or sm" onclick="SM.play('click');setJobStatus('${o.id}','ready');"
-        style="${js==='inprocess'?'':'opacity:.35;pointer-events:none;'}" ${js==='inprocess'?'':'disabled'}>📦 Ready</button>
+      <button class="btn suc sm" onclick="SM.play('click');setJobStatus('${o.id}','accepted');" style="${js==='new'||js==='hold'?'':'opacity:.35;pointer-events:none;'}" ${js==='new'||js==='hold'?'':'disabled'}>✅ Accept</button>
+      <button class="btn war sm" onclick="SM.play('click');showHoldModal('${o.id}');" style="${js!=='hold'&&js!=='completed'?'':'opacity:.35;pointer-events:none;'}" ${js!=='hold'&&js!=='completed'?'':'disabled'}>⏸️ Hold</button>
+      <button class="btn pu sm" onclick="SM.play('click');setJobStatus('${o.id}','inprocess');" style="${js==='accepted'?'':'opacity:.35;pointer-events:none;'}" ${js==='accepted'?'':'disabled'}>⚙️ In Process</button>
+      <button class="btn or sm" onclick="SM.play('click');setJobStatus('${o.id}','ready');" style="${js==='inprocess'?'':'opacity:.35;pointer-events:none;'}" ${js==='inprocess'?'':'disabled'}>📦 Ready</button>
     </div>
     <button class="btn suc sm" style="width:100%;${js==='completed'?'opacity:.35;pointer-events:none;':''}" onclick="SM.play('click');setJobStatus('${o.id}','completed');" ${js==='completed'?'disabled':''}>🎉 Completed</button>
   </div>
-  `:''}
   <div class="card" style="margin-bottom:10px;${S.portal!=='owner'?'display:none;':''}">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">💵 Advance Payment</div>
-    ${o.advancePaid>0?`
-    <div style="background:var(--gb);border:1px solid color-mix(in srgb,var(--g) 50%,transparent);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-size:12px;font-weight:700;color:var(--gt);">✅ Advance Recorded</div>
-          <div style="font-size:11px;color:var(--gt);opacity:.8;">${o.advanceMethod?'via '+esc(o.advanceMethod):''}  •  Balance: ₹${Math.max(0,(o.total||0)-(o.advancePaid||0)).toLocaleString('en-IN')}</div>
-        </div>
-        <div style="font-size:18px;font-weight:900;color:var(--gt);">₹${o.advancePaid.toLocaleString('en-IN')}</div>
-      </div>
-    </div>`:``}
-    <button class="btn pri sm" style="width:auto;" onclick="SM.play('click');showAdvancePay('${o.id}');">
-      ${o.advancePaid>0?'✏️ Edit Advance':'💵 Record Advance Payment'}
-    </button>
+    ${o.advancePaid>0?`<div style="background:var(--gb);border:1px solid color-mix(in srgb,var(--g) 50%,transparent);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:700;color:var(--gt);">✅ Advance Recorded</div><div style="font-size:11px;color:var(--gt);opacity:.8;">${o.advanceMethod?'via '+esc(o.advanceMethod):''}  •  Balance: ₹${Math.max(0,(o.total||0)-(o.advancePaid||0)).toLocaleString('en-IN')}</div></div><div style="font-size:18px;font-weight:900;color:var(--gt);">₹${o.advancePaid.toLocaleString('en-IN')}</div></div></div>`:''}
+    <button class="btn pri sm" style="width:auto;" onclick="SM.play('click');showAdvancePay('${o.id}');">${o.advancePaid>0?'✏️ Edit Advance':'💵 Record Advance Payment'}</button>
   </div>
   <div class="pay-card" style="${S.portal!=='owner'?'display:none;':''}">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -2007,16 +1980,16 @@ function vInv(){
     <button class="btn pri sm" id="payReqBtn" onclick="SM.play('click');sendPayReq('${o.id}');" style="width:auto;">${o.payRequested?'📲 Resend':'📲 Send Payment Request'}</button>
   </div>
   <div style="display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;" class="nop">
-    ${S.portal!=='employee'?(isPaid?`<div style="flex:1;padding:10px;background:var(--gb);border:1px solid var(--g);border-radius:var(--rsm);text-align:center;font-weight:700;color:var(--gt);">✅ Paid</div>`
-    :o.payRequested?`<button class="btn suc" onclick="SM.play('click');showPay('${o.id}');" style="flex:1;">💰 Mark as Paid</button>`
-    :`<div class="ttp" style="flex:1;"><button class="btn lock-btn" style="width:100%;" disabled>🔒 Mark as Paid</button><div class="ttip">Send payment request first</div></div>`):''}
+    ${S.portal!=='employee'?(isPaid?`<div style="flex:1;padding:10px;background:var(--gb);border:1px solid var(--g);border-radius:var(--rsm);text-align:center;font-weight:700;color:var(--gt);">✅ Paid</div>`:o.payRequested?`<button class="btn suc" onclick="SM.play('click');showPay('${o.id}');" style="flex:1;">💰 Mark as Paid</button>`:`<div class="ttp" style="flex:1;"><button class="btn lock-btn" style="width:100%;" disabled>🔒 Mark as Paid</button><div class="ttip">Send payment request first</div></div>`):''}
     <a href="https://wa.me/${ph}?text=${waContact}" target="_blank" class="btn wa sm" style="text-decoration:none;width:auto;padding:9px 13px;">💬</a>
     <button class="btn gho sm" onclick="SM.play('click');printInvoice('${o.id}');" style="padding:9px 13px;" title="Print">🖨️</button>
     <button class="btn gho sm" onclick="SM.play('click');downloadInvoicePng('${o.id}');" style="padding:9px 13px;" title="Download PNG">⬇️</button>
     <button class="btn dan sm" onclick="SM.play('click');delOrd('${o.id}');">🗑️</button>
-  </div>`:
+  </div>
+  ${S.portal==='owner'?`<div class="card" style="background:var(--rb);border:1px solid var(--r);margin-bottom:10px;"><div style="font-size:12px;font-weight:700;color:var(--rt);text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;">⚠️ Delete Order</div><button class="btn dan sm" onclick="SM.play('click');if(confirm('Delete this order permanently?')){dbDel('${o.id}');goView('orders');}">🗑️ Delete This Order</button></div>`:''}
+  `:
   `<div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;" class="nop">
-    ${js==='accepted'&&o.payRequested?`<button class="btn pri" onclick="SM.play('click');alert('Pay ₹${o.total.toLocaleString('en-IN')} via UPI or visit our shop.\\n📞 ${BIZ.ph}');" style="flex:1;">💰 Pay ₹${o.total.toLocaleString('en-IN')}</button>`:''}
+    ${js==='accepted'&&o.payRequested?`<button class="btn pri" onclick="SM.play('click');alert('Pay ₹${o.total.toLocaleString('en-IN')} via UPI or visit our shop.\n📞 ${BIZ.ph}');" style="flex:1;">💰 Pay ₹${o.total.toLocaleString('en-IN')}</button>`:''}
     ${js==='ready'||js==='completed'?`<a href="tel:+919035346417" class="btn suc sm" style="flex:1;text-decoration:none;">📞 Call</a><a href="https://wa.me/919035346417?text=${waContact}" target="_blank" class="btn wa sm" style="flex:1;text-decoration:none;">💬</a>`:''}
     ${o.otype==='quo'&&!S.orders.some(x=>x.fromQuoId===o.id&&x.otype!=='quo')?`<button class="btn pri" onclick="SM.play('click');convertQuo('${o.id}');" style="flex:1;">🔄 Convert to Order</button>`:''}
   </div>
@@ -2092,7 +2065,7 @@ function metD(type){
   if(type==='today'){
     const tod=S.orders.filter(o=>new Date(o.at).toDateString()===td&&o.otype!=='quo'),rev=tod.reduce((s,o)=>s+o.total,0);
     title=`Today — ${new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}`;
-    body=tod.length?tod.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)}</div></div>${S.portal==='owner'?S.portal==='owner'?'<span style="font-weight:800;">₹'+o.total.toLocaleString('en-IN')+'</span>':''}</div>`).join('')+(S.portal==='owner'?'<div style="padding:10px 0;border-top:2px solid var(--a);font-size:16px;font-weight:800;display:flex;justify-content:space-between;margin-top:6px;"><span>Total</span><span style="color:var(--a);">₹'+rev.toLocaleString('en-IN')+'</span></div>':''):`<div class="no-res"><div style="font-size:36px;margin-bottom:8px;">📅</div>No orders today</div>`;
+    body=tod.length?tod.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)}</div></div>${S.portal==='owner'?'<span style="font-weight:800;">₹'+o.total.toLocaleString('en-IN')+'</span>':''}</div>`).join('')+(S.portal==='owner'?'<div style="padding:10px 0;border-top:2px solid var(--a);font-size:16px;font-weight:800;display:flex;justify-content:space-between;margin-top:6px;"><span>Total</span><span style="color:var(--a);">₹'+rev.toLocaleString('en-IN')+'</span></div>':''):`<div class="no-res"><div style="font-size:36px;margin-bottom:8px;">📅</div>No orders today</div>`;
   }else if(type==='pending'){
     const p=S.orders.filter(o=>o.status==='pending'&&o.otype!=='quo');
     title=`Pending Orders (${p.length})`;
