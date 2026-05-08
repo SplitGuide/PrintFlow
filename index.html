@@ -1900,7 +1900,7 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
         </table>
       </div>
     </div>
-    <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);">
+    <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);${S.portal==='employee'?'display:none;':''}">
       <div class="inv-tot-row"><span>Taxable Amount</span><span>₹${(o.preg||0).toLocaleString('en-IN')}</span></div>
       <div class="inv-tot-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
       <div class="inv-tot-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
@@ -1935,7 +1935,7 @@ function vInv(){
   const waContact=encodeURIComponent(`Hi! Regarding *${o.invNo}* – ${o.cat}`);
 
   const adminSection=isA?`
-  <div class="card" style="margin-bottom:10px;">
+  <div class="card" style="margin-bottom:10px;${S.portal!=='owner'?'display:none;':''}">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">🎨 Design Charge</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
       <div style="font-size:12px;color:var(--t2);">Adjust design fee for this order${o.dfee!==S.dFee?'<div style="font-size:10px;color:var(--a);font-weight:700;margin-top:2px;">Custom charge applied</div>':''}</div>
@@ -1967,7 +1967,7 @@ function vInv(){
       <div style="font-size:10px;color:var(--t2);margin-top:2px;">PDF · CDR · AI · PSD · PNG · ZIP · Multiple files allowed</div>
     </div>
     <input type="file" id="aff_${o.id}" accept="image/*,.pdf,.ai,.psd,.eps,.cdr,.svg,.zip" multiple style="display:none;" onchange="addFinalFilesToOrder('${o.id}',this);">
-  </div>
+  </div>`:''}
   <div class="card" style="margin-bottom:10px;">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">📋 Update Status</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">
@@ -1982,7 +1982,8 @@ function vInv(){
     </div>
     <button class="btn suc sm" style="width:100%;${js==='completed'?'opacity:.35;pointer-events:none;':''}" onclick="SM.play('click');setJobStatus('${o.id}','completed');" ${js==='completed'?'disabled':''}>🎉 Completed</button>
   </div>
-  <div class="card" style="margin-bottom:10px;">
+  `:''}
+  <div class="card" style="margin-bottom:10px;${S.portal!=='owner'?'display:none;':''}">
     <div style="font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;">💵 Advance Payment</div>
     ${o.advancePaid>0?`
     <div style="background:var(--gb);border:1px solid color-mix(in srgb,var(--g) 50%,transparent);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px;">
@@ -1998,7 +1999,7 @@ function vInv(){
       ${o.advancePaid>0?'✏️ Edit Advance':'💵 Record Advance Payment'}
     </button>
   </div>
-  <div class="pay-card">
+  <div class="pay-card" style="${S.portal!=='owner'?'display:none;':''}">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <div><div style="font-size:13px;font-weight:700;color:var(--a);">💰 Payment Request</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">${o.payRequested?'Previously sent — resend below':'Send invoice to customer'}</div></div>
       ${o.payRequested?`<span style="background:var(--gb);color:var(--gt);font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;">SENT</span>`:''}
@@ -2006,9 +2007,9 @@ function vInv(){
     <button class="btn pri sm" id="payReqBtn" onclick="SM.play('click');sendPayReq('${o.id}');" style="width:auto;">${o.payRequested?'📲 Resend':'📲 Send Payment Request'}</button>
   </div>
   <div style="display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;" class="nop">
-    ${isPaid?`<div style="flex:1;padding:10px;background:var(--gb);border:1px solid var(--g);border-radius:var(--rsm);text-align:center;font-weight:700;color:var(--gt);">✅ Paid</div>`
+    ${S.portal!=='employee'?(isPaid?`<div style="flex:1;padding:10px;background:var(--gb);border:1px solid var(--g);border-radius:var(--rsm);text-align:center;font-weight:700;color:var(--gt);">✅ Paid</div>`
     :o.payRequested?`<button class="btn suc" onclick="SM.play('click');showPay('${o.id}');" style="flex:1;">💰 Mark as Paid</button>`
-    :`<div class="ttp" style="flex:1;"><button class="btn lock-btn" style="width:100%;" disabled>🔒 Mark as Paid</button><div class="ttip">Send payment request first</div></div>`}
+    :`<div class="ttp" style="flex:1;"><button class="btn lock-btn" style="width:100%;" disabled>🔒 Mark as Paid</button><div class="ttip">Send payment request first</div></div>`):''}
     <a href="https://wa.me/${ph}?text=${waContact}" target="_blank" class="btn wa sm" style="text-decoration:none;width:auto;padding:9px 13px;">💬</a>
     <button class="btn gho sm" onclick="SM.play('click');printInvoice('${o.id}');" style="padding:9px 13px;" title="Print">🖨️</button>
     <button class="btn gho sm" onclick="SM.play('click');downloadInvoicePng('${o.id}');" style="padding:9px 13px;" title="Download PNG">⬇️</button>
@@ -2085,17 +2086,19 @@ function vDash(){
 }
 
 function metD(type){
+  if(S.portal!=='owner')return; // revenue stats are owner-only
   SM.play('click');let title='',body='';
   const td=new Date().toDateString();
   if(type==='today'){
     const tod=S.orders.filter(o=>new Date(o.at).toDateString()===td&&o.otype!=='quo'),rev=tod.reduce((s,o)=>s+o.total,0);
     title=`Today — ${new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}`;
-    body=tod.length?tod.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)}</div></div><span style="font-weight:800;">₹${o.total.toLocaleString('en-IN')}</span></div>`).join('')+`<div style="padding:10px 0;border-top:2px solid var(--a);font-size:16px;font-weight:800;display:flex;justify-content:space-between;margin-top:6px;"><span>Total</span><span style="color:var(--a);">₹${rev.toLocaleString('en-IN')}</span></div>`:`<div class="no-res"><div style="font-size:36px;margin-bottom:8px;">📅</div>No orders today</div>`;
+    body=tod.length?tod.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)}</div></div>${S.portal==='owner'?S.portal==='owner'?'<span style="font-weight:800;">₹'+o.total.toLocaleString('en-IN')+'</span>':''}</div>`).join('')+(S.portal==='owner'?'<div style="padding:10px 0;border-top:2px solid var(--a);font-size:16px;font-weight:800;display:flex;justify-content:space-between;margin-top:6px;"><span>Total</span><span style="color:var(--a);">₹'+rev.toLocaleString('en-IN')+'</span></div>':''):`<div class="no-res"><div style="font-size:36px;margin-bottom:8px;">📅</div>No orders today</div>`;
   }else if(type==='pending'){
     const p=S.orders.filter(o=>o.status==='pending'&&o.otype!=='quo');
     title=`Pending Orders (${p.length})`;
-    body=p.length?p.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)} · ${fd(o.at)}</div></div><span style="font-weight:800;">₹${o.total.toLocaleString('en-IN')}</span></div>`).join(''):`<div class="no-res">No pending orders ✅</div>`;
+    body=p.length?p.map(o=>`<div class="oitem" style="padding:10px 0;" onclick="closeM();S.selId='${o.id}';S.view='inv';render(true);"><div style="flex:1;"><div style="font-weight:700;">${esc(o.cust?.nm)}</div><div style="font-size:11px;color:var(--t2);">${esc(o.cat)} · ${fd(o.at)}</div></div></div>`).join(''):`<div class="no-res">No pending orders ✅</div>`;
   }else if(type==='total'){
+    if(S.portal!=='owner'){return;}
     const bm={};S.orders.filter(o=>o.otype!=='quo').forEach(o=>{const m=new Date(o.at).toLocaleDateString('en-IN',{month:'short',year:'numeric'});bm[m]=(bm[m]||0)+o.total;});
     title='Revenue by Month';body=Object.entries(bm).map(([m,v])=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--b);font-size:13px;"><span style="color:var(--t2);">${m}</span><span style="font-weight:700;">₹${v.toLocaleString('en-IN')}</span></div>`).join('')||`<div class="no-res">No data</div>`;
   }else if(type==='hold'){
@@ -2112,7 +2115,7 @@ function buildOrdersList(q){
   const filtered=q?S.orders.filter(o=>(o.cust?.nm||'').toLowerCase().includes(q)||(o.cust?.ph||'').toLowerCase().includes(q)||(o.invNo||'').toLowerCase().includes(q)||(o.cat||'').toLowerCase().includes(q)):[...S.orders];
   if(!filtered.length)return`<div class="no-res" style="padding:28px;"><div style="font-size:36px;margin-bottom:8px;">${q?'🔍':'📋'}</div><div style="font-weight:700;">${q?`No results`:'No orders yet'}</div></div>`;
   const groups={};filtered.forEach(o=>{const d=new Date(o.at).toDateString(),l=new Date(o.at).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});if(!groups[d])groups[d]={l,items:[],rev:0};groups[d].items.push(o);groups[d].rev+=o.otype!=='quo'?o.total:0;});
-  return Object.entries(groups).map(([d,g])=>`<div class="dgrp"><span>${g.l}</span><span>${g.items.length} · ₹${g.rev.toLocaleString('en-IN')}</span></div>${g.items.map(o=>oRow(o)).join('')}`).join('');
+  return Object.entries(groups).map(([d,g])=>`<div class="dgrp"><span>${g.l}</span><span>${g.items.length} order${g.items.length!==1?'s':''}${S.portal==='owner'?' · ₹'+g.rev.toLocaleString('en-IN'):''}</span></div>${g.items.map(o=>oRow(o)).join('')}`).join('');
 }
 
 // ════════════════════════════════════════════════
@@ -2563,6 +2566,55 @@ function handleSearch(val){
   else if(!val&&clr)clr.remove();
 }
 
+// ════════════════════════════════════════════════
+// EMPLOYEE-SAFE ORDER VIEW (no pricing)
+// ════════════════════════════════════════════════
+function renderInvoiceEmployee(o){
+  const jsMeta=STATUS_META[o.jobStatus]||{};
+  const files=o.files&&o.files.length?o.files:[];
+  const finalFiles=o.finalFiles&&o.finalFiles.length?o.finalFiles:[];
+  return `<div class="inv-wrap">
+    <div class="inv-head">
+      <div class="inv-head-row">
+        <div class="inv-biz">
+          <div class="inv-biz-name">${BIZ.name}</div>
+          <div class="inv-biz-addr">${BIZ.addr}</div>
+        </div>
+        <div class="inv-type-block">
+          <div class="inv-type-label">JOB ORDER</div>
+          <div class="inv-num">${esc(o.invNo)}</div>
+          <div class="inv-date">${fd(o.at)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="inv-body">
+      <div style="margin-bottom:12px;">
+        <div class="inv-bill-label">Customer</div>
+        <div class="inv-bill-name">${esc(o.cust?.nm||'')}</div>
+        ${o.cust?.ph?`<div class="inv-bill-sub">${esc(o.cust.ph)}</div>`:''}
+        ${o.coname?`<div class="inv-bill-sub">${esc(o.coname)}</div>`:''}
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:12px;margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:800;margin-bottom:6px;">${esc(o.cat)}${o.sc?' – '+esc(o.sc):''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12px;color:var(--t2);">
+          <div>📐 Size: <b style="color:var(--t);">${esc(o.sz)}</b></div>
+          <div>🔢 Qty: <b style="color:var(--t);">${o.qty}</b></div>
+          ${o.mat?`<div>🧱 Material: <b style="color:var(--t);">${esc(o.mat)}</b></div>`:''}
+          ${o.del?`<div>🚚 <b style="color:var(--t);">Delivery</b></div>`:''}
+        </div>
+      </div>
+      ${o.note?`<div style="padding:8px 10px;background:var(--s2);border-radius:var(--rsm);font-size:12px;color:var(--t2);margin-bottom:10px;">📝 ${esc(o.note)}</div>`:''}
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:color-mix(in srgb,${jsMeta.color||'var(--a)'} 12%,transparent);border-radius:var(--rsm);">
+        <span style="font-size:20px;">${statusIcon(o.jobStatus)}</span>
+        <div><div style="font-weight:700;font-size:13px;">${jsMeta.label||o.jobStatus}</div><div style="font-size:10px;color:var(--t2);">Job Status</div></div>
+      </div>
+      ${files.length?`<div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:6px;">📎 Design Files from Customer</div>${files.map(fi=>`<div onclick="openFileViewer('${fi.url||fi.data||''}','${esc(fi.name)}','${fi.type||''}');" class="dl-link" style="cursor:pointer;margin-bottom:5px;">📎 ${esc(fi.name)}</div>`).join('')}</div>`:''}
+      ${finalFiles.length?`<div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:6px;">🖨️ Final Print Files</div>${finalFiles.map(fi=>`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 10px;margin-bottom:5px;"><div onclick="openFileViewer('${fi.url||fi.data||''}','${esc(fi.name)}','${fi.type||''}');" style="cursor:pointer;flex:1;font-size:12px;font-weight:700;">🖨️ ${esc(fi.name)}</div><a href="${fi.url||fi.data||'#'}" download="${esc(fi.name)}" style="font-size:11px;padding:4px 8px;background:var(--a);color:#fff;border-radius:6px;text-decoration:none;font-weight:700;">⬇️</a></div>`).join('')}</div>`:''}
+    </div>
+    <div class="inv-foot" style="border-top:1px solid rgba(0,0,0,.07);"><div class="inv-foot-text">${BIZ.name} · ${BIZ.ph}</div></div>
+  </div>`;
+}
+
 function oRow(o){
   const sel=S.multiSel.has(o.id),anyMode=S.multiSel.size>0;
   function toggleSel(e){e.stopPropagation();if(S.multiSel.has(o.id))S.multiSel.delete(o.id);else S.multiSel.add(o.id);render(false);}
@@ -2577,7 +2629,7 @@ function oRow(o){
       <div style="font-size:10px;color:var(--t3);">${fd(o.at)} · ${esc(o.invNo)}</div>
     </div>
     <div style="text-align:right;margin-left:8px;flex-shrink:0;">
-      <div style="font-weight:800;font-size:13px;">₹${o.total.toLocaleString('en-IN')}</div>
+      ${S.portal==='owner'?`<div style="font-weight:800;font-size:13px;">₹${o.total.toLocaleString('en-IN')}</div>`:''}
       ${statusBadge(o.otype==='quo'?'quotation':o.jobStatus)}
     </div>
   </div>`;
