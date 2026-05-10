@@ -84,6 +84,11 @@ body{display:flex;flex-direction:column;background:var(--bg);}
 @keyframes stepActive{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
 :focus-visible{outline:2px solid var(--a);outline-offset:2px;border-radius:var(--rxs);}
+/* .sport — design/material selector card (used in wS3sqft and wS4) */
+.sport{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--rad);border:1.5px solid var(--b);background:var(--s2);cursor:pointer;transition:border-color .15s,background .15s;}
+.sport:active{transform:scale(.97);}
+.sport.hi{background:var(--a);border-color:var(--a);}
+.sport.hi *{color:#fff !important;}
 
 /* ── INTERACTIVE HOVER EFFECTS ─────────────────────── */
 /* Per-letter hover on headline */
@@ -235,8 +240,8 @@ body{display:flex;flex-direction:column;background:var(--bg);}
   display:flex;align-items:center;justify-content:center;color:#aaa;transition:all .15s;z-index:5;
 }
 #muteBtn:hover{border-color:#444;color:#555;}
-/* hide old sport elements */
-.sport,.sico,.stit,.ssub{display:none;}
+/* hide old sport elements ONLY in splash */
+#splash .sico,#splash .stit,#splash .ssub{display:none;}
 
 /* sync pill */
 .pill-sync{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;background:var(--s2);border:1px solid var(--b);font-size:10px;font-weight:600;color:var(--t2);}
@@ -386,16 +391,16 @@ body.light .fi{background:#f7f7f7;color:#111;}
 .tl-conn.done{background:var(--g);}
 
 /* ─── TYPE SELECTOR ──────────────────────────────────── */
-.type-selector{display:flex;background:var(--s2);border-radius:50px;padding:4px;border:1px solid var(--b);position:relative;width:100%;max-width:320px;margin:0 auto 20px;overflow:hidden;}
-.type-pill{position:absolute;top:4px;bottom:4px;border-radius:46px;background:var(--a);transition:all .3s var(--sp);z-index:0;box-shadow:0 2px 10px rgba(239,68,68,.3);}
-.type-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;border-radius:46px;cursor:pointer;z-index:1;position:relative;font-size:13px;font-weight:600;transition:color .25s;user-select:none;}
-.type-opt:active{transform:scale(.96);}
+.type-selector{display:flex;background:var(--s2);border-radius:60px;padding:5px;border:1px solid var(--b);position:relative;width:100%;max-width:420px;margin:0 auto 24px;overflow:hidden;}
+.type-pill{position:absolute;top:5px;bottom:5px;border-radius:55px;background:var(--a);transition:all .32s var(--sp);z-index:0;box-shadow:0 4px 16px rgba(239,68,68,.35);}
+.type-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;padding:16px 14px;border-radius:55px;cursor:pointer;z-index:1;position:relative;font-size:16px;font-weight:700;transition:color .25s;user-select:none;}
+.type-opt:active{transform:scale(.95);}
 .type-opt.active{color:#fff;}
 .type-opt.inactive{color:var(--t2);}
-.type-opt .t-ico{font-size:18px;}
+.type-opt .t-ico{font-size:26px;}
 
 /* ─── CATEGORIES ─────────────────────────────────────── */
-.cats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.cats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;align-items:start;}
 .cat{background:var(--s1);border:1.5px solid var(--b);border-radius:var(--rad);padding:14px 8px 12px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s,transform .2s var(--sp);overflow:hidden;}
 .cat:hover{border-color:var(--b2);transform:translateY(-1px);}
 .cat:active{transform:scale(.94);}
@@ -500,6 +505,9 @@ body.light .mod{background:#fff;}
 .skeleton{background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--rsm);}
 .skel-row{padding:12px 15px;border-bottom:1px solid var(--b);display:flex;flex-direction:column;gap:7px;}
 .page-enter{animation:fadeIn .25s var(--sp) both;}
+.view-title{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:14px;color:var(--t);}
+.view-sub{font-size:12px;color:var(--t2);margin-top:-10px;margin-bottom:14px;}
+.section-label{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;margin-top:16px;}
 .add-file-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border:2px dashed var(--b2);border-radius:var(--rsm);cursor:pointer;font-size:13px;font-weight:600;color:var(--t2);background:transparent;width:100%;font-family:inherit;transition:all .2s;}
 .add-file-btn:hover{border-color:var(--a);color:var(--a);}
 
@@ -560,12 +568,14 @@ body.light .mod{background:#fff;}
   .inv-body,.inv-totals,.card,.flush,.inv-wrap{background:#fff!important;}
 }
 </style>
+<!-- Supabase JS SDK (optional — app works offline without it) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" onerror="console.warn('Supabase CDN blocked — running offline');" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <!-- WELCOME SCREEN -->
 <div id="welcome">
-  <div class="wn">Print<span>.</span></div>
+  <div class="wn">Vikrant <span>Offset</span></div>
   <div class="ws">Vikrant Offset Printers</div>
   <div class="wa2">Belagavi · Est. 1990</div>
   <div class="wp"><div class="wf"></div></div>
@@ -698,9 +708,10 @@ body.light .mod{background:#fff;}
       </div>
     </div>
     <!-- Back button row — shown on sub-views -->
-    <div id="hdr-back" style="display:none;padding:6px 16px 8px;border-top:1px solid var(--b);max-width:600px;margin:0 auto;width:100%;">
-      <button onclick="SM.play('click');historyBack();" style="display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:4px 0;transition:color .15s;" aria-label="Go back">
-        <span style="font-size:16px;">←</span> Back
+    <div id="hdr-back" style="display:none;padding:4px 16px 8px;max-width:600px;margin:0 auto;width:100%;border-top:1px solid var(--b);">
+      <button onclick="SM.play('click');historyBack();" style="display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:0;transition:color .15s;" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
       </button>
     </div>
   </header>
@@ -736,7 +747,7 @@ const SM=(()=>{
   const play=id=>{if(!muted&&sounds[id])sounds[id]();};
   const toggle=()=>{muted=!muted;try{localStorage.setItem('pf_muted',muted?'1':'0');}catch(e){}updateUI();if(!muted)play('tick');};
   const updateUI=()=>{const icon=muted?'🔇':'🔊';['muteBtn','hMuteBtn'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=icon;e.style.opacity=muted?'.5':'1';}});};
-  const init=()=>{try{getCtx();}catch(e){}updateUI();};
+  const init=()=>{try{getCtx();}catch(e){}try{updateUI();}catch(e){};};
   return{play,toggle,init,isMuted:()=>muted};
 })();
 
@@ -758,11 +769,11 @@ function showToast(msg,dur=2000){const old=document.querySelector('.toast');if(o
 // ════════════════════════════════════════════════
 const THEMES={red:{a:'#ef4444',g1:'#3a0808',g2:'#6a1010',g3:'#1e0404',g4:'#8a1818',bg:'#120202'},orange:{a:'#f97316',g1:'#2a0855',g2:'#3d1470',g3:'#180430',g4:'#4a1a80',bg:'#0e0320'},blue:{a:'#3b82f6',g1:'#0a1a55',g2:'#0d2a8a',g3:'#050f28',g4:'#1a3aaa',bg:'#040d1e'},green:{a:'#22c55e',g1:'#0a2a1a',g2:'#0d5a28',g3:'#041208',g4:'#1a7040',bg:'#030e06'},purple:{a:'#a855f7',g1:'#2a0855',g2:'#5a1090',g3:'#160438',g4:'#7028b8',bg:'#100220'},teal:{a:'#14b8a6',g1:'#0a2a38',g2:'#0d4a68',g3:'#041218',g4:'#1a6888',bg:'#030e14'}};
 let curTheme='red',bgT=0,bgCvs,bgCtx,grainCvs,grainCtx;
-function initBg(){bgCvs=document.getElementById('bgc');bgCtx=bgCvs.getContext('2d');grainCvs=document.createElement('canvas');grainCvs.width=grainCvs.height=256;grainCtx=grainCvs.getContext('2d');buildGrain();resizeBg();window.addEventListener('resize',resizeBg);animBg();}
+function initBg(){bgCvs=document.getElementById('bgc');if(!bgCvs)return;bgCtx=bgCvs.getContext('2d');grainCvs=document.createElement('canvas');grainCvs.width=grainCvs.height=256;grainCtx=grainCvs.getContext('2d');buildGrain();resizeBg();window.addEventListener('resize',resizeBg);animBg();}
 function buildGrain(){const id=grainCtx.createImageData(256,256),d=id.data;for(let i=0;i<d.length;i+=4){const v=Math.random();const b=v>.93?Math.random()*210+45:v>.84?Math.random()*90:0;d[i]=d[i+1]=d[i+2]=b;d[i+3]=b>0?Math.floor(b*.42):0;}grainCtx.putImageData(id,0,0);}
 function resizeBg(){bgCvs.width=window.innerWidth;bgCvs.height=window.innerHeight;}
 function hexA(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}
-function animBg(){bgT+=.0035;const t=bgT,th=THEMES[curTheme],W=bgCvs.width,H=bgCvs.height;bgCtx.clearRect(0,0,W,H);bgCtx.fillStyle=th.bg;bgCtx.fillRect(0,0,W,H);const blobs=[{x:W*(.2+.3*Math.sin(t*.7)),y:H*(.2+.25*Math.cos(t*.5)),r:W*.5,c:th.g1,a:.72},{x:W*(.72+.24*Math.cos(t*.6)),y:H*(.62+.2*Math.sin(t*.8)),r:W*.44,c:th.g2,a:.66},{x:W*(.5+.2*Math.sin(t*.9+1)),y:H*(.3+.28*Math.cos(t*.4+2)),r:W*.36,c:th.g3,a:.52},{x:W*(.12+.38*Math.cos(t*.5+3)),y:H*(.8+.14*Math.sin(t*1.1)),r:W*.38,c:th.g4,a:.46}];blobs.forEach(b=>{const g=bgCtx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,hexA(b.c,b.a));g.addColorStop(1,hexA(b.c,0));bgCtx.fillStyle=g;bgCtx.beginPath();bgCtx.arc(b.x,b.y,b.r,0,Math.PI*2);bgCtx.fill();});bgCtx.globalCompositeOperation='screen';bgCtx.globalAlpha=.2;const p=bgCtx.createPattern(grainCvs,'repeat');bgCtx.fillStyle=p;bgCtx.fillRect(0,0,W,H);bgCtx.globalAlpha=1;bgCtx.globalCompositeOperation='source-over';requestAnimationFrame(animBg);}
+function animBg(){if(!bgCvs||!bgCtx)return;bgT+=.0035;const t=bgT,th=THEMES[curTheme],W=bgCvs.width,H=bgCvs.height;bgCtx.clearRect(0,0,W,H);bgCtx.fillStyle=th.bg;bgCtx.fillRect(0,0,W,H);const blobs=[{x:W*(.2+.3*Math.sin(t*.7)),y:H*(.2+.25*Math.cos(t*.5)),r:W*.5,c:th.g1,a:.72},{x:W*(.72+.24*Math.cos(t*.6)),y:H*(.62+.2*Math.sin(t*.8)),r:W*.44,c:th.g2,a:.66},{x:W*(.5+.2*Math.sin(t*.9+1)),y:H*(.3+.28*Math.cos(t*.4+2)),r:W*.36,c:th.g3,a:.52},{x:W*(.12+.38*Math.cos(t*.5+3)),y:H*(.8+.14*Math.sin(t*1.1)),r:W*.38,c:th.g4,a:.46}];blobs.forEach(b=>{const g=bgCtx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,hexA(b.c,b.a));g.addColorStop(1,hexA(b.c,0));bgCtx.fillStyle=g;bgCtx.beginPath();bgCtx.arc(b.x,b.y,b.r,0,Math.PI*2);bgCtx.fill();});bgCtx.globalCompositeOperation='screen';bgCtx.globalAlpha=.2;const p=bgCtx.createPattern(grainCvs,'repeat');bgCtx.fillStyle=p;bgCtx.fillRect(0,0,W,H);bgCtx.globalAlpha=1;bgCtx.globalCompositeOperation='source-over';requestAnimationFrame(animBg);}
 function setTheme(n){curTheme=n;document.documentElement.style.setProperty('--a',THEMES[n].a);S.scheme=n;}
 
 // INFO SHEET
@@ -856,7 +867,7 @@ const S={
   },
 };
 
-function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null,customDFee:null,finalFiles:[]};}
+function ff(){return{step:0,ctype:null,otype:'order',cust:{nm:'',ph:'',em:''},coname:'',gstin:'',cat:null,sc:'',sz:null,custom:false,cw:'',ch:'',cu:'ft',cp:'',mat:null,design:'cust',designBrief:'',designRef:[],qty:1,note:'',del:false,daddr:'',files:[],fileErr:false,fromQuoId:null,addFrame:false,frameSz:null,frameFt:null,addDup:false,dupSet:null,sides:'single',addFoam:false,foamSz:null,foamFt:null,customDFee:null,finalFiles:[]};}
 
 // ════════════════════════════════════════════════
 // SUPABASE
@@ -982,17 +993,21 @@ function o2r(o){
 // ════════════════════════════════════════════════
 function darkToggle(){S.dark=!S.dark;applyDark();}
 function applyDark(){document.body.classList.toggle('light',!S.dark);const b=document.getElementById('dkbtn');if(b)b.textContent=S.dark?'☀️':'🌙';}
-applyDark();
+try{applyDark();}catch(e){}
 (function boot(){
-  SM.init();
+  try{SM.init();}catch(e){}
   setTimeout(()=>{
-    const w=document.getElementById('welcome'),sp=document.getElementById('splash');
-    if(w){w.style.transition='opacity .5s';w.style.opacity='0';setTimeout(()=>w.style.display='none',500);}
-    if(sp)sp.style.display='flex';
-    SM.play('welcome');
-  },3000);
-  // Wait for DOM + SDK to settle, then init Supabase
-  if(document.readyState==='complete'){sbInit();}else{window.addEventListener('load',()=>sbInit());}
+    try{
+      const w=document.getElementById('welcome'),sp=document.getElementById('splash');
+      if(w){w.style.opacity='0';w.style.transition='opacity .4s';setTimeout(()=>{w.style.display='none';},400);}
+      if(sp){sp.style.display='flex';}
+      setTimeout(()=>{try{initSplashInteractions();}catch(e){}},600);
+    }catch(e){}
+  },2400);
+  try{
+    if(document.readyState==='complete'){sbInit();}
+    else{window.addEventListener('load',()=>{try{sbInit();}catch(e){syncSet('offline','Offline');}});}
+  }catch(e){}
 })();
 
 // ════════════════════════════════════════════════
@@ -1149,9 +1164,34 @@ function showBackBtn(show){
 const TOP_VIEWS=['dash','orders','browse','quotations','sett','accounts','new-order'];
 
 function historyBack(){
-  // Go back to the relevant top-level view for this portal
-  const dest=S.portal==='cust'?'browse':S.portal==='employee'?'orders':'orders';
-  goView(dest);
+  const f=S.form,p=S.portal,v=S.view;
+
+  // ── Wizard steps ──────────────────────────────
+  if((v==='browse'||v==='new-order')&&f&&f.step>0){
+    if(f.step===1){
+      // Step 1 (Your Details) → back to type select or splash
+      if(p==='cust'){bkSplash();return;}
+      f.step=0;render(true);return;
+    }
+    // Step N → Step N-1
+    const coSteps=[0,1,2,3,4,5,6];
+    const indSteps=[0,1,2,3,4,5];
+    f.step=Math.max(0,f.step-1);
+    render(true);return;
+  }
+
+  // ── Sub-views ─────────────────────────────────
+  if(v==='inv'){goView(p==='cust'?'browse':'orders');return;}
+  if(v==='accounts'||v==='sett'){goView('dash');return;}
+  if(v==='quotations'){goView('browse');return;}
+  if(v==='multi-inv'){goView('orders');return;}
+
+  // ── Settings sub-pages ────────────────────────
+  if(S.sub){S.sub=null;render(false);return;}
+
+  // ── Top-level: go to splash/dash ──────────────
+  if(p==='cust'){bkSplash();}
+  else{goView('dash');}
 }
 
 function renderNav(){
@@ -1172,6 +1212,11 @@ function renderNav(){
 function render(animate=false){
   try{
     renderNav();
+    // Auto show/hide header back button
+    const f=S.form,v=S.view,p=S.portal;
+    const isTop=(v==='dash'||v==='orders'||v==='accounts'||v==='sett')&&(!f||f.step===0);
+    const isCustHome=p==='cust'&&v==='browse'&&(!f||f.step===0);
+    showBackBtn(!isTop&&!isCustHome);
     const mc=document.getElementById('mc');if(!mc)return;
     let html='';
     if(S.portal==='cust'){
@@ -1202,7 +1247,7 @@ function render(animate=false){
     }else{
       mc.innerHTML=html;
     }
-  }catch(e){console.error('render',e);}
+  }catch(e){console.error('render error:',e.message, e.stack?.split('\n')[1]);}
 }
 
 // ════════════════════════════════════════════════
@@ -1336,7 +1381,7 @@ function vBrowse(){
 
 function wS0(){
   const isAdmin=S.portal==='employee'||S.portal==='owner';
-  return`<div style="text-align:center;padding-top:10px;">
+  return`<div style="text-align:center;padding-top:16px;">
     <div style="text-align:left;margin-bottom:16px;">
       <button onclick="SM.play('click');${isAdmin?"goView('dash')":"bkSplash()"}" style="display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--b);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;font-family:inherit;transition:all .15s;" aria-label="Go back">
         ← Back
@@ -1345,20 +1390,32 @@ function wS0(){
     ${isAdmin?'':'<div style="font-size:22px;font-weight:800;margin-bottom:8px;">Welcome! 👋</div>'}
     <div style="font-size:13px;color:var(--t2);margin-bottom:24px;">${isAdmin?'Select order type:':'Are you ordering as an individual or a company?'}</div>
     ${typeSelectorHTML(S.form.ctype)}
-    <div style="font-size:11px;color:var(--t3);">Tap to select — continues automatically</div>
+    <div style="font-size:12px;color:var(--t3);margin-top:4px;">Tap to select — continues automatically</div>
   </div>`;
 }
 
 function wS1(){
   const f=S.form;
-  return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Your Details</div>
-  <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="cnm" type="text" placeholder="Rahul Sharma" value="${esc(f.cust.nm)}" oninput="S.form.cust.nm=this.value;" onblur="tryAA1();"></div>
-  <div class="fg"><label class="fl">Phone *</label><input class="fi" id="cph" type="tel" placeholder="9876543210" value="${esc(f.cust.ph)}" oninput="S.form.cust.ph=this.value;" onblur="tryAA1();"></div>
-  <div class="fg"><label class="fl">Email (optional)</label><input class="fi" id="cem" type="email" placeholder="you@email.com" value="${esc(f.cust.em)}" oninput="S.form.cust.em=this.value;"></div>
-  <button class="btn pri" onclick="SM.play('click');wn1();">Continue →</button>
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=0;render(true);">← Back</button>`;
+  return`<div style="font-size:18px;font-weight:800;margin-bottom:16px;">Your Details</div>
+  <div class="fg"><label class="fl">Full Name *</label>
+    <input class="fi" id="cnm" type="text" placeholder="Rahul Sharma"
+      value="${esc(f.cust.nm)}" oninput="S.form.cust.nm=this.value;"
+      autocomplete="name" enterkeyhint="next">
+  </div>
+  <div class="fg"><label class="fl">Phone *</label>
+    <input class="fi" id="cph" type="tel" placeholder="9876543210"
+      value="${esc(f.cust.ph)}" oninput="S.form.cust.ph=this.value;"
+      autocomplete="tel" enterkeyhint="next" maxlength="10">
+  </div>
+  <div class="fg"><label class="fl">Email <span style="font-weight:400;color:var(--t3);">(optional)</span></label>
+    <input class="fi" id="cem" type="email" placeholder="you@email.com"
+      value="${esc(f.cust.em)}" oninput="S.form.cust.em=this.value;"
+      autocomplete="email" enterkeyhint="done">
+  </div>
+  <button class="btn pri" style="margin-top:4px;" onclick="SM.play('click');wn1();">Continue →</button>
+`;
 }
-function tryAA1(){const f=S.form;if(f.cust.nm&&(f.cust.ph||'').replace(/\D/g,'').length>=10&&f.ctype!=='co')setTimeout(()=>wn1(),200);}
+function tryAA1(){/* auto-advance disabled — user taps Continue */}
 
 function wS1b(){
   const f=S.form;
@@ -1389,27 +1446,45 @@ function wS1b(){
 function wS2(){
   const f=S.form,prev=f.ctype==='co'?2:1,sel=S.cats.find(c=>c.id===f.cat);
   const visibleCats=S.cats.filter(c=>c.pricing!=='frame');
-  return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Select Category</div>
-  <div class="cats-grid${f.cat?' hs':''}" id="cat-grid">${visibleCats.map(c=>`<div class="cat${f.cat===c.id?' on':''}" onclick="selCatAdv('${c.id}');">${f.cat===c.id?'<div class="csel">✓</div>':''}${S.imgs[c.id]?`<div class="ciw"><img class="ci" src="${S.imgs[c.id]}" alt="${esc(c.nm)}"></div>`:''}<div class="cico">${c.ico}</div><div class="cnm">${c.nm}</div></div>`).join('')}</div>
-  ${sel&&sel.sc.length?`<div id="subcat-section" style="font-size:13px;font-weight:700;margin-bottom:8px;">Select Type (optional)</div><div class="pills" style="margin-bottom:14px;">${sel.sc.map(sc=>`<div class="pill${f.sc===sc?' on':''}" onclick="S.form.sc='${sc}';render(false);setTimeout(()=>smoothScrollTo('#cat-continue',60),80);">${sc}</div>`).join('')}</div>`:''}
-  ${f.cat?`<button class="btn pri" id="cat-continue" onclick="SM.play('click');wn2();">Continue →</button>`:''}
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">← Back</button>`;
+  const catGrid=visibleCats.map(c=>{
+    const isOn=f.cat===c.id;
+    const img=S.imgs[c.id]?`<div class="ciw"><img class="ci" src="${S.imgs[c.id]}" alt=""></div>`:'';
+    return `<div class="cat${isOn?' on':''}" onclick="S2cat('${c.id}');">${isOn?'<div class="csel">✓</div>':''}${img}<div class="cico">${c.ico}</div><div class="cnm">${c.nm}</div></div>`;
+  }).join('');
+  const subcatHTML=sel&&sel.sc&&sel.sc.length?`<div style="margin-top:16px;padding:14px;background:var(--s2);border-radius:var(--rad);border:1px solid var(--b);">
+    <div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Select Type <span style="opacity:.5;font-weight:400;">(optional)</span></div>
+    <div class="pills">${sel.sc.map(sc=>`<div class="pill${f.sc===sc?' on':''}" onclick="S2sc('${sc.replace(/'/g,"\'").replace(/"/g,'&quot;')}');">${sc}</div>`).join('')}</div>
+  </div>`:'';
+  const continueBtn=f.cat?`<button class="btn pri" style="margin-top:14px;width:100%;" onclick="S2go();">Continue →</button>`:'<p style="text-align:center;color:var(--t2);font-size:13px;margin-top:16px;">↑ Tap a category to continue</p>';
+  return`<div style="font-size:18px;font-weight:800;margin-bottom:14px;">Select Category</div>
+  <div class="cats-grid${f.cat?' hs':''}">${catGrid}</div>
+  ${subcatHTML}
+  ${continueBtn}
+`;
 }
+function S2cat(id){
+  if(S.form.cat!==id)S.form.sc='';
+  S.form.cat=id;S.form.sz=null;S.form.mat=null;
+  render(false);
+}
+function S2sc(sc){
+  S.form.sc=sc;
+  render(false);
+}
+function S2go(){
+  if(!S.form||!S.form.cat){showToast('⚠️ Please select a category');return;}
+  S.form.step=S.form.ctype==='co'?4:3;
+  render(true);
+}
+
+function pickCat(id){S2cat(id);} // legacy alias
+
+function goNext2(){S2go();} // legacy alias
 
 function selCatAdv(id){
   SM.play('click');
   S.form.cat=id;S.form.sz=null;S.form.mat=null;S.form.sc='';
-  const cat=S.cats.find(c=>c.id===id);
-  if((!cat||!cat.sc||!cat.sc.length)&&S.form.ctype==='ind'){
-    setTimeout(()=>wn2(),220);
-  } else {
-    render(false);
-    // Scroll to subcategory section if it exists, otherwise to Continue button
-    setTimeout(()=>{
-      const target=document.getElementById('subcat-section')||document.getElementById('cat-continue');
-      if(target)smoothScrollTo(target,60);
-    },80);
-  }
+  render(false);
 }
 
 function wS3(){
@@ -1583,7 +1658,6 @@ function wS3sqft(f,cat,prev){
     ${szPresets.length?`<div class="pills" style="margin-bottom:10px;">${presetPills}
       <div class="pill${f.custom&&!f.sz?' on':''}" onclick="S.form.custom=true;S.form.sz=null;render(false);">&#9999; Custom</div>
     </div>
-    ${o.advanceSS?`<div style="margin-top:6px;"><img src="${o.advanceSS}" class="upi-thumb" onclick="openUpiZoom('${o.advanceSS}');" style="max-width:100%;max-height:110px;border-radius:6px;object-fit:contain;" title="UPI Screenshot — tap to zoom"></div>`:''}
     `:''}
     <div style="display:flex;gap:8px;align-items:flex-end;">
       <div style="flex:1;"><div style="font-size:11px;color:var(--t2);margin-bottom:3px;">Width</div>
@@ -1620,7 +1694,7 @@ function wS3sqft(f,cat,prev){
   ${frameAddonHTML(f)}
   ${foamAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:14px;">Continue &rarr;</button>
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
+`;
 }
 
 function wS3fixed(f,cat,prev){
@@ -1702,7 +1776,7 @@ function wS3fixed(f,cat,prev){
   ${frameAddonHTML(f)}
   ${foamAddonHTML(f)}
   <button class="btn pri" onclick="SM.play('click');wn3();" style="margin-top:12px;">Continue &rarr;</button>
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">&larr; Back</button>`;
+`;
 }
 
 function selSzAdv(id){
@@ -1776,6 +1850,25 @@ function wS4(){
       <input class="fi" id="qi" type="number" min="1" value="${f.qty}" oninput="S.form.qty=Math.max(1,parseInt(this.value)||1);document.getElementById('qv').textContent=S.form.qty;" style="width:75px;text-align:center;">
     </div>
   </div>
+  ${f.design==='us'?`<div class="card" style="margin-bottom:12px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.04);">
+    <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--a);">🎨 Design Brief</div>
+    <div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.5;">
+      Design fee: <strong style="color:var(--t);">₹${f.customDFee!==null?f.customDFee:S.dFee}</strong> · Staff may adjust based on complexity
+    </div>
+    <div class="fg">
+      <label class="fl">Describe what you want *</label>
+      <textarea class="fi" placeholder="E.g. Red banner with our shop name, phone number and logo. Festive Diwali style, yellow and red colours..." oninput="S.form.designBrief=this.value;" style="min-height:90px;">${esc(f.designBrief||'')}</textarea>
+    </div>
+    <div class="fg">
+      <label class="fl">Reference Image (optional)</label>
+      ${f.designRef&&f.designRef.length?`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">${f.designRef.map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--gb);border:1px solid rgba(34,197,94,.25);border-radius:var(--rxs);"><span style="font-size:12px;color:var(--gt);font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">✅ ${esc(r.name)}</span><button onclick="S.form.designRef.splice(${i},1);render(false);" style="background:none;border:none;color:var(--rt);cursor:pointer;font-size:14px;padding:0;">✕</button></div>`).join('')}</div>`:''}
+      <div class="fup" onclick="document.getElementById('dref-inp').click();" style="padding:12px;min-height:48px;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:12px;color:var(--t2);">📎 ${f.designRef&&f.designRef.length?'Add more files':'Tap to upload reference image'}</span>
+      </div>
+      <input type="file" id="dref-inp" accept="image/*,.pdf,.jpg,.png" multiple style="display:none;" onchange="addDesignRef(this);">
+    </div>
+    <div style="font-size:11px;color:var(--t3);margin-top:4px;">We'll WhatsApp you for further details before starting</div>
+  </div>`:''}
   <div class="fg"><label class="fl">Delivery</label>
     <div style="display:flex;flex-direction:column;gap:9px;">
       <div class="sport${!f.del?' hi':''}" style="max-width:100%;border-radius:var(--rad);" onclick="S.form.del=false;render(false);">
@@ -1793,33 +1886,37 @@ function wS4(){
   </div>
   <div class="fg"><label class="fl">Notes (optional)</label><textarea class="fi" id="note" rows="2" placeholder="Colour, finish, requirements...">${esc(f.note)}</textarea></div>
   <button class="btn pri" onclick="SM.play('click');wn4();">Preview →</button>
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">← Back</button>`;
+`;
 }
 
 function wS5(){
   const f=S.form,prev=f.ctype==='co'?5:4,{cat,mat,snm,up,sub,df,delf,preg,gst,total}=calc(f),isQuo=f.otype==='quo';
   return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Review &amp; Submit</div>
   ${isQuo?`<div style="background:var(--pub);border:1px solid var(--pu);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--put);font-weight:700;text-align:center;margin-bottom:12px;">📋 QUOTATION REQUEST — Estimate only</div>`:''}
-  ${renderInvoice({cust:f.cust,ctype:f.ctype,coname:f.coname,gstin:f.gstin,otype:f.otype,cat:cat?.nm||'',sc:f.sc,sz:snm,mat:mat?.nm||'',up,qty:f.qty,sub,df,delf,preg,gst,total,note:f.note,jobStatus:'new',invNo:'PREVIEW',daddr:f.daddr,at:new Date().toISOString(),files:f.files},false)}
+  ${renderInvoice({cust:f.cust,ctype:f.ctype,coname:f.coname,gstin:f.gstin,otype:f.otype,cat:cat?.nm||'',sc:f.sc,sz:snm,mat:mat?.nm||'',up,qty:f.qty,sub,df,delf,preg,gst,total,note:f.note,designBrief:f.designBrief||'',designRef:f.designRef||[],jobStatus:'new',invNo:'PREVIEW',daddr:f.daddr,at:new Date().toISOString(),files:f.files},false)}
   <div style="background:var(--yb);border:1px solid var(--y);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--yt);margin-bottom:12px;">⚠️ Admin will confirm before production</div>
   <button class="btn pri" id="submitBtn" onclick="SM.play('click');submitOrder();">✅ Submit ${isQuo?'Quotation Request':'Order'}</button>
-  <button class="btn gho nop" style="width:100%;margin-top:8px;" onclick="SM.play('click');S.form.step=${prev};render(true);">← Back</button>`;
+`;
 }
 
 // ════════════════════════════════════════════════
 // WIZARD ACTIONS
 // ════════════════════════════════════════════════
 function wn1(){
-  const nm=S.form.cust.nm||gv('cnm'),ph=(S.form.cust.ph||gv('cph')).replace(/\D/g,'');
-  if(!nm){SM.play('error');alert('Enter your name');return;}
-  if(ph.length<10){SM.play('error');alert('Enter a valid 10-digit number');return;}
-  S.form.cust.nm=nm;S.form.cust.ph=S.form.cust.ph||gv('cph');S.form.cust.em=S.form.cust.em||gv('cem');
+  // Read directly from DOM inputs first (most up-to-date)
+  const nmEl=document.getElementById('cnm'),phEl=document.getElementById('cph'),emEl=document.getElementById('cem');
+  const nm=(nmEl?nmEl.value:S.form.cust.nm||'').trim();
+  const ph=(phEl?phEl.value:S.form.cust.ph||'').replace(/\D/g,'');
+  const em=emEl?emEl.value:S.form.cust.em||'';
+  if(!nm){SM.play('error');showToast('⚠️ Please enter your name');if(nmEl)nmEl.focus();return;}
+  if(ph.length<10){SM.play('error');showToast('⚠️ Enter a valid 10-digit phone number');if(phEl)phEl.focus();return;}
+  S.form.cust.nm=nm;S.form.cust.ph=ph;S.form.cust.em=em;
   S.form.step=2;SM.play('status');render(true);
 }
 
 function wn1b(){
   const co=S.form.coname||gv('coname');
-  if(!co.trim()){SM.play('error');alert('Please enter company name');return;}
+  if(!co.trim()){SM.play('error');showToast('⚠️ Please enter company name');return;}
   S.form.coname=co.trim();
   S.form.gstin=(S.form.gstin||gv('gstin')||'').toUpperCase().trim();
   if(!S.form.otype)S.form.otype='order'; // default to order if not picked
@@ -1827,12 +1924,12 @@ function wn1b(){
 }
 
 function wn2(){
-  if(!S.form.cat){SM.play('error');alert('Select a category');return;}
+  if(!S.form.cat){SM.play('error');showToast('⚠️ Please select a category');return;}
   S.form.step=S.form.ctype==='co'?4:3;SM.play('click');render(true);
 }
 
 function wn3(){
-  const cat=S.cats.find(c=>c.id===S.form.cat);
+  const f=S.form,cat=S.cats.find(c=>c.id===S.form.cat);
   const isSqft=cat&&cat.pricing==='sqft';
   const isFrame=cat&&cat.pricing==='frame';
   if(isFrame){
@@ -1846,14 +1943,14 @@ function wn3(){
   }
   if(isSqft){
     const mats=S.mats.filter(m=>m.cats.includes(S.form.cat));
-    if(mats.length&&!S.form.mat){SM.play('error');alert('Please select a material');return;}
+    if(mats.length&&!S.form.mat){SM.play('error');showToast('⚠️ Please select a material');return;}
     const cw=parseFloat(S.form.cw||gv('cw')||0),ch=parseFloat(S.form.ch||gv('ch')||0);
-    if(!cw||!ch){SM.play('error');alert('Please enter width and height');return;}
+    if(!cw||!ch){SM.play('error');showToast('⚠️ Please enter width and height');return;}
     S.form.cw=String(cw);S.form.ch=String(ch);S.form.cu=S.form.cu||gv('cu')||'ft';
     S.form.custom=true;
   }else{
-    if(!S.form.custom&&!S.form.sz){SM.play('error');alert('Select a size');return;}
-    if(S.form.custom){const cw=S.form.cw||gv('cw'),ch=S.form.ch||gv('ch');if(!cw||!ch){SM.play('error');alert('Enter dimensions');return;}S.form.cw=cw;S.form.ch=ch;S.form.cu=S.form.cu||gv('cu')||'ft';S.form.cp=S.form.cp||gv('cp')||'0';}
+    if(!S.form.custom&&!S.form.sz){SM.play('error');showToast('⚠️ Please select a size');return;}
+    if(S.form.custom){const cw=S.form.cw||gv('cw'),ch=S.form.ch||gv('ch');if(!cw||!ch){SM.play('error');showToast('⚠️ Please enter dimensions');return;}S.form.cw=cw;S.form.ch=ch;S.form.cu=S.form.cu||gv('cu')||'ft';S.form.cp=S.form.cp||gv('cp')||'0';}
   }
   S.form.step=S.form.ctype==='co'?5:4;SM.play('click');render(true);
 }
@@ -1862,8 +1959,24 @@ function wn4(){
   if(S.form.design==='cust'&&!S.form.files.length){S.form.fileErr=true;render(false);setTimeout(()=>document.getElementById('fupbox')?.scrollIntoView({behavior:'smooth',block:'center'}),80);SM.play('error');return;}
   S.form.fileErr=false;
   S.form.note=S.form.note||gv('note');
-  if(S.form.del){const a=S.form.daddr||gv('daddr');if(!a){SM.play('error');alert('Enter delivery address');return;}S.form.daddr=a;}
+  if(S.form.del){const a=S.form.daddr||gv('daddr');if(!a){SM.play('error');showToast('⚠️ Please enter delivery address');return;}S.form.daddr=a;}
+  if(S.form.design==='us'&&!S.form.designBrief?.trim()){SM.play('error');showToast('⚠️ Please describe what you want for your design');return;}
   S.form.step=S.form.ctype==='co'?6:5;SM.play('click');render(true);
+}
+
+async function addDesignRef(inp){
+  const files=Array.from(inp.files);
+  if(!files.length)return;
+  files.forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      S.form.designRef=S.form.designRef||[];
+      S.form.designRef.push({name:file.name,data:e.target.result,type:file.type});
+      render(false);
+    };
+    r.readAsDataURL(file);
+  });
+  inp.value='';
 }
 
 async function addFinalFilesToOrder(orderId, inp){
@@ -2038,11 +2151,17 @@ async function submitOrder(){
       qty:f.qty,uprice:up,dfee:df,delfee:delf,preg,gst,sub,total,
       note:f.note,del:f.del,daddr:f.daddr||'',
       status:'pending',pm:'',isNew:true,appr:'pending',upiSS:'',
-      files:f.files||[],fname:f.files[0]?.name||'',fileData:f.files[0]?.data||'',fileType:f.files[0]?.type||'',
+      files:f.files||[],fname:f.files[0]?.name||'',fileData:f.files[0]?.data||'',fileType:f.files[0]?.type||'',designBrief:f.designBrief||'',design:f.design||'cust',
       jobStatus:'new',holdReasons:[],payRequested:false,statusHistory:initHistory,fromQuoId:f.fromQuoId||null,advancePaid:0,advanceMethod:''};
     const localId='L'+Date.now();S.orders.unshift({id:localId,...o});
     if(SB){try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(!error&&data&&data[0]){const idx=S.orders.findIndex(x=>x.id===localId);if(idx!==-1)S.orders[idx]={...S.orders[idx],id:data[0].id};setTimeout(()=>sbLoad(),700);}else if(error)console.error(error);}catch(e){console.error(e);}}
     SM.play('order');if(!isQuo)Confetti.launch(80);
+    // WhatsApp brief to admin if design for me
+    if(f.design==='us'&&f.designBrief){
+      const brief=encodeURIComponent(f.designBrief);
+      const msg=`🎨 *Design Request*%0AOrder: *${invNo}*%0ACustomer: ${f.cust.nm||''} (${f.cust.ph||''})%0ACategory: ${cat?.nm||''}%0ASize: ${snm||''}%0A%0ABrief: ${brief}`;
+      setTimeout(()=>window.open(`https://wa.me/${BIZ.adminWa}?text=${msg}`,'_blank'),900);
+    }
     S.form=ff();
     if((S.portal==='employee'||S.portal==='owner')&&S.view==='new-order'){S.view='orders';render(true);return;}
     const mc=document.getElementById('mc');
