@@ -1257,6 +1257,10 @@ async function syncSettingsLoad(){
       try{
         const v=JSON.parse(value);
         if(key==='cats'&&Array.isArray(v)&&v.length){
+          // GUARD: reject legacy cat format (old IDs like flex,cards,dig,ban)
+          const LEGACY_IDS=['flex','cards','dig','ban','bro','pos','tsh','stk'];
+          const isLegacy=v.every(c=>LEGACY_IDS.includes(c.id));
+          if(isLegacy){console.warn('syncSettingsLoad: skipping legacy cats from DB');return;}
           // Merge DB cats with default state — preserve hardcoded flags
           S.cats=v.map(dbCat=>{
             const def=S.cats.find(d=>d.id===dbCat.id)||{};
@@ -1272,7 +1276,9 @@ async function syncSettingsLoad(){
         else if(key==='sizes'&&typeof v==='object'&&!Array.isArray(v)){
           // Merge DB sizes — preserve pSingle/pDouble from defaults if missing
           const merged={...S.sizes};
+          const LEGACY_CAT_IDS=['flex','cards','dig','ban','bro','pos','tsh','stk'];
           Object.entries(v).forEach(([catId,dbSzs])=>{
+            if(LEGACY_CAT_IDS.includes(catId))return; // skip old IDs
             const defSzs=S.sizes[catId]||[];
             merged[catId]=(Array.isArray(dbSzs)?dbSzs:[]).map(dbSz=>{
               const def=defSzs.find(d=>d.id===dbSz.id)||{};
