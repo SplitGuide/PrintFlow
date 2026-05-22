@@ -1128,7 +1128,7 @@ const S={
   ],
   sizes:{flex:[{id:'f1',l:'1×2 ft',w:1,h:2,cu:'ft'},{id:'f2',l:'2×3 ft',w:2,h:3,cu:'ft'},{id:'f3',l:'3×4 ft',w:3,h:4,cu:'ft'},{id:'f4',l:'4×6 ft',w:4,h:6,cu:'ft'},{id:'f5',l:'6×8 ft',w:6,h:8,cu:'ft'},{id:'f6',l:'10×10 ft',w:10,h:10,cu:'ft'}],cards:[{id:'c1',l:'Standard 3.5x2in',p:200},{id:'c2',l:'Slim',p:180},{id:'c3',l:'Square',p:250}],dig:[{id:'d1',l:'A4',p:20,pSingle:20,pDouble:35},{id:'d2',l:'A3',p:35,pSingle:35,pDouble:60},{id:'d3',l:'A2',p:65,pSingle:65,pDouble:110},{id:'d4',l:'A1',p:120,pSingle:120,pDouble:200}],ban:[{id:'b1',l:'2×4 ft',w:2,h:4,cu:'ft'},{id:'b2',l:'3×6 ft',w:3,h:6,cu:'ft'},{id:'b3',l:'4×8 ft',w:4,h:8,cu:'ft'},{id:'b4',l:'5×10 ft',w:5,h:10,cu:'ft'}],stk:[{id:'s1',l:'2x2 in',p:15},{id:'s2',l:'3x3 in',p:20},{id:'s3',l:'4x6 in',p:30},{id:'s4',l:'A4 Sheet',p:60}],bro:[{id:'br1',l:'Tri-fold A4',p:25},{id:'br2',l:'Bi-fold A4',p:20},{id:'br3',l:'Tri-fold A3',p:45}],pos:[{id:'p1',l:'A3',p:50},{id:'p2',l:'A2',p:90},{id:'p3',l:'A1',p:160},{id:'p4',l:'18x24in',p:110}],tsh:[{id:'t1',l:'Front Only',p:150},{id:'t2',l:'Back Only',p:150},{id:'t3',l:'Front and Back',p:250}]},
   mats:[{id:'m1',nm:'Normal Flex',rate:45,price:0,cats:['flex','ban']},{id:'m2',nm:'Star Flex',rate:65,price:0,cats:['flex','ban']},{id:'m3',nm:'Backlit Flex',rate:100,price:0,cats:['flex','ban']},{id:'m4',nm:'Vinyl',rate:55,price:25,cats:['flex','stk','ban']},{id:'m5',nm:'Glossy Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m6',nm:'Matte Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m7',nm:'Art Paper 130gsm',rate:0,price:0,cats:['dig','pos','bro','cards']},{id:'m8',nm:'Art Paper 300gsm',rate:0,price:0,cats:['cards','pos','bro']},{id:'m9',nm:'Canvas',rate:120,price:100,cats:['flex','ban','pos']},{id:'m10',nm:'Transparent Vinyl',rate:0,price:40,cats:['stk']},{id:'m11',nm:'Cotton',rate:0,price:0,cats:['tsh']},{id:'m12',nm:'Polyester',rate:0,price:30,cats:['tsh']}],
-  dFee:200,
+  dFee:200,dFees:{default:200,largeformat:200,stationery:150,marketing:300,stickers:150,books:500,packaging:500,invitations:400,calendars:350,id:150,office:150,apparel:200},
   // Duplicate / NCR copy sets
   dupSets:[
     {id:'dup2',label:'Duplicate (2-ply)',copies:2,price:3},
@@ -1235,6 +1235,7 @@ async function syncSettingsSave(){
     {key:'sizes',  value:JSON.stringify(S.sizes)},
     {key:'mats',   value:JSON.stringify(S.mats)},
     {key:'dFee',   value:String(S.dFee)},
+    {key:'dFees',  value:JSON.stringify(S.dFees)},
     {key:'holdReasons',value:JSON.stringify(S.holdReasons)},
     {key:'imgs',   value:JSON.stringify(S.imgs)},
     {key:'frameSizes',  value:JSON.stringify(S.frameSizes)},
@@ -3882,7 +3883,7 @@ function vSett(){
   if(S.portal==='employee'){S.view='dash';return vDash();}
   if(S.sub==='cats')return sCats();if(S.sub==='szs')return sSzs();if(S.sub==='mats')return sMats();
   if(S.sub==='clr')return sClr();if(S.sub==='imgs')return sImgs();if(S.sub==='hold')return sHoldReasons();
-  if(S.sub==='frm')return sFrame();if(S.sub==='foam')return sFoam();if(S.sub==='addons')return sAddons();if(S.sub==='pins')return sPins();
+  if(S.sub==='frm')return sFrame();if(S.sub==='foam')return sFoam();if(S.sub==='addons')return sAddons();if(S.sub==='pins')return sPins();if(S.sub==='fees')return sFees();
   return`<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Settings</div>
 
   <div class="flush" style="margin-bottom:10px;">
@@ -4167,6 +4168,25 @@ function rmDupSet(id){S.dupSets=S.dupSets.filter(d=>d.id!==id);render(false);syn
 function updDupSet(id,v){const d=S.dupSets.find(x=>x.id===id);if(d){d.price=parseFloat(v)||0;syncSettingsSave();}}
 
 function sr(i,t,s,oc){return`<div class="si" onclick="${oc}"><div><div style="font-weight:700;font-size:13px;">${i} ${t}</div>${s?`<div style="font-size:11px;color:var(--t2);">${s}</div>`:''}</div><span style="color:var(--t3);font-size:18px;">›</span></div>`;}
+function sFees(){
+  const cats=S.cats;
+  const rows=cats.map(c=>{
+    const fee=S.dFees?.[c.id]??S.dFee??200;
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b);">'
+      +'<div><div style="font-size:13px;font-weight:600;">'+c.ico+' '+c.nm+'</div>'
+      +'<div style="font-size:11px;color:var(--t2);">when customer picks Design for me</div></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;">'
+      +'<span style="font-size:12px;color:var(--t3);">₹</span>'
+      +'<input type="number" min="0" value="'+fee+'" '
+        +'oninput="if(!S.dFees)S.dFees={};S.dFees[\''+c.id+'\']= parseFloat(this.value)||0;syncSettingsSave();" '
+        +'style="width:80px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:6px 8px;color:var(--t);font-size:14px;font-weight:700;font-family:inherit;text-align:right;">'
+      +'</div></div>';
+  }).join('');
+  return '<div style="font-size:17px;font-weight:800;margin-bottom:4px;">Design Fees</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-bottom:16px;">Per-category base fee when customer selects "Design for me". Staff can override per order.</div>'
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:4px 14px;">'+rows+'</div>';
+}
+
 function sPins(){
   return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
     <button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button>
@@ -4803,6 +4823,11 @@ function sendNewJobReminders(){
 // ════════════════════════════════════════════════
 // EDIT ORDER
 // ════════════════════════════════════════════════
+function getDFee(catId){
+  if(!catId)return S.dFee||200;
+  return (S.dFees&&S.dFees[catId]!=null)?S.dFees[catId]:(S.dFee||200);
+}
+
 function editRecalc(){
   const sub  = parseFloat(document.getElementById('esub')?.value)||0;
   const df   = parseFloat(document.getElementById('edf')?.value)||0;
