@@ -3554,7 +3554,7 @@ async function setJobStatus(id,newSt,extra={}){
     SM.play('error');
     showToast('⚠️ Payment required before advancing',4000);
     // Show payment gate modal
-    showPaymentGate(o);
+    showPaymentGate(o, newSt);
     return;
   }
   const hist=pushHistory(o,newSt,extra.note||'');
@@ -3564,7 +3564,15 @@ async function setJobStatus(id,newSt,extra={}){
     upd.readyAt=new Date().toISOString();
     upd.paymentReminderSent=false; // reset so reminder fires at 24h
   }
-  await dbUpd(id,upd);SM.play('status');showToast(`${statusIcon(newSt)} Status: ${(STATUS_META[newSt]||{}).label}`);
+  try{
+    await dbUpd(id,upd);
+  }catch(e){
+    showToast('❌ DB save failed: '+e.message,5000);
+    console.error('setJobStatus dbUpd error:',e);
+    return;
+  }
+  SM.play('status');
+  showToast(`${statusIcon(newSt)} Status updated: ${(STATUS_META[newSt]||{}).label||newSt}`);
   const ph=(o.cust?.ph||'').replace(/\D/g,'');
   if(ph){
     const msgs={accepted:`Hi ${o.cust.nm}! ✅ Your order *${o.invNo}* has been ACCEPTED!\n📋 ${o.cat} – ${o.sz}\n💰 Amount: ₹${o.total.toLocaleString('en-IN')}\n\n💳 Pay via UPI: ${BIZ.upiId}\n📞 ${BIZ.ph}`,hold:`Hi ${o.cust.nm}! ⏸️ Order *${o.invNo}* ON HOLD.\n📌 ${(extra.holdReasons||[]).map(r=>'• '+r).join('\n')}\nPlease contact us.\n📞 ${BIZ.ph}`,inprocess:`Hi ${o.cust.nm}! ⚙️ Order *${o.invNo}* IN PROCESS!\n📞 ${BIZ.ph}`,ready:`Hi ${o.cust.nm}! 📦 Order *${o.invNo}* READY!\n📍 ${BIZ.addr}\n📞 ${BIZ.ph}`,completed:`Hi ${o.cust.nm}! 🎉 Order *${o.invNo}* COMPLETED!\n⭐ ${BIZ.googleReview}`};
@@ -3576,7 +3584,7 @@ async function setJobStatus(id,newSt,extra={}){
 // ═══════════════════════════════════════════
 // PAYMENT GATE MODAL
 // ═══════════════════════════════════════════
-function showPaymentGate(o){
+function showPaymentGate(o, pendingStatus){
   const m=document.getElementById('mods');if(!m)return;
   const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
   const isOwner=S.portal==='owner';
@@ -3611,8 +3619,8 @@ function showPaymentGate(o){
             💳 Record Advance / Mark Paid
           </button>
           ${isOwner?`
-          <button onclick="approveCreditForOrder('${o.id}');" style="width:100%;padding:12px;background:var(--pub);border:1px solid var(--pu);border-radius:var(--rad);color:var(--put);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:left;">
-            ✅ Approve Credit <span style="font-size:11px;font-weight:400;opacity:.7;">— allow order without upfront payment</span>
+          <button onclick="approveCreditForOrder('${o.id}','${pendingStatus||'accepted'}');" style="width:100%;padding:12px;background:var(--pub);border:1px solid var(--pu);border-radius:var(--rad);color:var(--put);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:left;">
+            ✅ Approve Credit &amp; Accept Order <span style="font-size:11px;font-weight:400;opacity:.7;">— clear payment, advance to ${pendingStatus||'accepted'}</span>
           </button>`:''}
           <button class="btn gho" onclick="closeM();">Cancel</button>
         </div>
@@ -3622,7 +3630,7 @@ function showPaymentGate(o){
   m.style.display='block';
 }
 
-async function approveCreditForOrder(id){
+async function approveCreditForOrder(id, pendingStatus){
   if(S.portal!=='owner'){showToast('⚠️ Owner only');return;}
   const o=S.orders.find(x=>x.id===id);if(!o)return;
   const upd={
@@ -3636,11 +3644,21 @@ async function approveCreditForOrder(id){
     }]
   };
   Object.assign(o,upd);
-  try{await dbUpd(id,upd);}catch(e){}
+  try{
+    await dbUpd(id,upd);
+  }catch(e){
+    showToast('❌ DB error: '+e.message,5000);return;
+  }
   closeM();
   SM.play('status');
-  showToast('✅ Credit approved — order can now proceed');
-  render(false);
+  showToast('✅ Credit approved!');
+  // Auto-advance to 'accepted' if order is still new/pending
+  const autoAdvance = pendingStatus || (o.jobStatus==='new'?'accepted':null);
+  if(autoAdvance && PAID_REQUIRED_FOR.includes(autoAdvance)){
+    await setJobStatus(id, autoAdvance);
+  } else {
+    render(false);
+  }
 }
 
 // HOLD MODAL
