@@ -1259,7 +1259,12 @@ async function syncSettingsSave(){
     {key:'foamTypes',    value:JSON.stringify(S.foamTypes)},
     {key:'foamPrices',   value:JSON.stringify(S.foamPrices)},
   ];
-  try{await SB.from('settings').upsert(rows,{onConflict:'key'});}catch(e){console.warn('Settings save failed',e);}
+  // Test connection first with a lightweight query
+  const{error:pingErr}=await SB.from('settings').select('key').limit(1);
+  if(pingErr)throw new Error('DB connection failed: '+pingErr.message);
+  const{error}=await SB.from('settings').upsert(rows,{onConflict:'key'});
+  if(error)throw new Error(error.message||'Supabase upsert failed');
+  console.log('✅ Settings saved to Supabase:',rows.length,'rows');
 }
 
 async function syncSettingsLoad(){
@@ -1303,6 +1308,7 @@ async function syncSettingsLoad(){
         }
         else if(key==='mats'&&Array.isArray(v))S.mats=v;
         else if(key==='dFee'&&!isNaN(v))S.dFee=Number(v);
+        else if(key==='dFees'&&typeof v==='object')S.dFees={...S.dFees,...v};
         else if(key==='holdReasons'&&Array.isArray(v))S.holdReasons=v;
         else if(key==='imgs'&&typeof v==='object')S.imgs=v;
         else if(key==='frameSizes'&&Array.isArray(v)&&v.length)S.frameSizes=v;
@@ -1314,7 +1320,7 @@ async function syncSettingsLoad(){
         else if(key==='foamPrices'&&typeof v==='object')S.foamPrices=v;
       }catch(e){}
     });
-  }catch(e){console.warn('Settings load failed',e);}
+  }catch(e){console.error('Settings load failed',e);showToast('⚠️ Could not load settings from database',4000);}
 }
 
 async function dbAdd(o){if(!SB){const id='L'+Date.now();S.orders.unshift({id,...o});renderNav();return id;}try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(error)throw error;return data[0]?.id;}catch(e){alert('❌ Save failed: '+e.message);return null;}}
@@ -4704,15 +4710,22 @@ function markSettDirty(){
 async function confirmSaveSettings(){
   const btn=document.querySelector('#sett-save-bar button:last-child');
   if(btn){btn.textContent='Saving…';btn.disabled=true;}
+  // Guard: SB must be initialised
+  if(!SB){
+    if(btn){btn.textContent='💾 Save to Database';btn.disabled=false;}
+    showToast('❌ Not connected to database. Check your connection and retry.',5000);
+    return;
+  }
   try{
     await syncSettingsSave();
     S.settDirty=false;
     hideSettBar();
     SM.play('payment');
-    showToast('✅ Settings saved to database!');
+    showToast('✅ Settings saved!');
   }catch(e){
+    console.error('confirmSaveSettings error:',e);
     if(btn){btn.textContent='💾 Save to Database';btn.disabled=false;}
-    showToast('❌ Save failed: '+e.message);
+    showToast('❌ Save failed: '+e.message,5000);
   }
 }
 
