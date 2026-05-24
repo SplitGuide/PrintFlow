@@ -296,8 +296,8 @@ body{display:flex;flex-direction:column;background:var(--bg);}
 .slogo{font-size:15px;font-weight:900;letter-spacing:-.2px;color:#f0f0f0;text-transform:uppercase;}
 .slogo span{color:var(--a);}
 .stags{display:flex;gap:6px;}
-.stag{padding:5px 11px;border:1px solid #444;border-radius:99px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;cursor:default;}
-.stag.on{border-color:var(--a);color:var(--a);}
+.stag{padding:6px 16px;border:none;border-radius:99px;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--vop-red);background:#ffffff;cursor:default;box-shadow:0 2px 8px rgba(0,0,0,.30);}
+.stag.on{background:#ffffff;color:var(--vop-red);box-shadow:0 2px 12px rgba(255,32,48,.35);transform:scale(1.06);}
 /* hero */
 .splash-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .splash-circle{
@@ -791,7 +791,7 @@ body.light .mod{background:#fff;}
   <div class="splash-top">
     <div class="slogo">Vikrant <span>Offset</span></div>
     <div class="stags">
-      <span class="stag on">Flex</span>
+      <span class="stag">Flex</span>
       <span class="stag">Digital</span>
       <span class="stag">Offset</span>
     </div>
@@ -1002,11 +1002,11 @@ const S={
   portal:null,view:null,orders:[],form:null,selId:null,sub:null,szcat:null,
   dark:localStorage.getItem('vop-theme')!=='light',scheme:'red',imgs:{},searchQ:'',holdReasons:[...DEFAULT_HOLD_REASONS],
   quoSearch:'',quoResults:null,multiSel:new Set(),accMonth:null,
-  cats:[
+  matcat:null,settDirty:false,cats:[
     /* ── BUSINESS STATIONERY ── */
     {id:'stationery',slug:'stationery',nm:'Business Stationery',ico:'💼',accent:'var(--vop-red)',
       sc:['Visiting Cards','Premium Cards','Letterheads','Envelopes','Bill Books','Rubber Stamps'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:true,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:true,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'visiting-cards',nm:'Visiting Cards',from:299,unit:'per 100',popular:true},
         {slug:'premium-business-cards',nm:'Premium Cards',from:899,unit:'per 100'},
@@ -1018,7 +1018,7 @@ const S={
     /* ── MARKETING MATERIAL ── */
     {id:'marketing',slug:'marketing',nm:'Marketing Material',ico:'📣',accent:'var(--vop-cyan)',
       sc:['Brochures','Flyers','Posters','Catalogues','Danglers','Menu Cards'],
-      pricing:'fixed',frameOn:true,frameSubcats:[],foamOn:true,foamSubcats:[],dupOn:true,dupSubcats:[],
+      pricing:'fixed',frameOn:true,frameSubmatcat:null,settDirty:false,cats:[],foamOn:true,foamSubmatcat:null,settDirty:false,cats:[],dupOn:true,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'brochures',nm:'Brochures',from:12,unit:'per pc',popular:true},
         {slug:'flyers',nm:'Flyers & Leaflets',from:1.5,unit:'per pc'},
@@ -1030,7 +1030,7 @@ const S={
     /* ── LARGE FORMAT & SIGNAGE ── */
     {id:'largeformat',slug:'largeformat',nm:'Large Format & Signage',ico:'🪧',accent:'var(--vop-magenta)',
       sc:['Flex Hoardings','Vinyl Banners','Roll-up Standees','Vehicle Wraps','ACP Boards','LED Signage'],
-      pricing:'sqft',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'sqft',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'flex-hoarding',nm:'Flex Hoardings',from:18,unit:'per sq.ft',popular:true},
         {slug:'vinyl-banners',nm:'Vinyl Banners',from:22,unit:'per sq.ft'},
@@ -1042,7 +1042,7 @@ const S={
     /* ── STICKERS & LABELS ── */
     {id:'stickers',slug:'stickers',nm:'Stickers & Labels',ico:'🏷️',accent:'var(--vop-yellow)',
       sc:['Product Stickers','Barcode Labels','Transparent','Foil & Holographic','Shipping Labels'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'product-stickers',nm:'Product Stickers',from:4,unit:'per pc',popular:true},
         {slug:'barcode-labels',nm:'Barcode Labels',from:0.6,unit:'per pc'},
@@ -1053,7 +1053,7 @@ const S={
     /* ── BOOKS & BINDING ── */
     {id:'books',slug:'books',nm:'Books & Binding',ico:'📚',accent:'var(--vop-red)',
       sc:['Softcover','Hardcover','Notebooks','Magazines','Annual Reports'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'softcover-books',nm:'Softcover Books',from:145,unit:'per pc'},
         {slug:'hardcover-books',nm:'Hardcover Books',from:380,unit:'per pc'},
@@ -1064,7 +1064,7 @@ const S={
     /* ── PACKAGING ── */
     {id:'packaging',slug:'packaging',nm:'Packaging',ico:'📦',accent:'var(--vop-cyan)',
       sc:['Mono Cartons','Corrugated Boxes','Paper Bags','Hang Tags','Tissue Wrap'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'mono-cartons',nm:'Mono Cartons',from:9,unit:'per pc',popular:true},
         {slug:'corrugated-boxes',nm:'Corrugated Boxes',from:14,unit:'per pc'},
@@ -1075,7 +1075,7 @@ const S={
     /* ── INVITATIONS & CARDS ── */
     {id:'invitations',slug:'invitations',nm:'Invitations & Cards',ico:'💌',accent:'var(--vop-magenta)',
       sc:['Wedding Invitations','Event Invitations','Greeting Cards','Thank-you Cards'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'wedding-cards',nm:'Wedding Invitations',from:18,unit:'per pc',popular:true},
         {slug:'event-invitations',nm:'Event Invitations',from:9,unit:'per pc'},
@@ -1085,7 +1085,7 @@ const S={
     /* ── CALENDARS & DIARIES ── */
     {id:'calendars',slug:'calendars',nm:'Calendars & Diaries',ico:'📅',accent:'var(--vop-yellow)',
       sc:['Wall Calendars','Desk Calendars','Diaries','Planners'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'wall-calendars',nm:'Wall Calendars',from:65,unit:'per pc'},
         {slug:'desk-calendars',nm:'Desk Calendars',from:95,unit:'per pc'},
@@ -1095,7 +1095,7 @@ const S={
     /* ── ID CARDS & TAGS ── */
     {id:'id',slug:'id',nm:'ID Cards & Tags',ico:'🪪',accent:'var(--vop-red)',
       sc:['PVC ID Cards','Lanyards','Conference Badges','Access Cards'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'id-cards',nm:'PVC ID Cards',from:22,unit:'per pc',popular:true},
         {slug:'lanyards',nm:'Lanyards',from:35,unit:'per pc'},
@@ -1105,7 +1105,7 @@ const S={
     /* ── OFFICE & BILLS ── */
     {id:'office',slug:'office',nm:'Office & Bills',ico:'🗂️',accent:'var(--vop-cyan)',
       sc:['Receipt Books','Delivery Challans','Vouchers','Presentation Folders','Window Envelopes'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:true,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:true,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'receipt-books',nm:'Receipt Books',from:220,unit:'per book'},
         {slug:'delivery-challans',nm:'Delivery Challans',from:240,unit:'per book'},
@@ -1116,7 +1116,7 @@ const S={
     /* ── APPAREL & PROMO ── */
     {id:'apparel',slug:'apparel',nm:'Apparel & Promo',ico:'👕',accent:'var(--vop-magenta)',
       sc:['Printed T-shirts','Polo T-shirts','Caps','Photo Mugs','Keychains','Pens & Bottles'],
-      pricing:'fixed',frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[],
+      pricing:'fixed',frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[],
       products:[
         {slug:'tshirts',nm:'Printed T-shirts',from:220,unit:'per pc',popular:true},
         {slug:'polo-tshirts',nm:'Polo T-shirts',from:380,unit:'per pc'},
@@ -1127,8 +1127,21 @@ const S={
       ]},
   ],
   sizes:{flex:[{id:'f1',l:'1×2 ft',w:1,h:2,cu:'ft'},{id:'f2',l:'2×3 ft',w:2,h:3,cu:'ft'},{id:'f3',l:'3×4 ft',w:3,h:4,cu:'ft'},{id:'f4',l:'4×6 ft',w:4,h:6,cu:'ft'},{id:'f5',l:'6×8 ft',w:6,h:8,cu:'ft'},{id:'f6',l:'10×10 ft',w:10,h:10,cu:'ft'}],cards:[{id:'c1',l:'Standard 3.5x2in',p:200},{id:'c2',l:'Slim',p:180},{id:'c3',l:'Square',p:250}],dig:[{id:'d1',l:'A4',p:20,pSingle:20,pDouble:35},{id:'d2',l:'A3',p:35,pSingle:35,pDouble:60},{id:'d3',l:'A2',p:65,pSingle:65,pDouble:110},{id:'d4',l:'A1',p:120,pSingle:120,pDouble:200}],ban:[{id:'b1',l:'2×4 ft',w:2,h:4,cu:'ft'},{id:'b2',l:'3×6 ft',w:3,h:6,cu:'ft'},{id:'b3',l:'4×8 ft',w:4,h:8,cu:'ft'},{id:'b4',l:'5×10 ft',w:5,h:10,cu:'ft'}],stk:[{id:'s1',l:'2x2 in',p:15},{id:'s2',l:'3x3 in',p:20},{id:'s3',l:'4x6 in',p:30},{id:'s4',l:'A4 Sheet',p:60}],bro:[{id:'br1',l:'Tri-fold A4',p:25},{id:'br2',l:'Bi-fold A4',p:20},{id:'br3',l:'Tri-fold A3',p:45}],pos:[{id:'p1',l:'A3',p:50},{id:'p2',l:'A2',p:90},{id:'p3',l:'A1',p:160},{id:'p4',l:'18x24in',p:110}],tsh:[{id:'t1',l:'Front Only',p:150},{id:'t2',l:'Back Only',p:150},{id:'t3',l:'Front and Back',p:250}]},
-  mats:[{id:'m1',nm:'Normal Flex',rate:45,price:0,cats:['flex','ban']},{id:'m2',nm:'Star Flex',rate:65,price:0,cats:['flex','ban']},{id:'m3',nm:'Backlit Flex',rate:100,price:0,cats:['flex','ban']},{id:'m4',nm:'Vinyl',rate:55,price:25,cats:['flex','stk','ban']},{id:'m5',nm:'Glossy Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m6',nm:'Matte Paper',rate:0,price:0,cats:['dig','pos','bro']},{id:'m7',nm:'Art Paper 130gsm',rate:0,price:0,cats:['dig','pos','bro','cards']},{id:'m8',nm:'Art Paper 300gsm',rate:0,price:0,cats:['cards','pos','bro']},{id:'m9',nm:'Canvas',rate:120,price:100,cats:['flex','ban','pos']},{id:'m10',nm:'Transparent Vinyl',rate:0,price:40,cats:['stk']},{id:'m11',nm:'Cotton',rate:0,price:0,cats:['tsh']},{id:'m12',nm:'Polyester',rate:0,price:30,cats:['tsh']}],
-  dFee:200,dFees:{default:200,largeformat:200,stationery:150,marketing:300,stickers:150,books:500,packaging:500,invitations:400,calendars:350,id:150,office:150,apparel:200},
+  mats:[
+    {id:'m1',nm:'Normal Flex',    rate:45, price:0,  cats:['largeformat']},
+    {id:'m2',nm:'Star Flex',      rate:65, price:0,  cats:['largeformat']},
+    {id:'m3',nm:'Backlit Flex',   rate:100,price:0,  cats:['largeformat']},
+    {id:'m4',nm:'Vinyl',          rate:55, price:25, cats:['largeformat','stickers']},
+    {id:'m5',nm:'Glossy Paper',   rate:0,  price:0,  cats:['marketing','invitations','calendars']},
+    {id:'m6',nm:'Matte Paper',    rate:0,  price:0,  cats:['marketing','invitations','calendars']},
+    {id:'m7',nm:'Art Paper 130gsm',rate:0, price:0,  cats:['stationery','marketing','invitations']},
+    {id:'m8',nm:'Art Paper 300gsm',rate:0, price:0,  cats:['stationery','marketing']},
+    {id:'m9',nm:'Canvas',         rate:120,price:100,cats:['largeformat']},
+    {id:'m10',nm:'Transparent Vinyl',rate:0,price:40,cats:['stickers']},
+    {id:'m11',nm:'Cotton',        rate:0,  price:0,  cats:['apparel']},
+    {id:'m12',nm:'Polyester',     rate:0,  price:30, cats:['apparel']},
+  ],
+  letterheadPricing:null,dFee:200,dFees:{default:200,largeformat:200,stationery:150,marketing:300,stickers:150,books:500,packaging:500,invitations:400,calendars:350,id:150,office:150,apparel:200},
   // Duplicate / NCR copy sets
   dupSets:[
     {id:'dup2',label:'Duplicate (2-ply)',copies:2,price:3},
@@ -1266,7 +1279,7 @@ async function syncSettingsLoad(){
           S.cats=v.map(dbCat=>{
             const def=S.cats.find(d=>d.id===dbCat.id)||{};
             return Object.assign(
-              {frameOn:false,frameSubcats:[],foamOn:false,foamSubcats:[],dupOn:false,dupSubcats:[]},
+              {frameOn:false,frameSubmatcat:null,settDirty:false,cats:[],foamOn:false,foamSubmatcat:null,settDirty:false,cats:[],dupOn:false,dupSubmatcat:null,settDirty:false,cats:[]},
               def,           // keep hardcoded flags (allowSides, pricing)
               dbCat,         // override with saved values (nm, ico, sc, frameOn, etc.)
               {pricing:dbCat.pricing||def.pricing||'fixed',
@@ -1305,7 +1318,7 @@ async function syncSettingsLoad(){
 }
 
 async function dbAdd(o){if(!SB){const id='L'+Date.now();S.orders.unshift({id,...o});renderNav();return id;}try{const{data,error}=await SB.from('orders').insert([o2r(o)]).select();if(error)throw error;return data[0]?.id;}catch(e){alert('❌ Save failed: '+e.message);return null;}}
-async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id',finalFiles:'final_files',advancePaid:'advance_paid',advanceMethod:'advance_method',advanceSS:'advance_ss'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
+async function dbUpd(id,d){const lo=S.orders.find(x=>x.id===id);if(lo)Object.assign(lo,d);if(!SB){render(false);return;}const mp={isNew:'is_new',upiSS:'upi_screenshot',pm:'pay_method',jobStatus:'job_status',holdReasons:'hold_reasons',payRequested:'pay_requested',statusHistory:'status_history',fromQuoId:'from_quotation_id',finalFiles:'final_files',advancePaid:'advance_paid',advanceMethod:'advance_method',advanceSS:'advance_ss',readyAt:'ready_at',creditApproved:'credit_approved',creditApprovedBy:'credit_approved_by',creditApprovedAt:'credit_approved_at',paymentReminderSent:'payment_reminder_sent',paymentReminderAt:'payment_reminder_at'};const db={};Object.entries(d).forEach(([k,v])=>{db[mp[k]||k.replace(/([A-Z])/g,c=>'_'+c.toLowerCase())]=typeof v==='object'&&v!==null?JSON.stringify(v):v;});try{await SB.from('orders').update(db).eq('id',id);}catch(e){console.error(e);}}
 async function dbDel(id){
   const o=S.orders.find(x=>x.id===id);
   S.orders=S.orders.filter(x=>x.id!==id);
@@ -1355,6 +1368,9 @@ try{applyDark();}catch(e){}
     if(document.readyState==='complete'){sbInit();}
     else{window.addEventListener('load',()=>{try{sbInit();}catch(e){syncSet('offline','Offline');}});}
   }catch(e){}
+  // Check 24h payment reminders every hour
+  setTimeout(checkPaymentReminders, 8000);
+  setInterval(checkPaymentReminders, 3600000);
   // Deep-link: ?slug=visiting-cards or ?from=site
   try{
     const params=new URLSearchParams(window.location.search);
@@ -1548,6 +1564,7 @@ function historyBack(){
 
   // ── Sub-views ─────────────────────────────────
   if(v==='inv'){goView(p==='cust'?'browse':'orders');return;}
+  if(v==='analytics'){goView('dash');return;}
   if(v==='accounts'||v==='sett'){goView('dash');return;}
   if(v==='quotations'){goView('browse');return;}
   if(v==='multi-inv'){goView('orders');return;}
@@ -1567,7 +1584,7 @@ function renderNav(){
   }else{
     const nc=S.orders.filter(o=>o.isNew).length;
     if(S.portal==='owner'){
-      n.innerHTML=`<div class="bnav-inner"><button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='accounts'?' on':''}" onclick="goView('accounts');"><span class="nico">📒</span>Accounts</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button></div>`;
+      n.innerHTML=`<div class="bnav-inner"><button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dash</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='analytics'?' on':''}" onclick="goView('analytics');"><span class="nico">📈</span>Analytics</button><button class="nb${S.view==='accounts'?' on':''}" onclick="goView('accounts');"><span class="nico">📒</span>Accounts</button><button class="nb${S.view==='sett'?' on':''}" onclick="goView('sett');"><span class="nico">⚙️</span>Settings</button></div>`;
     }else{
       n.innerHTML=`<div class="bnav-inner"><button class="nb${S.view==='dash'?' on':''}" onclick="goView('dash');"><span class="nico">📊</span>Dashboard</button><button class="nb${S.view==='orders'?' on':''}" onclick="goView('orders');"><span class="nico">📋</span>Orders${nc?`<span class="nbadge">${nc}</span>`:''}</button><button class="nb${S.view==='new-order'?' on':''}" onclick="SM.play('click');if(S.view==='new-order'&&S.form&&S.form.step>0){goView('new-order');}else{S.form=ff();goView('new-order');}"><span class="nico">➕</span>New Order</button></div>`;
     }
@@ -1815,58 +1832,87 @@ function wS1b(){
 // WIZARD STEPS (continued from wS2)
 // ════════════════════════════════════════════════
 function wS2(){
-  const f=S.form,prev=f.ctype==='co'?2:1,sel=S.cats.find(c=>c.id===f.cat);
+  const f=S.form,sel=S.cats.find(c=>c.id===f.cat);
   const visibleCats=S.cats.filter(c=>c.pricing!=='frame');
+  const acc=sel?.accent||'var(--a)';
+
+  // ── Category grid ──────────────────────────────────────────────────
   const catGrid=visibleCats.map(c=>{
     const isOn=f.cat===c.id;
     const img=S.imgs[c.id]?('<div class="ciw"><img class="ci" src="'+S.imgs[c.id]+'" alt=""></div>'):'';
-    const fromPr=c.products&&c.products.length?('<div style="font-size:10px;color:var(--t3);margin-top:2px;">from ₹'+c.products[0].from+'</div>'):'';
-    const acc=c.accent||'var(--a)';
-    const accentStyle=isOn?('border-color:'+acc+';background:rgba(255,32,48,.08);'):'';
-    const csel=isOn?('<div class="csel" style="background:'+acc+';">✓</div>'):'';
-    return '<div class="cat'+(isOn?' on':'')+'" onclick="S2cat(\''+c.id+'\');" style="'+accentStyle+'">'+csel+img+'<div class="cico">'+c.ico+'</div><div class="cnm">'+c.nm+'</div>'+fromPr+'</div>';
+    const accentStyle=isOn?('border-color:'+(c.accent||'var(--a)')+';background:rgba(255,32,48,.08);'):'';
+    const csel=isOn?('<div class="csel" style="background:'+(c.accent||'var(--a)')+';">✓</div>'):'';
+    return '<div class="cat'+(isOn?' on':'')+'\" onclick=\"S2cat(\''+c.id+'\');\" style=\"'+accentStyle+'\">'
+      +csel+img+'<div class="cico">'+c.ico+'</div><div class="cnm">'+c.nm+'</div></div>';
   }).join('');
-  // Show product grid if cat has products, else show sc pills
-  const accentColor=sel?.accent||'var(--a)';
+
+  // ── Sub-category pills (shown once category picked) ────────────────
   let subcatHTML='';
-  if(sel?.products?.length){
-    const rows=sel.products.map(p=>{
-      const isOn=f.sc===p.nm;
-      const border=isOn?accentColor:'var(--b)';
-      const bg=isOn?'rgba(255,32,48,.08)':'var(--s1)';
-      const chevColor=isOn?accentColor:'var(--t3)';
-      const popular=p.popular?'<span class="popular-badge">Popular</span>':'';
-      const nm=p.nm.replace(/'/g,"\'");
-      return '<div onclick="S2sc(\''+nm+'\');" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--rsm);border:1.5px solid '+border+';background:'+bg+';cursor:pointer;transition:all .15s;">'
-        +'<div><div style="font-size:13px;font-weight:600;color:var(--t);">'+p.nm+popular+'</div>'
-        +'<div style="font-size:11px;color:var(--t2);margin-top:1px;">from ₹'+p.from+' '+p.unit+'</div></div>'
-        +'<div style="font-size:16px;color:'+chevColor+';">'+(isOn?'✓':'›')+'</div></div>';
-    }).join('');
-    subcatHTML='<div style="margin-top:16px;padding:14px;background:var(--s2);border-radius:var(--rad);border:1px solid var(--b);">'
-      +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.12em;">Select Product</div>'
-      +'<div style="flex:1;height:1px;background:var(--b);"></div></div>'
-      +'<div style="display:flex;flex-direction:column;gap:6px;">'+rows+'</div></div>';
-  } else if(sel?.sc?.length){
+  const hasSubs=sel&&sel.sc&&sel.sc.length>0;
+  if(hasSubs){
     const pills=sel.sc.map(sc=>{
       const isOn=f.sc===sc;
-      const safeVal=sc.replace(/'/g,"\'").replace(/"/g,'&quot;');
-      return '<div class="pill'+(isOn?' on':'')+'" onclick="S2sc(\''+safeVal+'\');">'+sc+'</div>';
+      const safe=sc.replace(/'/g,"\\'");
+      return '<div class="pill'+(isOn?' on':'')
+        +'" style="'+(isOn?'border-color:'+acc+';background:color-mix(in srgb,'+acc+' 12%,transparent);color:'+acc+';font-weight:700;':'')+'"'
+        +' onclick="S.form.sc=\''+safe+'\';S.form.mat=null;render(false);">'+sc+'</div>';
     }).join('');
-    subcatHTML='<div style="margin-top:16px;padding:14px;background:var(--s2);border-radius:var(--rad);border:1px solid var(--b);">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;">Select Type <span style="opacity:.5;font-weight:400;">(optional)</span></div>'
-      +'<div class="pills">'+pills+'</div></div>';
+    const done=!!f.sc;
+    subcatHTML='<div style="margin-top:14px;padding:14px;background:var(--s2);border-radius:var(--rad);border:1.5px solid '+(done?acc:'var(--b)')+';">'
+      +'<div style="font-size:11px;font-weight:700;color:'+(done?acc:'var(--t2)')+';text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;">'
+      +(done?'✓ '+f.sc:'Sub-category')+'</div>'
+      +'<div class="pills">'+pills+'</div>'
+      +'</div>';
   }
-  const continueBtn=f.cat?`<button class="btn pri" style="margin-top:14px;width:100%;" onclick="S2go();">Continue →</button>`:'<p style="text-align:center;color:var(--t2);font-size:13px;margin-top:16px;">↑ Tap a category to continue</p>';
-  return`<div style="font-size:18px;font-weight:800;margin-bottom:14px;">Select Category</div>
-  <div class="cats-grid${f.cat?' hs':''}">${catGrid}</div>
-  ${subcatHTML}
-  ${continueBtn}
-`;
+
+  // ── Material section (shown once sub-category selected, or no subs) ──
+  let matHTML='';
+  const mats=sel?S.mats.filter(m=>m.cats.includes(f.cat)):[];
+  const showMats=sel&&mats.length&&(!hasSubs||f.sc);
+  if(showMats){
+    const matCards=mats.map(m=>{
+      const isOn=f.mat===m.id;
+      const border=isOn?acc:'var(--b)';
+      const bg=isOn?'color-mix(in srgb,'+acc+' 10%,transparent)':'var(--s1)';
+      const isSqft=sel.pricing==='sqft';
+      const rateInfo=isSqft&&m.rate?'₹'+m.rate+'/sq.ft':m.price?'₹'+m.price+'/unit':'';
+      return '<div onclick="S.form.mat=\''+m.id+'\';render(false);" '
+        +'style="display:flex;align-items:center;justify-content:space-between;'
+        +'padding:11px 13px;border-radius:var(--rsm);border:1.5px solid '+border+';'
+        +'background:'+bg+';cursor:pointer;margin-bottom:7px;transition:all .15s;">'
+        +'<div style="font-size:13px;font-weight:'+(isOn?'700':'600')+';color:var(--t);">'+m.nm+'</div>'
+        +'<div style="display:flex;align-items:center;gap:8px;">'
+          +(rateInfo?'<span style="font-size:11px;color:var(--t2);">'+rateInfo+'</span>':'')
+          +'<span style="font-size:16px;color:'+acc+';">'+(isOn?'✓':'›')+'</span>'
+        +'</div></div>';
+    }).join('');
+    matHTML='<div style="margin-top:14px;padding:14px;background:var(--s2);border-radius:var(--rad);border:1.5px solid '+(f.mat?acc:'var(--b)')+';">'
+      +'<div style="font-size:11px;font-weight:700;color:'+(f.mat?acc:'var(--t2)')+';text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;">'
+      +(f.mat?'✓ Material Selected':'Material')+'</div>'
+      +matCards+'</div>';
+  }
+
+  // ── Continue button ─────────────────────────────────────────────────
+  let continueBtn='';
+  if(!f.cat){
+    continueBtn='<p style="text-align:center;color:var(--t2);font-size:13px;margin-top:16px;">↑ Tap a category to continue</p>';
+  }else if(hasSubs&&!f.sc){
+    continueBtn='<p style="text-align:center;color:var(--t2);font-size:13px;margin-top:14px;">↑ Select a sub-category to continue</p>';
+  }else if(showMats&&!f.mat){
+    continueBtn='<p style="text-align:center;color:var(--t2);font-size:13px;margin-top:14px;">↑ Select a material to continue</p>';
+  }else{
+    continueBtn='<button class="btn pri" style="margin-top:14px;width:100%;" onclick="S2go();">Continue →</button>';
+  }
+
+  return '<div style="font-size:18px;font-weight:800;margin-bottom:14px;">Select Category</div>'
+    +'<div class="cats-grid'+(f.cat?' hs':'')+'">'+catGrid+'</div>'
+    +subcatHTML
+    +matHTML
+    +continueBtn;
 }
+
 function S2cat(id){
-  if(S.form.cat!==id)S.form.sc='';
-  S.form.cat=id;S.form.sz=null;S.form.mat=null;
+  S.form.cat=id;S.form.sc='';S.form.sz=null;S.form.mat=null;
   const cat=S.cats.find(c=>c.id===id);
   if(cat)S.form.catSlug=cat.slug||id;
   render(false);
@@ -1893,6 +1939,9 @@ function selCatAdv(id){
 
 function wS3(){
   const f=S.form,cat=S.cats.find(c=>c.id===f.cat),prev=f.ctype==='co'?3:2;
+  // Letterhead: special tiered pricing UI
+  if(f.cat==='stationery'&&(f.sc==='Letterheads'||f.sc==='A4 Letterhead'||f.slug==='letterheads'))
+    return wS3letterhead(f,prev);
   return(cat&&cat.pricing==='sqft')?wS3sqft(f,cat,prev):wS3fixed(f,cat,prev);
 }
 // ════════════════════════════════════════════════
@@ -2036,14 +2085,6 @@ function wS3sqft(f,cat,prev){
   else if(!f.custom&&f.sz){const sz=szPresets.find(s=>s.id===f.sz);if(sz)liveArea=toSqft(sz.w||0,sz.h||0,sz.cu||'ft');}
   if(liveArea>0&&rate>0)livePrice=Math.round(liveArea*rate*100)/100;
 
-  const matCards=mats.map(m=>`
-    <div class="sport${f.mat===m.id?' hi':''}" style="max-width:100%;border-radius:var(--rsm);padding:10px 13px;cursor:pointer;" onclick="SM.play('click');S.form.mat='${m.id}';render(false);setTimeout(()=>smoothScrollTo('#dims-section',60),80);">
-      <div style="flex:1;">
-        <div style="font-weight:700;font-size:13px;${f.mat===m.id?'color:#fff':''}">${m.nm}</div>
-        <div style="font-size:11px;${f.mat===m.id?'color:rgba(255,255,255,.8)':'color:var(--t2);'}">&#8377;${m.rate||0}/sq.ft</div>
-      </div>
-      <span style="font-size:18px;${f.mat===m.id?'color:#fff':'color:var(--t3);'}">${f.mat===m.id?'✓':'›'}</span>
-    </div>`).join('');
 
   const presetPills=szPresets.map(sz=>{
     const a=toSqft(sz.w||0,sz.h||0,sz.cu||'ft');
@@ -2054,9 +2095,7 @@ function wS3sqft(f,cat,prev){
   return `<div style="font-size:18px;font-weight:800;margin-bottom:4px;">Size &amp; Material</div>
   <div style="font-size:11px;color:var(--t2);margin-bottom:14px;">Price = Width &times; Height &times; Rate per sq.ft</div>
 
-  ${mats.length?`<div class="fg" id="mat-section"><label class="fl">Material *</label>
-    <div style="display:flex;flex-direction:column;gap:7px;">${matCards}</div>
-  </div>`:''}
+
 
   <div class="fg" id="dims-section"><label class="fl">Dimensions</label>
     ${szPresets.length?`<div class="pills" style="margin-bottom:10px;">${presetPills}
@@ -2115,10 +2154,6 @@ function wS3fixed(f,cat,prev){
     const dispP=cat&&cat.allowSides?(sz.pSingle||sz.p):sz.p;
     return `<div class="pill${f.sz===sz.id&&!f.custom?' on':''}" onclick="selSzAdv('${sz.id}');">${sz.l}<span style="display:block;font-size:10px;opacity:.7;">&#8377;${dispP}</span></div>`;
   }).join('');
-  const matPills=mats.map(m=>{
-    const dp=(m.price>0)?m.price:(selSz?selSz.p:0);
-    return `<div class="pill${f.mat===m.id?' on':''}" onclick="S.form.mat='${m.id}';render(false);setTimeout(()=>smoothScrollTo('#price-preview',80),80);">${m.nm}${dp>0?`<span style="display:block;font-size:10px;opacity:.8;">&#8377;${dp}</span>`:''}</div>`;
-  }).join('');
 
   return `<div style="font-size:18px;font-weight:800;margin-bottom:12px;">Size &amp; Material</div>
 
@@ -2170,7 +2205,6 @@ function wS3fixed(f,cat,prev){
     })()}
   </div>`:''}
 
-  ${mats.length?`<div class="fg" id="mat-section"><label class="fl">Material</label><div class="pills">${matPills}</div></div>`:''}
 
   ${previewPrice!==null&&selSz?`<div id="price-preview" style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
     <span style="font-size:12px;color:var(--t2);">Unit Price${selMat?' &bull; '+selMat.nm:''}</span>
@@ -2377,26 +2411,18 @@ function wn4(){
   S.form.step=S.form.ctype==='co'?6:5;SM.play('click');render(true);
 }
 
-async function preflightCheck(file){
-  const warnings=[];
-  const MB=file.size/1024/1024;
-  if(MB>50)warnings.push(`⚠️ File too large (${MB.toFixed(1)}MB). Max 50MB.`);
-  const ext=(file.name.split('.').pop()||'').toLowerCase();
-  const goodFmts=['pdf','ai','cdr','eps','psd','png','tif','tiff'];
-  const okFmts=['jpg','jpeg'];
-  const badFmts=['docx','doc','pptx','xlsx','bmp','gif','webp'];
-  if(badFmts.includes(ext))warnings.push(`⚠️ ${ext.toUpperCase()} not ideal for print. Convert to PDF or PNG for best results.`);
-  if(okFmts.includes(ext))warnings.push(`ℹ️ JPEG accepted — ensure it is 300dpi or higher for sharp print output.`);
-  return warnings;
-}
+// preflightCheck: unified alias for preflightFile
+// Both return Promise<{ok, warns?, error?}>
+function preflightCheck(file){ return preflightFile(file); }
 
-function addDesignRef(inp){
+async function addDesignRef(inp){
   const files=Array.from(inp.files);
+  inp.value='';
   if(!files.length)return;
-  files.forEach(file=>{
-    const warns=preflightCheck(file);
-    if(warns.some(w=>w.startsWith('⚠️ File too large'))){showToast(warns[0]);return;}
-    warns.filter(w=>!w.startsWith('⚠️ File too large')).forEach(w=>showToast(w));
+  for(const file of files){
+    const result=await preflightFile(file);
+    if(!result.ok){SM.play('error');showToast('❌ '+result.error,4000);continue;}
+    (result.warns||[]).forEach(w=>showToast(w,3500));
     const r=new FileReader();
     r.onload=e=>{
       S.form.designRef=S.form.designRef||[];
@@ -2404,8 +2430,7 @@ function addDesignRef(inp){
       render(false);
     };
     r.readAsDataURL(file);
-  });
-  inp.value='';
+  }
 }
 
 async function addFinalFilesToOrder(orderId, inp){
@@ -2564,7 +2589,7 @@ async function pickFiles(inp){
   }
 }
 
-function pickCatImg(inp,id){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{S.imgs[id]=e.target.result;SM.play('status');render(false);syncSettingsSave();};r.readAsDataURL(f);}
+function pickCatImg(inp,id){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{S.imgs[id]=e.target.result;SM.play('status');render(false);markSettDirty();};r.readAsDataURL(f);}
 
 // ════════════════════════════════════════════════
 // SUBMIT ORDER
@@ -2688,6 +2713,11 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
   const area  = o.area ?? 0;
   const isSqft= o.isSqft ?? false;
   const isQ   = o.otype==='quo';
+  // TAX INVOICE only once job is ready/completed; before that show ESTIMATE
+  const INVOICE_STATUSES=['ready','completed'];
+  const isReady=INVOICE_STATUSES.includes(o.jobStatus||'new');
+  const docType=isQ?'QUOTATION':isReady?'TAX INVOICE':'ESTIMATE';
+  const isEstimate=!isQ&&!isReady;
   const ph    = (o.cust?.ph||'').replace(/\D/g,'');
 
   // Rate display: per sqft or per piece
@@ -2698,7 +2728,7 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
     ? `${area.toFixed(2)} sqft`
     : `${qty}`;
 
-  const invWA=encodeURIComponent(`📄 *${isQ?'Quotation':'Invoice'} ${o.invNo}*\n\n${BIZ.name}\n🖨️ ${o.cat}${o.sc?' – '+o.sc:''} – ${o.sz}\n📦 Qty: ${qty}\n💰 *₹${total.toLocaleString('en-IN')}*\n${BIZ.ph}`);
+  const invWA=encodeURIComponent(`📄 *${isQ?'Quotation':isReady?'Invoice':'Estimate'} ${o.invNo}*\n\n${BIZ.name}\n🖨️ ${o.cat}${o.sc?' – '+o.sc:''} – ${o.sz}\n📦 Qty: ${qty}\n💰 *₹${total.toLocaleString('en-IN')}*\n${BIZ.ph}`);
 
   // File attachments
   let fileSec='';
@@ -2713,7 +2743,7 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
   }
 
   return`<div class="inv-wrap">
-    <div class="inv-head">
+    <div class="inv-head" style="${isEstimate?'background:linear-gradient(135deg,#b45309,#92400e);':''}">
       <div class="inv-head-row">
         <div class="inv-biz">
           <div class="inv-biz-name">${BIZ.name}</div>
@@ -2721,7 +2751,7 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
           <div style="font-size:9px;opacity:.75;font-family:monospace;margin-top:2px;">GSTIN: ${BIZ.gstin}</div>
         </div>
         <div class="inv-type-block">
-          <div class="inv-type-label">${isQ?'QUOTATION':'TAX INVOICE'}</div>
+          <div class="inv-type-label">${docType}</div>
           <div class="inv-num">#${esc(o.invNo||'PREVIEW')}</div>
           <div class="inv-date">${fd(o.at)}</div>
           ${showSend&&ph?`<div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end;" class="nop">
@@ -2740,10 +2770,11 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
           <div class="inv-bill-name" style="${o.ctype==='co'&&o.coname?'font-size:13px;font-weight:600;':''}">${esc(o.cust?.nm||'')}</div>
           ${o.cust?.ph?`<div class="inv-bill-sub">${esc(o.cust.ph)}</div>`:''}
           ${o.cust?.em?`<div class="inv-bill-sub">${esc(o.cust.em)}</div>`:''}
-          ${o.gstin?`<div class="inv-bill-sub" style="font-family:monospace;font-size:10px;">GSTIN: ${esc(o.gstin)}</div>`:''}
+          ${o.gstin&&!isEstimate?`<div class="inv-bill-sub" style="font-family:monospace;font-size:10px;">GSTIN: ${esc(o.gstin)}</div>`:''}
           ${o.daddr?`<div class="inv-bill-sub">🚚 ${esc(o.daddr)}</div>`:''}
         </div>
-        <div>${statusBadge(isQ?'quotation':o.jobStatus||'new')}</div>
+        <div>${statusBadge(isQ?'quotation':o.jobStatus||'new')}${o.creditApproved?'<span style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);color:#a78bfa;font-size:9px;font-weight:700;letter-spacing:.1em;padding:2px 8px;border-radius:99px;margin-left:4px;">CREDIT</span>':''}</div>
+      ${isEstimate?'<div style="margin-top:6px;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:5px 10px;font-size:10px;font-weight:700;color:#92400e;letter-spacing:.05em;">⚠️ ESTIMATE — not valid for GST input credit</div>':''}
       </div>
 
       <div style="border-radius:var(--rxs);overflow:hidden;border:1px solid var(--b);">
@@ -2788,8 +2819,8 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
 
     <div class="inv-totals" style="border-top:1px solid var(--b);">
       <div class="inv-tot-row"><span>Subtotal</span><span>₹${(sub+df+delf).toLocaleString('en-IN')}</span></div>
-      <div class="inv-tot-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
-      <div class="inv-tot-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row" style="${isEstimate?'opacity:.5;':''}"><span>CGST @ 9%${isEstimate?' (est.)':''}</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row" style="${isEstimate?'opacity:.5;':''}"><span>SGST @ 9%${isEstimate?' (est.)':''}</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
       <div style="height:1px;background:var(--b);margin:6px 0;"></div>
       <div class="inv-grand-total"><span>Total Amount</span><span>₹${total.toLocaleString('en-IN')}</span></div>
       ${o.pm?`<div style="font-size:11px;color:var(--t2);margin-top:4px;">Paid via: <b style="color:var(--t);">${esc(o.pm)}</b></div>`:''}
@@ -2805,7 +2836,7 @@ function renderInvoice(o,showSend=false,emSubj='',emBody=''){
       </div>`:''}
     </div>
 
-    ${o.note?`<div style="padding:10px 16px;border-top:1px solid var(--b);font-size:12px;color:var(--t2);">📝 ${esc(o.note)}</div>`:''}
+    ${o.paymentReminderSent?`<div style="padding:10px 16px;border-top:1px solid var(--b);background:rgba(245,158,11,.08);font-size:12px;color:var(--yt);">⏰ 24h payment reminder sent ${o.paymentReminderAt?fd(o.paymentReminderAt):''}</div>`:''}${o.note?`<div style="padding:10px 16px;border-top:1px solid var(--b);font-size:12px;color:var(--t2);">📝 ${esc(o.note)}</div>`:''}
     ${fileSec}
     ${o.upiSS?`<div style="padding:10px 16px;border-top:1px solid var(--b);"><div style="font-size:11px;color:var(--t2);margin-bottom:4px;">UPI Screenshot:</div><img src="${o.upiSS}" class="upi-thumb" onclick="openUpiZoom('${o.upiSS}');" style="max-width:100%;max-height:130px;border-radius:8px;object-fit:contain;"></div>`:''}
     <div class="cmyk-stripe"><span class="cs-c"></span><span class="cs-m"></span><span class="cs-y"></span><span class="cs-k"></span></div><div class="inv-foot" style="border-top:none;">
@@ -3269,8 +3300,8 @@ function vMultiInv(){
     </div>
     <div class="inv-totals" style="border-top:1px solid rgba(0,0,0,.07);">
       <div class="inv-tot-row"><span>Taxable Amount</span><span>₹${grandPreg.toLocaleString('en-IN')}</span></div>
-      <div class="inv-tot-row"><span>CGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
-      <div class="inv-tot-row"><span>SGST @ 9%</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row" style="${isEstimate?'opacity:.5;':''}"><span>CGST @ 9%${isEstimate?' (est.)':''}</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
+      <div class="inv-tot-row" style="${isEstimate?'opacity:.5;':''}"><span>SGST @ 9%${isEstimate?' (est.)':''}</span><span>₹${cgst.toLocaleString('en-IN')}</span></div>
       <div class="inv-grand-total"><span>Grand Total</span><span>₹${grandTotal.toLocaleString('en-IN')}</span></div>
     </div>
     <div class="inv-foot" style="border-top:1px solid rgba(0,0,0,.07);"><div class="inv-foot-text">Thank you for choosing <b>${BIZ.name}</b>!</div><div class="inv-foot-text" style="margin-top:3px;">${BIZ.ph} · ${BIZ.ph2} · ${BIZ.email}</div></div>
@@ -3512,15 +3543,97 @@ function oRow(o){
 // ════════════════════════════════════════════════
 async function setJobStatus(id,newSt,extra={}){
   const o=S.orders.find(x=>x.id===id);if(!o)return;
+  // ── Payment gate ────────────────────────────────
+  if(PAID_REQUIRED_FOR.includes(newSt)&&!isOrderCleared(o)){
+    SM.play('error');
+    showToast('⚠️ Payment required before advancing',4000);
+    // Show payment gate modal
+    showPaymentGate(o);
+    return;
+  }
   const hist=pushHistory(o,newSt,extra.note||'');
   const upd={jobStatus:newSt,statusHistory:hist,...extra};
   if(newSt==='accepted')upd.appr='approved';
+  if(newSt==='ready'&&!o.readyAt){
+    upd.readyAt=new Date().toISOString();
+    upd.paymentReminderSent=false; // reset so reminder fires at 24h
+  }
   await dbUpd(id,upd);SM.play('status');showToast(`${statusIcon(newSt)} Status: ${(STATUS_META[newSt]||{}).label}`);
   const ph=(o.cust?.ph||'').replace(/\D/g,'');
   if(ph){
     const msgs={accepted:`Hi ${o.cust.nm}! ✅ Your order *${o.invNo}* has been ACCEPTED!\n📋 ${o.cat} – ${o.sz}\n💰 Amount: ₹${o.total.toLocaleString('en-IN')}\n\n💳 Pay via UPI: ${BIZ.upiId}\n📞 ${BIZ.ph}`,hold:`Hi ${o.cust.nm}! ⏸️ Order *${o.invNo}* ON HOLD.\n📌 ${(extra.holdReasons||[]).map(r=>'• '+r).join('\n')}\nPlease contact us.\n📞 ${BIZ.ph}`,inprocess:`Hi ${o.cust.nm}! ⚙️ Order *${o.invNo}* IN PROCESS!\n📞 ${BIZ.ph}`,ready:`Hi ${o.cust.nm}! 📦 Order *${o.invNo}* READY!\n📍 ${BIZ.addr}\n📞 ${BIZ.ph}`,completed:`Hi ${o.cust.nm}! 🎉 Order *${o.invNo}* COMPLETED!\n⭐ ${BIZ.googleReview}`};
     if(msgs[newSt])window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msgs[newSt])}`,'_blank');
   }
+  render(false);
+}
+
+// ═══════════════════════════════════════════
+// PAYMENT GATE MODAL
+// ═══════════════════════════════════════════
+function showPaymentGate(o){
+  const m=document.getElementById('mods');if(!m)return;
+  const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
+  const isOwner=S.portal==='owner';
+  m.innerHTML=`<div class="mov" onclick="if(event.target===this)closeM();">
+    <div class="mod" style="padding:0;border-radius:20px 20px 0 0;overflow:hidden;">
+      <div style="background:var(--rb);padding:14px 18px 12px;border-bottom:1px solid rgba(239,68,68,.3);">
+        <div style="font-size:15px;font-weight:800;color:var(--rt);">⛔ Payment Required</div>
+        <div style="font-size:12px;color:var(--rt);opacity:.8;margin-top:2px;">Order #${esc(o.invNo||'')} cannot proceed</div>
+      </div>
+      <div style="padding:16px 18px;">
+        <div style="background:var(--s2);border-radius:var(--rad);padding:14px;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--t2);">Order Total</span>
+            <span style="font-weight:700;">₹${(o.total||0).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--t2);">Advance Paid</span>
+            <span style="color:var(--gt);font-weight:700;">₹${(o.advancePaid||0).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="height:1px;background:var(--b);margin:8px 0;"></div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-size:13px;font-weight:700;color:var(--rt);">Balance Due</span>
+            <span style="font-size:18px;font-weight:900;color:var(--rt);">₹${bal.toLocaleString('en-IN')}</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.5;">
+          Collect payment or record an advance before changing status.
+          ${isOwner?'<br>As owner, you can also approve credit for this order.':''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="btn pri" onclick="closeM();S.selId='${o.id}';goView('inv');" style="text-align:left;">
+            💳 Record Advance / Mark Paid
+          </button>
+          ${isOwner?`
+          <button onclick="approveCreditForOrder('${o.id}');" style="width:100%;padding:12px;background:var(--pub);border:1px solid var(--pu);border-radius:var(--rad);color:var(--put);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:left;">
+            ✅ Approve Credit <span style="font-size:11px;font-weight:400;opacity:.7;">— allow order without upfront payment</span>
+          </button>`:''}
+          <button class="btn gho" onclick="closeM();">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  m.style.display='block';
+}
+
+async function approveCreditForOrder(id){
+  if(S.portal!=='owner'){showToast('⚠️ Owner only');return;}
+  const o=S.orders.find(x=>x.id===id);if(!o)return;
+  const upd={
+    creditApproved:true,
+    creditApprovedBy:'owner',
+    creditApprovedAt:new Date().toISOString(),
+    statusHistory:[...(o.statusHistory||[]),{
+      st:o.jobStatus||'new',
+      note:'Credit approved by owner — order cleared to proceed without payment',
+      at:new Date().toISOString()
+    }]
+  };
+  Object.assign(o,upd);
+  try{await dbUpd(id,upd);}catch(e){}
+  closeM();
+  SM.play('status');
+  showToast('✅ Credit approved — order can now proceed');
   render(false);
 }
 
@@ -3999,23 +4112,23 @@ function setFramePrice(szId,ftId,val){
 }
 function addFrameSize(){
   const l=gv('nfs-l').trim();if(!l){SM.play('error');alert('Enter a label');return;}
-  S.frameSizes.push({id:'fs'+Date.now(),l});SM.play('tick');render(false);syncSettingsSave();
+  S.frameSizes.push({id:'fs'+Date.now(),l});SM.play('tick');render(false);markSettDirty();
 }
 function rmFrameSize(id){
   S.frameSizes=S.frameSizes.filter(s=>s.id!==id);
   // remove prices for this size
   Object.keys(S.framePrices).filter(k=>k.startsWith(id+'_')).forEach(k=>delete S.framePrices[k]);
-  SM.play('click');render(false);syncSettingsSave();
+  SM.play('click');render(false);markSettDirty();
 }
 function addFrameType(){
   const nm=gv('nft-n').trim(),ico=gv('nft-i').trim()||'🖼️';
   if(!nm){SM.play('error');alert('Enter a type name');return;}
-  S.frameTypes.push({id:'ft'+Date.now(),nm,ico});SM.play('tick');render(false);syncSettingsSave();
+  S.frameTypes.push({id:'ft'+Date.now(),nm,ico});SM.play('tick');render(false);markSettDirty();
 }
 function rmFrameType(id){
   S.frameTypes=S.frameTypes.filter(t=>t.id!==id);
   Object.keys(S.framePrices).filter(k=>k.endsWith('_'+id)).forEach(k=>delete S.framePrices[k]);
-  SM.play('click');render(false);syncSettingsSave();
+  SM.play('click');render(false);markSettDirty();
 }
 
 // ════════════════════════════════════════════════
@@ -4070,10 +4183,10 @@ function sFoam(){
   </div>`;
 }
 function setFoamPrice(szId,ftId,v){const key=szId+'_'+ftId,p=parseFloat(v)||0;if(p>0)S.foamPrices[key]=p;else delete S.foamPrices[key];}
-function addFoamSize(){const l=gv('nfms-l').trim();if(!l){SM.play('error');alert('Enter a label');return;}S.foamSizes.push({id:'fms'+Date.now(),l});SM.play('tick');render(false);syncSettingsSave();}
-function rmFoamSize(id){S.foamSizes=S.foamSizes.filter(s=>s.id!==id);Object.keys(S.foamPrices).filter(k=>k.startsWith(id+'_')).forEach(k=>delete S.foamPrices[k]);render(false);syncSettingsSave();}
-function addFoamType(){const nm=gv('nfmt-n').trim(),ico=gv('nfmt-i').trim()||'⬜';if(!nm){SM.play('error');alert('Enter a name');return;}S.foamTypes.push({id:'fmt'+Date.now(),nm,ico});SM.play('tick');render(false);syncSettingsSave();}
-function rmFoamType(id){S.foamTypes=S.foamTypes.filter(t=>t.id!==id);Object.keys(S.foamPrices).filter(k=>k.endsWith('_'+id)).forEach(k=>delete S.foamPrices[k]);render(false);syncSettingsSave();}
+function addFoamSize(){const l=gv('nfms-l').trim();if(!l){SM.play('error');alert('Enter a label');return;}S.foamSizes.push({id:'fms'+Date.now(),l});SM.play('tick');render(false);markSettDirty();}
+function rmFoamSize(id){S.foamSizes=S.foamSizes.filter(s=>s.id!==id);Object.keys(S.foamPrices).filter(k=>k.startsWith(id+'_')).forEach(k=>delete S.foamPrices[k]);render(false);markSettDirty();}
+function addFoamType(){const nm=gv('nfmt-n').trim(),ico=gv('nfmt-i').trim()||'⬜';if(!nm){SM.play('error');alert('Enter a name');return;}S.foamTypes.push({id:'fmt'+Date.now(),nm,ico});SM.play('tick');render(false);markSettDirty();}
+function rmFoamType(id){S.foamTypes=S.foamTypes.filter(t=>t.id!==id);Object.keys(S.foamPrices).filter(k=>k.endsWith('_'+id)).forEach(k=>delete S.foamPrices[k]);render(false);markSettDirty();}
 
 // ════════════════════════════════════════════════
 // ADD-ONS SETTINGS — per category & subcategory
@@ -4094,17 +4207,17 @@ function sAddons(){
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div style="font-size:12px;color:var(--t);">🪟 Frame <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
-          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.frameOn=!c.frameOn;if(c.frameOn)c.frameSubcats=[];}render(false);syncSettingsSave();">${tog(c.frameOn,'var(--a)')}</div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.frameOn=!c.frameOn;if(c.frameOn)c.frameSubcats=[];}render(false);markSettDirty();">${tog(c.frameOn,'var(--a)')}</div>
         </div>
         ${frameSubs}
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div style="font-size:12px;color:var(--t);">🟧 Foam Sheet <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
-          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.foamOn=!c.foamOn;if(c.foamOn)c.foamSubcats=[];}render(false);syncSettingsSave();">${tog(c.foamOn,'#f59e0b')}</div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.foamOn=!c.foamOn;if(c.foamOn)c.foamSubcats=[];}render(false);markSettDirty();">${tog(c.foamOn,'#f59e0b')}</div>
         </div>
         ${foamSubs}
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div style="font-size:12px;color:var(--t);">📄 Duplicate/NCR <span style="color:var(--t2);font-size:10px;">(all types)</span></div>
-          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.dupOn=!c.dupOn;if(c.dupOn)c.dupSubcats=[];}render(false);syncSettingsSave();">${tog(c.dupOn,'var(--bl)')}</div>
+          <div style="cursor:pointer;" onclick="const c=S.cats.find(x=>x.id==='${c.id}');if(c){c.dupOn=!c.dupOn;if(c.dupOn)c.dupSubcats=[];}render(false);markSettDirty();">${tog(c.dupOn,'var(--bl)')}</div>
         </div>
         ${dupSubs}
       </div>
@@ -4156,18 +4269,40 @@ function toggleAddonSubcat(catId,addon,sc){
   if(!c[key])c[key]=[];
   const idx=c[key].indexOf(sc);
   if(idx>=0)c[key].splice(idx,1);else c[key].push(sc);
-  SM.play('tick');render(false);syncSettingsSave();
+  SM.play('tick');render(false);markSettDirty();
 }
 function addDupSet(){
   const l=gv('nds-l').trim(),c=parseInt(gv('nds-c'))||2,p=parseFloat(gv('nds-p'))||0;
   if(!l){SM.play('error');alert('Enter a label');return;}
   S.dupSets.push({id:'dup'+Date.now(),label:l,copies:c,price:p});
-  SM.play('tick');render(false);syncSettingsSave();
+  SM.play('tick');render(false);markSettDirty();
 }
-function rmDupSet(id){S.dupSets=S.dupSets.filter(d=>d.id!==id);render(false);syncSettingsSave();}
-function updDupSet(id,v){const d=S.dupSets.find(x=>x.id===id);if(d){d.price=parseFloat(v)||0;syncSettingsSave();}}
+function rmDupSet(id){S.dupSets=S.dupSets.filter(d=>d.id!==id);render(false);markSettDirty();}
+function updDupSet(id,v){const d=S.dupSets.find(x=>x.id===id);if(d){d.price=parseFloat(v)||0;markSettDirty();}}
 
 function sr(i,t,s,oc){return`<div class="si" onclick="${oc}"><div><div style="font-weight:700;font-size:13px;">${i} ${t}</div>${s?`<div style="font-size:11px;color:var(--t2);">${s}</div>`:''}</div><span style="color:var(--t3);font-size:18px;">›</span></div>`;}
+function sImgs(){
+  const rows=S.cats.map(c=>{
+    const hasImg=S.imgs&&S.imgs[c.id];
+    return '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b);">'
+      +(hasImg
+        ?'<img src="'+S.imgs[c.id]+'" style="width:56px;height:40px;object-fit:cover;border-radius:8px;border:1px solid var(--b);" onerror="this.style.display=\'none\'"/>'
+        :'<div style="width:56px;height:40px;border-radius:8px;background:var(--s3);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:20px;">'+c.ico+'</div>')
+      +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;">'+c.nm+'</div>'
+        +'<div style="font-size:11px;color:var(--t2);">'+(hasImg?'Image set':'No image — shows emoji')+'</div></div>'
+      +'<div style="display:flex;gap:6px;">'
+        +'<label style="padding:6px 12px;background:var(--s2);border:1px solid var(--b);border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;color:var(--t2);">📎 Upload'
+          +'<input type="file" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="uploadCatImage(\''+c.id+'\',this);">'
+        +'</label>'
+        +(hasImg?'<button onclick="removeCatImage(\''+c.id+'\');" style="padding:6px 10px;background:var(--rb);border:1px solid rgba(239,68,68,.3);border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;color:var(--rt);">✕</button>':'')
+      +'</div>'
+    +'</div>';
+  }).join('');
+  return '<div style="font-size:17px;font-weight:800;margin-bottom:4px;">Product Images</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-bottom:14px;">Upload a photo for each category. Shown in the order wizard. JPG/PNG/WebP, max 5MB.</div>'
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:4px 14px;">'+rows+'</div>';
+}
+
 function sFees(){
   const cats=S.cats;
   const rows=cats.map(c=>{
@@ -4178,7 +4313,7 @@ function sFees(){
       +'<div style="display:flex;align-items:center;gap:6px;">'
       +'<span style="font-size:12px;color:var(--t3);">₹</span>'
       +'<input type="number" min="0" value="'+fee+'" '
-        +'oninput="if(!S.dFees)S.dFees={};S.dFees[\''+c.id+'\']= parseFloat(this.value)||0;syncSettingsSave();" '
+        +'oninput="if(!S.dFees)S.dFees={};S.dFees[\''+c.id+'\']= parseFloat(this.value)||0;markSettDirty();" '
         +'style="width:80px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:6px 8px;color:var(--t);font-size:14px;font-weight:700;font-family:inherit;text-align:right;">'
       +'</div></div>';
   }).join('');
@@ -4269,7 +4404,7 @@ function changePin(role){
 function bkS(){S.sub=null;render(false);}
 
 function sHoldReasons(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Hold Reasons</div></div><div class="flush" style="margin-bottom:10px;">${S.holdReasons.map((r,i)=>`<div class="mat-row"><div class="mat-info"><div class="mat-name">${esc(r)}</div></div><button class="mat-del" onclick="SM.play('click');S.holdReasons.splice(${i},1);render(false);">✕</button></div>`).join('')}</div><div class="card"><div style="font-weight:800;margin-bottom:10px;">Add Reason</div><div style="display:flex;gap:8px;"><input class="fi" id="newReason" type="text" placeholder="e.g. Wrong colour profile" style="flex:1;"><button class="btn pri sm" onclick="SM.play('click');addHoldReason();">+ Add</button></div></div>`;}
-function addHoldReason(){const v=gv('newReason').trim();if(!v)return;S.holdReasons.push(v);SM.play('click');render(false);syncSettingsSave();}
+function addHoldReason(){const v=gv('newReason').trim();if(!v)return;S.holdReasons.push(v);SM.play('click');render(false);markSettDirty();}
 
 function sClr(){const nm={red:'Red',orange:'Orange',blue:'Blue',green:'Green',purple:'Purple',teal:'Teal'};return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Color &amp; Theme</div></div><div class="card" style="margin-bottom:10px;"><div style="font-weight:800;margin-bottom:12px;">Accent + Background</div><div class="swatches">${Object.entries(THEMES).map(([k,v])=>`<div style="text-align:center;cursor:pointer;" onclick="SM.play('click');setTheme('${k}');render(false);"><div class="sw${S.scheme===k?' on':''}" style="background:${v.a};"></div><div style="font-size:10px;margin-top:3px;color:var(--t2);">${nm[k]}</div></div>`).join('')}</div></div><div class="card"><div style="font-weight:800;margin-bottom:8px;">Display Mode</div><div class="togs"><div class="tog${S.dark?' on':''}" onclick="S.dark=true;applyDark();SM.play('click');render(false);">🌙 Dark</div><div class="tog${!S.dark?' on':''}" onclick="S.dark=false;applyDark();SM.play('click');render(false);">☀️ Light</div></div></div>`;}
 
@@ -4376,115 +4511,146 @@ function updSzSide(cat,id,side,v){
   const p=parseFloat(v)||0;
   if(side==='single'){sz.pSingle=p;sz.p=p;}
   else{sz.pDouble=p;}
-  syncSettingsSave();
+  markSettDirty();
 }
 
 function sMats(){
-  const rows=S.mats.map(m=>{
+  // Default to first category
+  if(!S.matcat||!S.cats.find(c=>c.id===S.matcat))S.matcat=S.cats[0]?.id||null;
+  const selCat=S.cats.find(c=>c.id===S.matcat);
+  const isSqft=selCat&&selCat.pricing==='sqft';
+
+  // Only materials for this category
+  const mats=S.mats.filter(m=>m.cats.includes(S.matcat));
+
+  const catOpts=S.cats.map(c=>{
+    const cnt=S.mats.filter(m=>m.cats.includes(c.id)).length;
+    return `<option value="${c.id}"${c.id===S.matcat?' selected':''}>${c.ico} ${c.nm} (${cnt})</option>`;
+  }).join('');
+
+  const rows=mats.map(m=>{
     const sqftCats=m.cats.filter(id=>{const c=S.cats.find(x=>x.id===id);return c&&c.pricing==='sqft';});
     const fixedCats=m.cats.filter(id=>{const c=S.cats.find(x=>x.id===id);return c&&c.pricing!=='sqft';});
 
-    // Build subRate rows for each cat that has subcategories
-    const subRateRows=m.cats.map(catId=>{
-      const cat=S.cats.find(c=>c.id===catId);
-      if(!cat||!cat.sc||!cat.sc.length)return '';
-      const isSqft=cat.pricing==='sqft';
-      return cat.sc.map(sc=>{
-        const subKey=catId+'___'+sc;
-        const existing=m.subRates&&m.subRates[subKey];
-        const hasSides=!isSqft&&cat.allowSides;
-        if(isSqft){
-          const val=existing!=null?existing.rate:'';
-          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--b);">
-            <span style="font-size:11px;color:var(--t2);">${cat.ico} ${sc}</span>
-            <div style="display:flex;align-items:center;gap:4px;">
-              <span style="font-size:10px;color:var(--t2);">&#8377;/sqft</span>
-              <input class="fi" type="number" value="${val}" placeholder="—" style="width:60px;padding:4px 5px;text-align:right;font-size:12px;"
-                oninput="setMatSubRate('${m.id}','${subKey}','rate',this.value);"
-                title="${cat.nm} › ${sc} — rate/sqft (blank = use default)">
-            </div>
-          </div>`;
-        }
-        if(hasSides){
-          const vs=existing!=null&&existing.pSingle!=null?existing.pSingle:'';
-          const vd=existing!=null&&existing.pDouble!=null?existing.pDouble:'';
-          return `<div style="padding:6px 0;border-bottom:1px dashed var(--b);">
-            <div style="font-size:11px;color:var(--t2);margin-bottom:5px;">${cat.ico} ${sc}</div>
-            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-              <div style="display:flex;align-items:center;gap:3px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:4px 7px;">
-                <span style="font-size:10px;color:var(--t2);white-space:nowrap;">1️⃣ Single &#8377;</span>
-                <input class="fi" type="number" value="${vs}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;"
-                  oninput="setMatSubRate('${m.id}','${subKey}','pSingle',this.value);"
-                  title="Single side price for ${sc}">
-              </div>
-              <div style="display:flex;align-items:center;gap:3px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:4px 7px;">
-                <span style="font-size:10px;color:var(--blt);white-space:nowrap;">2️⃣ Double &#8377;</span>
-                <input class="fi" type="number" value="${vd}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;color:var(--blt);"
-                  oninput="setMatSubRate('${m.id}','${subKey}','pDouble',this.value);"
-                  title="Double side price for ${sc}">
-              </div>
-            </div>
-          </div>`;
-        }
-        // Plain fixed
-        const val=existing!=null?existing.price:'';
+    // Subcategory-specific rates for THIS category only
+    const subRateRows=(selCat&&selCat.sc&&selCat.sc.length?selCat.sc:[]).map(sc=>{
+      const subKey=S.matcat+'___'+sc;
+      const existing=m.subRates&&m.subRates[subKey];
+      const hasSides=!isSqft&&selCat.allowSides;
+      if(isSqft){
+        const val=existing!=null?existing.rate:'';
         return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--b);">
-          <span style="font-size:11px;color:var(--t2);">${cat.ico} ${sc}</span>
+          <span style="font-size:11px;color:var(--t2);">${selCat.ico} ${sc}</span>
           <div style="display:flex;align-items:center;gap:4px;">
-            <span style="font-size:10px;color:var(--t2);">&#8377;/unit</span>
+            <span style="font-size:10px;color:var(--t2);">₹/sqft</span>
             <input class="fi" type="number" value="${val}" placeholder="—" style="width:60px;padding:4px 5px;text-align:right;font-size:12px;"
-              oninput="setMatSubRate('${m.id}','${subKey}','price',this.value);"
-              title="${cat.nm} › ${sc} — price/unit (blank = use default)">
+              oninput="setMatSubRate('${m.id}','${subKey}','rate',this.value);"
+              title="${selCat.nm} › ${sc} — rate/sqft (blank = use default)">
           </div>
         </div>`;
-      }).join('');
+      }
+      if(hasSides){
+        const vs=existing!=null&&existing.pSingle!=null?existing.pSingle:'';
+        const vd=existing!=null&&existing.pDouble!=null?existing.pDouble:'';
+        return `<div style="padding:6px 0;border-bottom:1px dashed var(--b);">
+          <div style="font-size:11px;color:var(--t2);margin-bottom:5px;">${selCat.ico} ${sc}</div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:3px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:4px 7px;">
+              <span style="font-size:10px;color:var(--t2);white-space:nowrap;">1️⃣ Single ₹</span>
+              <input class="fi" type="number" value="${vs}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;"
+                oninput="setMatSubRate('${m.id}','${subKey}','pSingle',this.value);">
+            </div>
+            <div style="display:flex;align-items:center;gap:3px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:4px 7px;">
+              <span style="font-size:10px;color:var(--blt);white-space:nowrap;">2️⃣ Double ₹</span>
+              <input class="fi" type="number" value="${vd}" placeholder="—" style="width:55px;padding:3px 5px;text-align:right;font-size:12px;background:transparent;border:none;color:var(--blt);"
+                oninput="setMatSubRate('${m.id}','${subKey}','pDouble',this.value);">
+            </div>
+          </div>
+        </div>`;
+      }
+      const val=existing!=null?existing.price:'';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--b);">
+        <span style="font-size:11px;color:var(--t2);">${selCat.ico} ${sc}</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="font-size:10px;color:var(--t2);">₹/unit</span>
+          <input class="fi" type="number" value="${val}" placeholder="—" style="width:60px;padding:4px 5px;text-align:right;font-size:12px;"
+            oninput="setMatSubRate('${m.id}','${subKey}','price',this.value);"
+            title="${selCat.nm} › ${sc} — price/unit (blank = use default)">
+        </div>
+      </div>`;
     }).join('');
 
+    // Other categories this material also covers
+    const otherCats=m.cats.filter(id=>id!==S.matcat).map(id=>S.cats.find(c=>c.id===id)?.nm||id);
+
     return `<div style="padding:12px 14px;border-bottom:1px solid var(--b);">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;">
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:700;font-size:13px;">${m.nm}</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px;">${m.cats.map(id=>S.cats.find(c=>c.id===id)?.nm||id).join(', ')}</div>
+          <div style="font-weight:700;font-size:14px;">${m.nm}</div>
+          ${otherCats.length?`<div style="font-size:10px;color:var(--t3);margin-top:2px;">Also used in: ${otherCats.join(', ')}</div>`:''}
         </div>
-        <button class="mat-del" onclick="SM.play('click');rmMat('${m.id}');" style="flex-shrink:0;">✕</button>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="SM.play('click');openEditMat('${m.id}');" style="padding:5px 11px;border-radius:99px;border:1px solid var(--b);background:var(--s2);font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;font-family:inherit;">✏️ Edit</button>
+          <button class="mat-del" onclick="SM.play('click');rmMat('${m.id}');">✕</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:${subRateRows?'10px':'0'};">
         ${sqftCats.length?`<div style="display:flex;align-items:center;gap:5px;background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 30%,transparent);border-radius:var(--rsm);padding:5px 9px;">
-          <span style="font-size:11px;color:var(--blt);font-weight:700;">&#8377;/sq.ft</span>
+          <span style="font-size:11px;color:var(--blt);font-weight:700;">₹/sq.ft</span>
           <input class="fi" type="number" value="${m.rate||0}" style="width:60px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--blt);" onchange="updMatRate('${m.id}',this.value);" title="Default rate/sqft">
         </div>`:''}
         ${fixedCats.length?`<div style="display:flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:5px 9px;">
-          <span style="font-size:11px;color:var(--t2);font-weight:700;">&#8377;/unit</span>
+          <span style="font-size:11px;color:var(--t2);font-weight:700;">₹/unit</span>
           <input class="fi" type="number" value="${m.price||0}" style="width:60px;padding:4px 6px;text-align:right;font-size:13px;font-weight:700;background:transparent;border:none;color:var(--t);" onchange="updMatPrice('${m.id}',this.value);" title="Default price/unit (0 = use size price)">
         </div>`:''}
       </div>
-      ${subRateRows?`<details style="margin-top:2px;"><summary style="font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;list-style:none;">▸ Subcategory-specific rates</summary><div style="padding:8px 0 2px;">${subRateRows}</div></details>`:''}
+      ${subRateRows?`<details style="margin-top:2px;"><summary style="font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;list-style:none;">▸ ${selCat.nm} subcategory rates</summary><div style="padding:8px 0 2px;">${subRateRows}</div></details>`:''}
     </div>`;
   }).join('');
 
+  // Add form — pre-check the current category
   const catChecks=S.cats.map(c=>`
-    <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:4px 0;">
-      <input type="checkbox" id="mc-${c.id}" style="width:15px;height:15px;">
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:3px 0;">
+      <input type="checkbox" id="mc-${c.id}" ${c.id===S.matcat?'checked':''} style="width:15px;height:15px;">
       <span>${c.ico} ${c.nm}</span>
       <span style="font-size:10px;color:var(--t3);">(${c.pricing==='sqft'?'sqft':'fixed'})</span>
     </label>`).join('');
 
   return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
     <button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button>
-    <div style="font-size:18px;font-weight:800;">Materials</div>
+    <div style="font-size:18px;font-weight:800;">🧱 Materials</div>
   </div>
+
+  <div class="fg">
+    <label class="fl">Category</label>
+    <select class="fi" onchange="S.matcat=this.value;render(false);">${catOpts}</select>
+  </div>
+
+  ${isSqft?`<div style="background:var(--blb);border:1px solid color-mix(in srgb,var(--bl) 35%,transparent);border-radius:var(--rsm);padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--blt);">
+    📐 <b>Sqft pricing</b> — set rate/sqft per material below.
+  </div>`:''}
   <div style="font-size:12px;color:var(--t2);margin-bottom:10px;padding:0 2px;">
-    Set default rates below. Expand <b>▸ Subcategory rates</b> on any material to set rates per type — for Digital Print, set separate <b>Single</b> and <b>Double</b> side prices per type.
+    ${mats.length?`${mats.length} material${mats.length!==1?'s':''} for <b>${selCat?.nm||''}</b>. Expand <b>▸ subcategory rates</b> to set type-specific prices.`:`No materials assigned to <b>${selCat?.nm||''}</b> yet.`}
   </div>
-  <div class="flush" style="margin-bottom:10px;">${rows||'<div style="padding:16px;text-align:center;color:var(--t2);">No materials</div>'}</div>
+
+  <div class="flush" style="margin-bottom:14px;">${rows||`<div style="padding:28px 16px;text-align:center;">
+    <div style="font-size:32px;margin-bottom:8px;">🧱</div>
+    <div style="font-weight:700;margin-bottom:4px;">No materials for ${selCat?.nm||'this category'}</div>
+    <div style="font-size:12px;color:var(--t2);">Add one below — it will be pre-assigned here.</div>
+  </div>`}</div>
+
   <div class="card">
-    <div style="font-weight:800;margin-bottom:12px;">Add Material</div>
-    <div class="fg"><label class="fl">Name</label><input class="fi" id="nm-n" type="text" placeholder="e.g. Premium Vinyl"></div>
+    <div style="font-weight:800;margin-bottom:4px;">Add Material</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:12px;">Pre-assigned to <b>${selCat?.nm||''}</b> · you can add more categories</div>
+    <div class="fg"><label class="fl">Name</label><input class="fi" id="nm-n" type="text" placeholder="e.g. Star Flex"></div>
     <div style="display:flex;gap:8px;">
-      <div class="fg" style="flex:1;"><label class="fl">Rate/sq.ft (&#8377;)</label><input class="fi" id="nm-r" type="number" value="0" placeholder="0"></div>
-      <div class="fg" style="flex:1;"><label class="fl">Price/unit (&#8377;)</label><input class="fi" id="nm-c" type="number" value="0" placeholder="0"></div>
+      <div class="fg" style="flex:1;"><label class="fl">Rate/sq.ft (₹)</label><input class="fi" id="nm-r" type="number" value="0" placeholder="0"></div>
+      <div class="fg" style="flex:1;"><label class="fl">Price/unit (₹)</label><input class="fi" id="nm-c" type="number" value="0" placeholder="0"></div>
     </div>
-    <div class="fg"><label class="fl">Applies To</label><div style="display:flex;flex-direction:column;gap:2px;margin-top:4px;">${catChecks}</div></div>
+    <details style="margin-bottom:12px;">
+      <summary style="font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;list-style:none;">▸ Also applies to other categories (optional)</summary>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-top:8px;padding:4px 0;">${catChecks}</div>
+    </details>
     <button class="btn pri" onclick="SM.play('click');addMat();">+ Add Material</button>
   </div>`;
 }
@@ -4494,10 +4660,82 @@ function setMatSubRate(matId,subKey,field,val){
   const v=parseFloat(val);
   if(isNaN(v)||val===''){delete m.subRates[subKey];}
   else{if(!m.subRates[subKey])m.subRates[subKey]={};m.subRates[subKey][field]=v;}
-  syncSettingsSave();
+  markSettDirty();
 }
 
 function sImgs(){return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;"><button class="btn gho sm nop" onclick="SM.play('click');bkS();">← Back</button><div style="font-size:18px;font-weight:800;">Catalog Images</div></div>${S.cats.map(c=>`<div class="card" style="margin-bottom:9px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span style="font-size:20px;">${c.ico}</span><span style="font-weight:700;">${c.nm}</span></div>${S.imgs[c.id]?`<img src="${S.imgs[c.id]}" style="width:100%;height:95px;object-fit:cover;border-radius:9px;margin-bottom:8px;">`:''}  <div style="display:flex;gap:7px;"><button class="btn gho sm" style="flex:1;" onclick="SM.play('click');document.getElementById('ci-${c.id}').click();">📷 ${S.imgs[c.id]?'Change':'Add'}</button>${S.imgs[c.id]?`<button class="btn dan sm" onclick="SM.play('click');delete S.imgs['${c.id}'];render(false);">Remove</button>`:''}</div><input type="file" id="ci-${c.id}" accept="image/*" style="display:none;" onchange="pickCatImg(this,'${c.id}');"></div>`).join('')}`;}
+
+
+// ════════════════════════════════════════════════
+// SETTINGS DIRTY / SAVE / DISCARD
+// ════════════════════════════════════════════════
+function markSettDirty(){
+  S.settDirty=true;
+  // Show/update the floating save bar without full re-render
+  const bar=document.getElementById('sett-save-bar');
+  if(bar){bar.style.transform='translateY(0)';bar.style.opacity='1';}
+  else{
+    // Bar not in DOM yet (first change) — inject it
+    const el=document.createElement('div');
+    el.id='sett-save-bar';
+    el.style.cssText='position:fixed;bottom:72px;left:0;right:0;z-index:400;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#1a120a,#2a1a0e);border-top:2px solid var(--vop-red);box-shadow:0 -4px 24px rgba(255,32,48,.25);transition:transform .3s var(--ease),opacity .3s;transform:translateY(0);opacity:1;max-width:600px;margin:0 auto;';
+    // Center it properly
+    const wrap=document.createElement('div');
+    wrap.style.cssText='position:fixed;bottom:72px;left:0;right:0;z-index:400;pointer-events:none;';
+    el.style.position='relative';
+    el.style.bottom='auto';
+    el.style.maxWidth='600px';
+    el.style.margin='0 auto';
+    el.style.pointerEvents='all';
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--vop-red);animation:pulse 1.5s infinite;flex-shrink:0;"></div>
+        <div style="font-size:12px;font-weight:700;color:#fff;">Unsaved changes</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button onclick="discardSettChanges();" style="padding:8px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;">↩ Discard</button>
+        <button onclick="confirmSaveSettings();" style="padding:8px 18px;border-radius:99px;border:none;background:var(--vop-red);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 10px rgba(255,32,48,.4);transition:all .15s;">💾 Save to Database</button>
+      </div>`;
+    wrap.appendChild(el);
+    document.body.appendChild(wrap);
+  }
+}
+
+async function confirmSaveSettings(){
+  const btn=document.querySelector('#sett-save-bar button:last-child');
+  if(btn){btn.textContent='Saving…';btn.disabled=true;}
+  try{
+    await syncSettingsSave();
+    S.settDirty=false;
+    hideSettBar();
+    SM.play('payment');
+    showToast('✅ Settings saved to database!');
+  }catch(e){
+    if(btn){btn.textContent='💾 Save to Database';btn.disabled=false;}
+    showToast('❌ Save failed: '+e.message);
+  }
+}
+
+async function discardSettChanges(){
+  if(!confirm('Discard all unsaved changes and reload from database?'))return;
+  try{
+    await syncSettingsLoad();
+    S.settDirty=false;
+    hideSettBar();
+    SM.play('error');
+    render(false);
+    showToast('↩️ Changes discarded');
+  }catch(e){showToast('❌ Could not reload: '+e.message);}
+}
+
+function hideSettBar(){
+  const wraps=document.querySelectorAll('#sett-save-bar');
+  wraps.forEach(el=>{
+    const parent=el.parentElement;
+    if(parent&&parent!==document.body)parent.remove();
+    else el.remove();
+  });
+}
 
 // ════════════════════════════════════════════════
 // SETTINGS CRUD
@@ -4509,12 +4747,44 @@ function addCat(){
   const pricing=document.getElementById('nc-pricing')?document.getElementById('nc-pricing').value:'fixed';
   const id=nm.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now();
   S.cats.push({id,nm,ico,sc:[],pricing});
-  S.sizes[id]=[];SM.play('status');render(false);syncSettingsSave();
+  S.sizes[id]=[];SM.play('status');render(false);markSettDirty();
 }
-function toggleCatPricing(id,v){const c=S.cats.find(x=>x.id===id);if(c){c.pricing=v;render(false);syncSettingsSave();}}
-function rmCat(id){if(confirm('Remove?')){S.cats=S.cats.filter(c=>c.id!==id);render(false);syncSettingsSave();}}
-function addSc(cid){const inp=document.getElementById('sc-'+cid),v=(inp?.value||'').trim();if(!v)return;const c=S.cats.find(x=>x.id===cid);if(c){if(!c.sc)c.sc=[];c.sc.push(v);inp.value='';SM.play('tick');render(false);syncSettingsSave();}}
-function rmSc(cid,sc){const c=S.cats.find(x=>x.id===cid);if(c)c.sc=(c.sc||[]).filter(s=>s!==sc);render(false);syncSettingsSave();}
+function toggleCatPricing(id,v){const c=S.cats.find(x=>x.id===id);if(c){c.pricing=v;render(false);markSettDirty();}}
+function rmCat(id){if(confirm('Remove?')){S.cats=S.cats.filter(c=>c.id!==id);render(false);markSettDirty();}}
+function addSc(cid){const inp=document.getElementById('sc-'+cid),v=(inp?.value||'').trim();if(!v)return;const c=S.cats.find(x=>x.id===cid);if(c){if(!c.sc)c.sc=[];c.sc.push(v);inp.value='';SM.play('tick');render(false);markSettDirty();}}
+function rmSc(cid,sc){const c=S.cats.find(x=>x.id===cid);if(c)c.sc=(c.sc||[]).filter(s=>s!==sc);render(false);markSettDirty();}
+
+function editSc(cid,idx,oldName){
+  showMod(`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div style="font-size:16px;font-weight:800;">✏️ Edit Sub-type</div>
+    <button onclick="closeM();" style="width:30px;height:30px;border-radius:50%;border:none;background:var(--s2);color:var(--t2);font-size:14px;cursor:pointer;">✕</button>
+  </div>
+  <div class="fg">
+    <label class="fl">Sub-type Name</label>
+    <input class="fi" id="edit-sc-inp" type="text" value="${esc(oldName)}" placeholder="e.g. Visiting Cards"
+      style="font-size:16px;font-weight:700;"
+      onkeydown="if(event.key==='Enter'){SM.play('click');renameSc('${cid}',${idx},this.value);}">
+  </div>
+  <div style="display:flex;gap:8px;margin-top:4px;">
+    <button class="btn gho" style="flex:1;" onclick="closeM();">Cancel</button>
+    <button class="btn pri" style="flex:2;" onclick="SM.play('click');renameSc('${cid}',${idx},document.getElementById('edit-sc-inp').value);">✅ Save</button>
+  </div>`);
+  setTimeout(()=>{const inp=document.getElementById('edit-sc-inp');if(inp){inp.focus();inp.select();}},80);
+}
+
+function renameSc(cid,idx,newName){
+  const nm=(newName||'').trim();
+  if(!nm){SM.play('error');showToast('⚠️ Name cannot be empty');return;}
+  const c=S.cats.find(x=>x.id===cid);
+  if(!c||!c.sc||idx<0||idx>=c.sc.length)return;
+  const old=c.sc[idx];
+  if(nm===old){closeM();return;}
+  // Check duplicate
+  if(c.sc.includes(nm)&&c.sc.indexOf(nm)!==idx){SM.play('error');showToast('⚠️ That name already exists');return;}
+  c.sc[idx]=nm;
+  closeM();SM.play('status');markSettDirty();render(false);
+  showToast('✅ Renamed to "'+nm+'"');
+}
 function addSz(){
   const l=gv('ns-l').trim();if(!l)return;
   const selCat=S.cats.find(c=>c.id===S.szcat);
@@ -4534,20 +4804,20 @@ function addSz(){
     const p=parseFloat(gv('ns-p'));if(!p){SM.play('error');alert('Enter a price');return;}
     S.sizes[S.szcat].push({id:'sz'+Date.now(),l,p});
   }
-  SM.play('tick');render(false);syncSettingsSave();
+  SM.play('tick');render(false);markSettDirty();
 }
 function updSz(cat,id,v){const sz=(S.sizes[cat]||[]).find(s=>s.id===id);if(sz)sz.p=parseFloat(v)||0;}
-function rmSz(cat,id){S.sizes[cat]=(S.sizes[cat]||[]).filter(s=>s.id!==id);render(false);syncSettingsSave();}
+function rmSz(cat,id){S.sizes[cat]=(S.sizes[cat]||[]).filter(s=>s.id!==id);render(false);markSettDirty();}
 function addMat(){
   const nm=gv('nm-n').trim(),rate=parseFloat(gv('nm-r'))||0,price=parseFloat(gv('nm-c'))||0;
   const cats=S.cats.filter(c=>document.getElementById('mc-'+c.id)&&document.getElementById('mc-'+c.id).checked).map(c=>c.id);
   if(!nm||!cats.length){SM.play('error');alert('Enter name and select at least one category');return;}
   S.mats.push({id:'mat'+Date.now(),nm,rate,price,cats});
-  SM.play('status');render(false);syncSettingsSave();
+  SM.play('status');render(false);markSettDirty();
 }
-function updMatRate(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.rate=parseFloat(v)||0;syncSettingsSave();}}
-function updMatPrice(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.price=parseFloat(v)||0;syncSettingsSave();}}
-function rmMat(id){S.mats=S.mats.filter(m=>m.id!==id);render(false);syncSettingsSave();}
+function updMatRate(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.rate=parseFloat(v)||0;markSettDirty();}}
+function updMatPrice(id,v){const m=S.mats.find(x=>x.id===id);if(m){m.price=parseFloat(v)||0;markSettDirty();}}
+function rmMat(id){S.mats=S.mats.filter(m=>m.id!==id);render(false);markSettDirty();}
 
 // ════════════════════════════════════════════════
 // MODAL
@@ -4823,6 +5093,28 @@ function sendNewJobReminders(){
 // ════════════════════════════════════════════════
 // EDIT ORDER
 // ════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// PAYMENT GATE
+// ═══════════════════════════════════════════
+
+// Returns true if order is financially cleared to proceed
+function isOrderCleared(o){
+  if(!o)return false;
+  if(o.status==='paid')return true;                         // fully paid
+  if((o.advancePaid||0)>=(o.total||1))return true;         // advance covers total
+  if(o.creditApproved)return true;                          // owner granted credit
+  return false;
+}
+
+// Returns human-readable reason why order is blocked
+function paymentBlockReason(o){
+  const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
+  return 'Payment required — ₹'+bal.toLocaleString('en-IN')+' outstanding. Collect payment or record advance before proceeding. Owner can approve credit to waive this.';
+}
+
+// Statuses that require payment clearance before advancing
+const PAID_REQUIRED_FOR=['accepted','inprocess','ready','completed'];
+
 function getDFee(catId){
   if(!catId)return S.dFee||200;
   return (S.dFees&&S.dFees[catId]!=null)?S.dFees[catId]:(S.dFee||200);
@@ -5037,6 +5329,296 @@ async function addFileWithPreflight(inp,target='design'){
     };
     reader.readAsDataURL(file);
   }
+}
+
+// ════════════════════════════════════════════════
+// PRODUCT IMAGES (Supabase Storage)
+// ════════════════════════════════════════════════
+async function uploadCatImage(catId,inp){
+  const file=inp.files[0];inp.value='';
+  if(!file)return;
+  if(file.size>5242880){showToast('⚠️ Image too large — max 5MB');return;}
+  if(!SB){showToast('⚠️ No DB connection');return;}
+  const ext=file.name.split('.').pop().toLowerCase();
+  const path='cats/'+catId+'.'+ext;
+  showToast('⏳ Uploading image…');
+  try{
+    const{error}=await SB.storage.from('product-images').upload(path,file,{upsert:true,cacheControl:'3600'});
+    if(error)throw error;
+    const{data}=SB.storage.from('product-images').getPublicUrl(path);
+    S.imgs[catId]=data.publicUrl;
+    await SB.from('settings').upsert({key:'imgs',value:JSON.stringify(S.imgs)},{onConflict:'key'});
+    showToast('✅ Image uploaded!');SM.play('status');render(false);
+  }catch(e){showToast('⚠️ Upload failed: '+(e.message||e));}
+}
+
+async function removeCatImage(catId){
+  if(!confirm('Remove image for this category?'))return;
+  delete S.imgs[catId];
+  if(SB)await SB.from('settings').upsert({key:'imgs',value:JSON.stringify(S.imgs)},{onConflict:'key'});
+  showToast('🗑️ Image removed');render(false);
+}
+
+// ════════════════════════════════════════════════
+// QUOTATION → ORDER CONVERSION
+// ════════════════════════════════════════════════
+async function convertQuoToOrder(id){
+  if(S.portal!=='owner'&&S.portal!=='employee')return;
+  const o=S.orders.find(x=>x.id===id);
+  if(!o){showToast('⚠️ Order not found');return;}
+  if(!confirm('Convert quotation #'+(o.invNo||'')+'\nto a confirmed order?'))return;
+  const newInvNo=genInvNo();
+  const updates={
+    otype:'order',invNo:newInvNo,fromQuoId:o.id,
+    status:'pending',jobStatus:'new',
+    convertedAt:new Date().toISOString(),
+    statusHistory:[...(o.statusHistory||[]),{st:'new',note:'Converted from quotation '+(o.invNo||''),at:new Date().toISOString()}]
+  };
+  Object.assign(o,updates);
+  try{await dbUpd(id,updates);SM.play('status');showToast('✅ Order #'+newInvNo+' created');render(false);}
+  catch(e){showToast('⚠️ Saved locally');render(false);}
+}
+
+// ════════════════════════════════════════════════
+// ANALYTICS DASHBOARD
+// ════════════════════════════════════════════════
+function vAnalytics(){
+  const orders=S.orders.filter(o=>o.otype!=='quo'&&o.invNo&&!o.invNo.startsWith('Q'));
+  const now=new Date();
+
+  // Revenue by category
+  const byCat={};
+  orders.forEach(o=>{
+    const c=o.cat||'Other';
+    if(!byCat[c])byCat[c]={n:0,rev:0};
+    byCat[c].n++;byCat[c].rev+=(o.total||0);
+  });
+  const totalRev=orders.reduce((s,o)=>s+(o.total||0),0);
+  const catRows=Object.entries(byCat).sort((a,b)=>b[1].rev-a[1].rev)
+    .map(([cat,d])=>{
+      const pct=Math.round(d.rev/(totalRev||1)*100);
+      return '<div style="margin-bottom:12px;">'
+        +'<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'
+          +'<div style="font-size:13px;font-weight:600;">'+cat+'</div>'
+          +'<div style="font-size:11px;color:var(--t2);">₹'+d.rev.toLocaleString('en-IN')+' · '+d.n+' orders</div>'
+        +'</div>'
+        +'<div style="height:6px;background:var(--b);border-radius:99px;overflow:hidden;">'
+          +'<div style="height:100%;width:'+pct+'%;background:var(--a);border-radius:99px;"></div>'
+        +'</div>'
+      +'</div>';
+    }).join('');
+
+  // 30-day chart
+  const days=[];
+  for(let i=29;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);days.push(d.toISOString().split('T')[0]);}
+  const dayMap={};
+  orders.forEach(o=>{const d=(o.at||'').split('T')[0];if(!dayMap[d])dayMap[d]=0;dayMap[d]+=(o.total||0);});
+  const revs=days.map(d=>dayMap[d]||0);
+  const maxR=Math.max(...revs,1);
+  const bars=days.map((d,i)=>{
+    const r=revs[i];const h=Math.max(2,Math.round((r/maxR)*60));
+    return '<div title="'+d+'&#10;₹'+r.toLocaleString('en-IN')+'" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;">'
+      +'<div style="width:100%;height:'+h+'px;background:'+(r?'var(--a)':'var(--b)')+';border-radius:3px 3px 0 0;min-height:2px;"></div>'
+    +'</div>';
+  }).join('');
+
+  // Status breakdown
+  const sc={new:0,accepted:0,inprocess:0,hold:0,ready:0,completed:0};
+  orders.forEach(o=>{const s=o.jobStatus||'new';if(s in sc)sc[s]++;});
+  const scol={new:'var(--t3)',accepted:'var(--bl)',inprocess:'var(--or)',hold:'var(--r)',ready:'var(--pu)',completed:'var(--g)'};
+  const slbl={new:'New',accepted:'Accepted',inprocess:'In Process',hold:'On Hold',ready:'Ready for Pickup',completed:'Completed'};
+  const statusRows=Object.entries(sc).filter(([,n])=>n>0).map(([s,n])=>
+    '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--b);">'
+      +'<div style="width:8px;height:8px;border-radius:50%;background:'+scol[s]+';flex-shrink:0;"></div>'
+      +'<div style="flex:1;font-size:13px;">'+slbl[s]+'</div>'
+      +'<div style="font-weight:800;font-size:15px;">'+n+'</div>'
+    +'</div>'
+  ).join('');
+
+  // Summary
+  const thisMonth=orders.filter(o=>{const d=new Date(o.at||0);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  const monthRev=thisMonth.reduce((s,o)=>s+(o.total||0),0);
+  const avgVal=orders.length?Math.round(totalRev/orders.length):0;
+  const pendingPay=orders.filter(o=>o.status==='pending').length;
+  const mk=(ico,lbl,val,sub)=>'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:14px;">'
+    +'<div style="font-size:22px;margin-bottom:3px;">'+ico+'</div>'
+    +'<div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;font-weight:700;">'+lbl+'</div>'
+    +'<div style="font-size:20px;font-weight:900;margin-top:3px;font-family:var(--font-display);">'+val+'</div>'
+    +(sub?'<div style="font-size:11px;color:var(--t2);margin-top:2px;">'+sub+'</div>':'')
+  +'</div>';
+
+  return '<div>'
+    +'<div style="font-size:20px;font-weight:800;font-family:var(--font-display);margin-bottom:16px;">Analytics</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">'
+      +mk('💰','All-time Revenue','₹'+totalRev.toLocaleString('en-IN'),orders.length+' orders')
+      +mk('📅','This Month','₹'+monthRev.toLocaleString('en-IN'),thisMonth.length+' orders')
+      +mk('📦','Avg Order','₹'+avgVal.toLocaleString('en-IN'),'per order')
+      +mk('⏳','Unpaid',pendingPay,(pendingPay===1?'order':'orders')+' pending')
+    +'</div>'
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:14px;margin-bottom:14px;">'
+      +'<div style="font-size:13px;font-weight:700;margin-bottom:10px;">Daily Revenue — last 30 days</div>'
+      +'<div style="display:flex;align-items:flex-end;gap:2px;height:64px;">'+bars+'</div>'
+      +'<div style="display:flex;justify-content:space-between;margin-top:6px;">'
+        +'<div style="font-size:10px;color:var(--t3);">30 days ago</div>'
+        +'<div style="font-size:10px;color:var(--t3);">Today</div>'
+      +'</div>'
+    +'</div>'
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:14px;margin-bottom:14px;">'
+      +'<div style="font-size:13px;font-weight:700;margin-bottom:10px;">By Category</div>'
+      +(catRows||'<div style="font-size:13px;color:var(--t2);">No orders yet</div>')
+    +'</div>'
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rad);padding:14px;">'
+      +'<div style="font-size:13px;font-weight:700;margin-bottom:4px;">Job Status Breakdown</div>'
+      +(statusRows||'<div style="font-size:13px;color:var(--t2);padding:8px 0;">No orders yet</div>')
+    +'</div>'
+  +'</div>';
+}
+
+// ═══════════════════════════════════════════
+// 24h PAYMENT REMINDER AUTOMATION
+// ═══════════════════════════════════════════
+async function checkPaymentReminders(){
+  if(S.portal!=='owner'&&S.portal!=='employee')return;
+  const now=Date.now();
+  const TWENTY_FOUR_H=86400000;
+  const due=S.orders.filter(o=>{
+    if(o.jobStatus!=='ready')return false;        // must be ready
+    if(o.status==='paid')return false;            // already paid
+    if((o.advancePaid||0)>=(o.total||1))return false; // advance covers it
+    if(o.paymentReminderSent)return false;        // already reminded
+    if(!o.readyAt)return false;                   // no ready timestamp
+    const readyMs=new Date(o.readyAt).getTime();
+    return (now-readyMs)>=TWENTY_FOUR_H;          // 24h elapsed
+  });
+
+  if(!due.length)return;
+
+  // Show a badge/toast for staff
+  showToast('⏰ '+due.length+' order'+(due.length>1?'s':'')+' ready 24h+ — payment pending',5000);
+
+  // Send WhatsApp reminder for each
+  for(const o of due){
+    const ph=(o.cust?.ph||'').replace(/\D/g,'');
+    if(!ph)continue;
+    const bal=Math.max(0,(o.total||0)-(o.advancePaid||0));
+    const msg=encodeURIComponent(
+      'Dear '+o.cust?.nm+', your order *#'+o.invNo+'* at Vikrant Offset Printers is READY for pickup.'
+      +'\n\n💰 Balance due: ₹'+bal.toLocaleString('en-IN')
+      +'\n📍 '+BIZ.addr
+      +'\n📞 '+BIZ.ph
+      +'\n\nPlease collect at your earliest convenience.'
+    );
+    // Open WhatsApp (browser may block multiple windows — open one at a time)
+    window.open('https://wa.me/'+ph+'?text='+msg,'_blank');
+
+    // Mark reminder sent
+    const upd={
+      paymentReminderSent:true,
+      paymentReminderAt:new Date().toISOString(),
+      statusHistory:[...(o.statusHistory||[]),{
+        st:'ready',
+        note:'24h payment reminder sent via WhatsApp',
+        at:new Date().toISOString()
+      }]
+    };
+    Object.assign(o,upd);
+    try{await dbUpd(o.id,upd);}catch(e){}
+    // Small delay between multiple windows
+    await new Promise(r=>setTimeout(r,1500));
+  }
+  render(false);
+}
+
+// ════════════════════════════════════════════════
+// LETTERHEAD TIERED PRICING PICKER
+// ════════════════════════════════════════════════
+function wS3letterhead(f, prev){
+  const lp = S.letterheadPricing || {
+    papers:[
+      {id:'ab',code:'AB',nm:'Alabaster 100 gsm',    tiers:{'1000':1150,'2000':2200,'4000':4200}},
+      {id:'ex',code:'EX',nm:'Excel Bond 100 gsm',   tiers:{'1000':1350,'2000':2600,'4000':5000}},
+      {id:'sn',code:'SN',nm:'Super Sunshine 100 gsm',tiers:{'1000':1270,'2000':2440,'4000':4680}},
+      {id:'ag',code:'AG',nm:'Art Paper 90 gsm',      tiers:{'1000':1250,'2000':2400,'4000':4600}},
+      {id:'ap',code:'AP',nm:'Art Paper 130 gsm',     tiers:{'1000':1399,'2000':2698,'4000':5196}}
+    ],
+    qtys:[1000,2000,4000],
+    side:'Single Side (SS)',
+    delivery:'Next Day',
+    designSize:'212×299mm'
+  };
+  const qtys = lp.qtys || [1000,2000,4000];
+  const papers = lp.papers || [];
+  const selQty = f.lhQty || String(qtys[0]);
+  const selPaper = f.lhPaper || papers[0]?.id || '';
+
+  // Active paper price
+  const activePaper = papers.find(p=>p.id===selPaper);
+  const activePrice = activePaper ? (activePaper.tiers[selQty]||0) : 0;
+
+  // Update form fields to reflect selection
+  if(activePrice){ f.qty=parseInt(selQty); f.cp=activePrice; f.custom=true; f.sz='A4 (210x297mm)'; f.mat=activePaper?.nm||''; }
+
+  // Qty tabs
+  const qtyTabs = qtys.map(q=>{
+    const isOn = String(q)===String(selQty);
+    return '<button onclick="S.form.lhQty=\''+q+'\';S.form.lhPaper=\''+selPaper+'\';render(false);" '
+      +'style="flex:1;padding:9px 4px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;'
+      +'border-bottom:2px solid '+(isOn?'var(--a)':'transparent')+';'
+      +'color:'+(isOn?'var(--a)':'var(--t2)')+';background:transparent;transition:all .15s;">'
+      +q.toLocaleString('en-IN')+' pcs'
+    +'</button>';
+  }).join('');
+
+  // Paper rows
+  const paperRows = papers.map(p=>{
+    const price = p.tiers[selQty]||0;
+    const isOn = p.id===selPaper;
+    const perPc = price?(price/parseInt(selQty)).toFixed(2):'—';
+    return '<div onclick="S.form.lhPaper=\''+p.id+'\';S.form.lhQty=\''+selQty+'\';render(false);" '
+      +'style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;'
+      +'border-radius:var(--rsm);border:1.5px solid '+(isOn?'var(--a)':'var(--b)')+';'
+      +'background:'+(isOn?'rgba(255,32,48,.07)':'var(--s1)')+';cursor:pointer;margin-bottom:8px;transition:all .15s;">'
+      +'<div>'
+        +'<div style="font-size:13px;font-weight:700;color:var(--t);">'
+          +'<span style="font-family:var(--font-mono);font-size:11px;color:'+(isOn?'var(--a)':'var(--t3)')+';margin-right:6px;">'+p.code+'</span>'
+          +p.nm
+        +'</div>'
+        +'<div style="font-size:11px;color:var(--t2);margin-top:2px;">₹'+perPc+' per piece</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0;">'
+        +'<div style="font-size:16px;font-weight:800;color:'+(isOn?'var(--a)':'var(--t)')+';">₹'+price.toLocaleString('en-IN')+'</div>'
+        +'<div style="font-size:10px;color:var(--t3);">for '+parseInt(selQty).toLocaleString('en-IN')+' pcs</div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+
+  // Summary bar
+  const summaryBar = activePaper && activePrice ? 
+    '<div style="background:linear-gradient(135deg,var(--vop-red),var(--vop-red-deep));border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div><div style="font-size:11px;color:rgba(255,255,255,.7);">'+activePaper.nm+' · '+parseInt(selQty).toLocaleString('en-IN')+' pcs</div>'
+        +'<div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;">'+lp.side+' · A4 · '+lp.delivery+'</div></div>'
+      +'<div style="font-size:22px;font-weight:900;color:#fff;">₹'+activePrice.toLocaleString('en-IN')+'</div>'
+    +'</div>' : '';
+
+  return '<div style="font-size:18px;font-weight:800;font-family:var(--font-display);margin-bottom:6px;">Letterheads</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-bottom:14px;">A4 · 210×297mm · Design size '+lp.designSize+'</div>'
+    // Qty tabs
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);margin-bottom:16px;">'
+      +'<div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:8px 14px 0;">Select Quantity</div>'
+      +'<div style="display:flex;padding:0 8px;">'+qtyTabs+'</div>'
+    +'</div>'
+    // Paper options
+    +'<div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Paper Type</div>'
+    +paperRows
+    // Summary
+    +summaryBar
+    +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 14px;margin-bottom:14px;display:flex;gap:16px;">'
+      +'<div><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;">Delivery</div><div style="font-size:12px;font-weight:700;">'+lp.delivery+'</div></div>'
+      +'<div><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;">Print</div><div style="font-size:12px;font-weight:700;">'+lp.side+'</div></div>'
+      +'<div><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;">Design Size</div><div style="font-size:12px;font-weight:700;">'+lp.designSize+'</div></div>'
+    +'</div>'
+    +'<button class="btn pri" style="width:100%;" onclick="S.form.step='+(f.ctype==='co'?4:3)+';S.form.lhDone=true;render(true);">Continue →</button>'
+    +'<button class="btn gho" style="width:100%;margin-top:8px;" onclick="S.form.step='+prev+';render(true);">← Back</button>';
 }
 </script>
 </body>
